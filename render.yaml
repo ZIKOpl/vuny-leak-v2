@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: vuny-leak-v2
+    runtime: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: FRONTEND_URL
+        value: https://vuny-leak-v2.onrender.com
+      - key: DISCORD_REDIRECT_URI
+        value: https://vuny-leak-v2.onrender.com/api/auth/discord/callback
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: DISCORD_CLIENT_ID
+        sync: false
+      - key: DISCORD_CLIENT_SECRET
+        sync: false
+      - key: DISCORD_GUILD_ID
+        sync: false

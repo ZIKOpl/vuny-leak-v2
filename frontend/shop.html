@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boutique — Vuny Leak V2</title>
+<link rel="icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="css/main.css">
+<style>
+/* ── SHOP SPECIFIC ─────────────────────────────────── */
+.product-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+  cursor: pointer;
+  position: relative;
+}
+.product-card:hover {
+  border-color: var(--red);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-red);
+}
+.product-thumb {
+  width: 100%; aspect-ratio: 16/9;
+  object-fit: cover; background: var(--bg3); display: block;
+}
+.product-thumb-empty {
+  width: 100%; aspect-ratio: 16/9;
+  background: var(--bg3);
+  display: flex; align-items: center; justify-content: center;
+}
+.product-thumb-empty svg { width: 36px; height: 36px; color: var(--border2); }
+.product-featured-badge {
+  position: absolute; top: 8px; left: 8px;
+  background: var(--red); color: #fff;
+  font-size: 0.62rem; font-weight: 800;
+  letter-spacing: .06em; padding: 2px 8px;
+  border-radius: 4px; text-transform: uppercase;
+}
+.product-stock-badge {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(0,0,0,.6); color: var(--text-muted);
+  font-size: 0.65rem; font-weight: 700;
+  padding: 2px 8px; border-radius: 4px;
+  backdrop-filter: blur(4px);
+}
+.product-stock-badge.low { color: #e67e22; }
+.product-stock-badge.out { color: var(--red); }
+.product-body { padding: 14px; }
+.product-title {
+  font-weight: 700; font-size: 0.9rem;
+  color: var(--white); margin-bottom: 5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.product-desc {
+  font-size: 0.78rem; color: var(--text-muted);
+  line-height: 1.5; margin-bottom: 8px;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.product-footer {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.product-price {
+  font-family: var(--font-display);
+  font-size: 1.15rem; font-weight: 700;
+  color: var(--white);
+}
+.product-price .eur { font-size: .8rem; color: var(--text-muted); font-weight: 400; }
+.product-cat {
+  font-size: 0.7rem; color: var(--text-muted);
+  background: var(--bg3); padding: 2px 8px;
+  border-radius: 4px; border: 1px solid var(--border);
+}
+
+/* ── PRODUCT MODAL ─────────────────────────────────── */
+.product-modal-thumb {
+  width: 100%; border-radius: 10px;
+  max-height: 280px; object-fit: cover;
+  margin-bottom: 1.2rem; display: block;
+}
+.product-modal-meta {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 1.2rem;
+}
+.product-modal-price {
+  font-family: var(--font-display);
+  font-size: 2rem; font-weight: 700;
+  color: var(--white); margin-bottom: 1rem;
+  display: flex; align-items: baseline; gap: 6px;
+}
+.product-modal-price .eur { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+.qty-selector {
+  display: flex; align-items: center;
+  gap: 0; background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius); overflow: hidden;
+  width: fit-content; margin-bottom: 1.2rem;
+}
+.qty-btn {
+  width: 38px; height: 38px;
+  background: none; border: none;
+  color: var(--text-muted); font-size: 1.2rem;
+  cursor: pointer; transition: color .15s, background .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.qty-btn:hover { color: var(--white); background: var(--bg4); }
+.qty-val {
+  min-width: 44px; text-align: center;
+  font-weight: 700; font-size: 0.95rem;
+  color: var(--white); border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  height: 38px; display: flex; align-items: center; justify-content: center;
+}
+.qty-total {
+  font-size: 0.82rem; color: var(--text-muted);
+  margin-bottom: 1.2rem;
+}
+.qty-total strong { color: var(--white); }
+
+/* ── CHAT BUBBLE ───────────────────────────────────── */
+#chatBubble {
+  position: fixed; bottom: 1.5rem; right: 1.5rem;
+  z-index: 850;
+  display: none;
+}
+.chat-bubble-btn {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--red); border: none;
+  color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 20px rgba(215,38,56,.4);
+  transition: transform .2s, box-shadow .2s;
+  position: relative;
+}
+.chat-bubble-btn:hover { transform: scale(1.08); box-shadow: 0 8px 28px rgba(215,38,56,.55); }
+.chat-bubble-badge {
+  position: absolute; top: -3px; right: -3px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #e67e22; border: 2px solid var(--bg);
+  display: none; align-items: center; justify-content: center;
+  font-size: .65rem; font-weight: 800; color: #fff;
+}
+
+/* ── CHAT PANEL ────────────────────────────────────── */
+.chat-panel {
+  position: fixed; bottom: 1.5rem; right: 1.5rem;
+  width: 360px; height: 500px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 16px; z-index: 860;
+  display: flex; flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,.7);
+  overflow: hidden;
+  transform: scale(.9) translateY(10px);
+  opacity: 0; pointer-events: none;
+  transition: all .2s cubic-bezier(.34,1.56,.64,1);
+}
+.chat-panel.open {
+  transform: scale(1) translateY(0);
+  opacity: 1; pointer-events: all;
+}
+.chat-panel-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-bottom: 1px solid var(--border);
+  background: var(--bg3); flex-shrink: 0;
+}
+.chat-panel-head-info { flex: 1; min-width: 0; }
+.chat-panel-head-title {
+  font-weight: 700; font-size: 0.85rem; color: var(--white);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.chat-panel-head-sub { font-size: 0.72rem; color: var(--text-dim); margin-top: 1px; }
+.chat-panel-close {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: none; border: 1px solid var(--border);
+  color: var(--text-muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: color .15s, border-color .15s; flex-shrink: 0;
+}
+.chat-panel-close:hover { color: var(--red); border-color: var(--red-border); }
+.chat-messages {
+  flex: 1; overflow-y: auto; padding: 12px;
+  display: flex; flex-direction: column; gap: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+.chat-msg {
+  display: flex; gap: 7px; align-items: flex-start;
+  max-width: 85%;
+}
+.chat-msg.mine { align-self: flex-end; flex-direction: row-reverse; }
+.chat-msg-ava {
+  width: 26px; height: 26px; border-radius: 50%;
+  object-fit: cover; flex-shrink: 0;
+}
+.chat-msg-bubble {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 12px 12px 12px 3px;
+  padding: 7px 10px; font-size: 0.8rem;
+  color: var(--text); line-height: 1.5; word-break: break-word;
+}
+.chat-msg.mine .chat-msg-bubble {
+  background: var(--red-dim); border-color: var(--red-border);
+  border-radius: 12px 12px 3px 12px; color: var(--text);
+}
+.chat-msg-img { max-width: 180px; border-radius: 8px; display: block; margin-top: 4px; }
+.chat-msg-time {
+  font-size: 0.65rem; color: var(--text-dim);
+  margin-top: 3px; text-align: right;
+}
+.chat-msg.mine .chat-msg-time { text-align: left; }
+.chat-msg-system {
+  align-self: center; background: var(--bg3);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 6px 12px; font-size: 0.75rem; color: var(--text-muted);
+  text-align: center; max-width: 90%; white-space: pre-line;
+}
+.chat-input-area {
+  display: flex; gap: 6px; align-items: flex-end;
+  padding: 10px 12px; border-top: 1px solid var(--border);
+  background: var(--bg3); flex-shrink: 0;
+}
+.chat-input {
+  flex: 1; background: var(--bg4); border: 1px solid var(--border);
+  border-radius: 10px; padding: 8px 12px;
+  color: var(--text); font-size: 0.82rem; font-family: inherit;
+  resize: none; max-height: 80px; min-height: 36px;
+  overflow-y: auto; transition: border-color .2s;
+  line-height: 1.4;
+}
+.chat-input:focus { outline: none; border-color: var(--red); }
+.chat-input::placeholder { color: var(--text-dim); }
+.chat-send-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--red); border: none; color: #fff;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .15s, transform .15s; flex-shrink: 0;
+}
+.chat-send-btn:hover { background: var(--red-dark); transform: scale(1.05); }
+.chat-status-bar {
+  padding: 6px 12px; font-size: 0.72rem; text-align: center;
+  border-top: 1px solid var(--border); flex-shrink: 0;
+}
+.chat-status-open { color: var(--green); }
+.chat-status-sold { color: #e67e22; }
+.chat-status-closed { color: var(--red); }
+
+/* ── RESPONSIVE ────────────────────────────────────── */
+@media (max-width: 500px) {
+  .chat-panel { width: calc(100vw - 2rem); right: 1rem; bottom: 1rem; height: 420px; }
+  #chatBubble { right: 1rem; bottom: 1rem; }
+}
+</style>
+</head>
+<body>
+<header class="navbar" id="navbar"></header>
+<nav class="mobile-nav" id="mobileNav">
+  <a href="index.html">Accueil</a>
+  <a href="shop.html" class="active">Boutique</a>
+  <a href="vip.html">VIP</a>
+  <a href="about.html">À propos</a>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-radial"></div>
+    <div class="hero-content">
+      <div class="hero-label">Boutique officielle</div>
+      <h1 class="hero-title">VUNY <span class="accent">SHOP</span></h1>
+      <p class="hero-subtitle">Achetez des produits exclusifs. Paiement sécurisé via chat privé avec nos administrateurs.</p>
+    </div>
+  </section>
+
+  <div class="main-grid">
+    <div class="main-content">
+
+      <!-- EN AVANT -->
+      <div class="section" id="featuredSection" style="display:none">
+        <div class="section-head">
+          <h2 class="section-title">En <span class="accent">avant</span></h2>
+          <div class="section-line"></div>
+        </div>
+        <div class="top5-grid" id="featuredGrid"></div>
+      </div>
+
+      <!-- TOUS LES PRODUITS -->
+      <div class="section" id="browseSection">
+        <div class="cat-header">
+          <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1">
+            <span id="catHeaderIcon" style="font-size:1.4rem;flex-shrink:0">🛒</span>
+            <div style="min-width:0">
+              <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--white);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="catHeaderName">Tous les produits</div>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px" id="catHeaderCount"></div>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" id="addProductBtn" style="display:none;flex-shrink:0" onclick="openAddProductModal()">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Ajouter un produit
+          </button>
+        </div>
+        <div class="sort-bar">
+          <span class="sort-label">Trier par</span>
+          <select class="sort-select" id="sortSelect" onchange="loadProducts()">
+            <option value="createdAt">Plus récents</option>
+            <option value="price_asc">Prix croissant</option>
+            <option value="price_desc">Prix décroissant</option>
+          </select>
+        </div>
+        <div class="resources-grid" id="productsGrid">
+          <div class="loading" style="grid-column:1/-1"><div class="spinner"></div></div>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="main-sidebar">
+      <div class="sidebar-box">
+        <div class="sidebar-label">Catégories</div>
+        <div class="cat-list" id="catList">
+          <div class="loading" style="padding:.8rem 0"><div class="spinner" style="margin:0 auto"></div></div>
+        </div>
+      </div>
+      <div class="sidebar-box">
+        <div class="sidebar-label">Comment acheter ?</div>
+        <div style="display:flex;flex-direction:column;gap:.7rem">
+          <div style="display:flex;gap:10px;font-size:0.8rem;color:var(--text-muted)">
+            <span style="width:20px;height:20px;border-radius:50%;background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</span>
+            Clique sur un produit et sélectionne la quantité
+          </div>
+          <div style="display:flex;gap:10px;font-size:0.8rem;color:var(--text-muted)">
+            <span style="width:20px;height:20px;border-radius:50%;background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</span>
+            Appuie sur "Acheter" pour ouvrir un chat avec l'équipe
+          </div>
+          <div style="display:flex;gap:10px;font-size:0.8rem;color:var(--text-muted)">
+            <span style="width:20px;height:20px;border-radius:50%;background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</span>
+            Un admin te contacte pour finaliser le paiement
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-box" id="myTicketsBox" style="display:none">
+        <div class="sidebar-label">Mes commandes</div>
+        <div id="myTicketsList"><div class="loading" style="padding:.5rem 0"><div class="spinner" style="margin:0 auto;width:18px;height:18px;border-width:2px"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="overlay" id="productOverlay">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-head">
+      <div class="modal-head-title" id="productModalTitle">Produit</div>
+      <button class="modal-close" onclick="closeProductModal()">&#10005;</button>
+    </div>
+    <div class="modal-body" id="productModalBody"></div>
+  </div>
+</div>
+
+<!-- ADD PRODUCT MODAL (admin) -->
+<div class="overlay" id="addProductOverlay">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head">
+      <div class="modal-head-title" id="addProductModalTitle">Ajouter un produit</div>
+      <button class="modal-close" onclick="document.getElementById('addProductOverlay').classList.remove('open')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Titre <span class="req">*</span></label>
+        <input class="form-input" id="apTitle" placeholder="Nom du produit">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description <span class="req">*</span></label>
+        <textarea class="form-input" id="apDesc" placeholder="Description du produit..." style="min-height:90px"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Catégorie <span class="req">*</span></label>
+          <select class="form-input" id="apCategory">
+            <option value="">Choisir...</option>
+            <option value="Scripts">Scripts</option>
+            <option value="MLO">MLO</option>
+            <option value="Vehicles">Vehicles</option>
+            <option value="Vêtements">Vêtements</option>
+            <option value="Armes">Armes</option>
+            <option value="Bundles">Bundles</option>
+            <option value="Pack Graphique">Pack Graphique</option>
+            <option value="Autres">Autres</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prix (EUR) <span class="req">*</span></label>
+          <input class="form-input" id="apPrice" type="number" min="0" step="0.01" placeholder="9.99">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Quantité en stock <span class="req">*</span></label>
+          <input class="form-input" id="apQty" type="number" min="1" value="1" placeholder="1">
+        </div>
+        <div class="form-group" style="display:flex;align-items:flex-end">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding-bottom:2px">
+            <input type="checkbox" id="apFeatured" style="accent-color:var(--red);width:16px;height:16px">
+            <span style="font-size:0.82rem;color:var(--text-muted)">Mettre en avant</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">URL miniature (optionnel)</label>
+        <input class="form-input" id="apThumb" placeholder="https://...">
+      </div>
+      <input type="hidden" id="apEditId">
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="document.getElementById('addProductOverlay').classList.remove('open')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveProduct()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Enregistrer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT BUBBLE -->
+<div id="chatBubble">
+  <button class="chat-bubble-btn" onclick="toggleChatPanel()" title="Mon ticket commande">
+    <!-- Cart icon -->
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <path d="M16 10a4 4 0 0 1-8 0"/>
+    </svg>
+    <span class="chat-bubble-badge" id="chatBubbleBadge"></span>
+  </button>
+</div>
+
+<!-- CHAT PANEL -->
+<!-- BOUTIQUE CHAT — centered modal overlay -->
+<div class="chat-modal-overlay" id="chatPanel">
+  <div class="chat-modal-box">
+    <div class="chat-modal-head">
+      <div class="chat-modal-icon" style="background:var(--red-dim);border:1px solid var(--red-border)">
+        <svg width="18" height="18" fill="none" stroke="var(--red)" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </div>
+      <div class="chat-modal-info">
+        <div class="chat-modal-title" id="chatPanelTitle">Commande</div>
+        <div class="chat-modal-sub" id="chatPanelSub">Chat avec l'équipe</div>
+      </div>
+      <button class="chat-modal-close" onclick="toggleChatPanel()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="chat-modal-messages" id="chatMessages"></div>
+    <div id="chatStatusBar" style="display:none" class="chat-modal-status"></div>
+    <div id="chatImgPreviewRow" class="img-send-preview">
+      <img id="chatImgPreviewThumb" src="" alt="">
+      <span id="chatImgPreviewName" style="font-size:.75rem;color:var(--text-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis"></span>
+      <button class="img-send-preview-remove" onclick="clearChatImg()">✕</button>
+    </div>
+    <div class="chat-modal-input-area" id="chatInputArea">
+      <input type="file" id="chatImgFileInput" accept="image/*" style="display:none" onchange="handleChatImgFile(event)">
+      <textarea class="chat-modal-input" id="chatInput" placeholder="Message..." rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMsg();}"
+        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"></textarea>
+      <button class="chat-modal-img-btn" id="chatImgBtn" onclick="document.getElementById('chatImgFileInput').click()" title="Joindre une image">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </button>
+      <button class="chat-modal-send-btn" onclick="sendChatMsg()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<footer class="footer" id="footer"></footer>
+<script src="js/app.js"></script>
+<script>
+// ── STATE ──────────────────────────────────────────────
+let shopState = { category: null, page: 1, catCounts: {}, catList: [], searchQuery: null };
+let chatState  = { ticketId: null, panelOpen: false, evtSource: null, lastMsgCount: 0 };
+let currentProduct = null;
+let currentQty = 1;
+
+// ── INIT ──────────────────────────────────────────────
+(async () => {
+  await initAuth();
+  renderNavbar('shop');
+  renderFooter();
+  if (App.user && roleLevel(App.user.role) >= 1) {
+    document.getElementById('addProductBtn').style.display = 'inline-flex';
+  }
+  await loadCategories();
+  loadFeatured();
+  if (App.user) {
+    document.getElementById('myTicketsBox').style.display = 'block';
+    loadMyTickets();
+    // Restore SSE for open ticket after page reload (deferred so all functions are defined)
+    setTimeout(() => restoreShopTicketSSE(), 300);
+  }
+})();
+
+// Update navbar to mark shop as active
+function renderNavbar(activePage) {
+  const navbar = document.getElementById('navbar');
+  if (!navbar) return;
+  navbar.innerHTML = `
+    <div class="navbar-left">
+      <a href="index.html" class="navbar-logo"><img src="assets/logo.png" alt="Logo"></a>
+      <nav class="navbar-links">
+        <a href="index.html">Accueil</a>
+        <a href="shop.html" class="${activePage==='shop'?'active':''}">Boutique</a>
+        <a href="vip.html" class="nav-vip-btn ${App.user&&isVip(App.user.role)?'vip-unlocked':'vip-locked'}" onclick="handleVipClick(event)">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" class="vip-lock-icon"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>VIP
+        </a>
+        <a href="about.html">À propos</a>
+        ${App.user ? '<a href="#" class="nav-support-btn" onclick="openSupportModal(event)">Support</a>' : ''}
+      </nav>
+    </div>
+    <div class="navbar-right">
+      <div id="createBtnArea"></div>
+      <div class="search-wrap">
+        <svg class="search-icon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" type="text" placeholder="Rechercher..." id="globalSearch" onkeydown="if(event.key==='Enter')doSearch(this.value)">
+      </div>
+      <div id="authArea"></div>
+      <button class="nav-burger" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
+    </div>`;
+  renderAuthArea();
+}
+
+// ── CATEGORIES ────────────────────────────────────────
+async function loadCategories() {
+  try {
+    const cats = await apiFetch('/shop/categories');
+    shopState.catList = cats;
+    const total = cats.reduce((a, b) => a + b.count, 0);
+    const list = document.getElementById('catList');
+    list.innerHTML = `
+      <div class="cat-item active" onclick="selectCat(null,this)" id="catAll">
+        <div class="cat-item-left"><span class="cat-icon">🛒</span><span>Tous les produits</span></div>
+        <span class="cat-count">${total}</span>
+      </div>
+      ${cats.map(c => `
+        <div class="cat-item" onclick="selectCat('${c.name || c._id}',this)" data-cat-icon="${c.icon || '📦'}">
+          <div class="cat-item-left"><span class="cat-icon">${c.icon || catIcon(c._id)}</span><span>${c.name || c._id}</span></div>
+          <span class="cat-count">${c.count}</span>
+        </div>`).join('')}
+    `;
+    loadProducts();
+  } catch {
+    document.getElementById('catList').innerHTML = '<div class="empty" style="padding:.5rem"><p>Erreur</p></div>';
+    loadProducts();
+  }
+}
+
+function catIcon(name) {
+  const map = { Scripts:'📜', MLO:'🗺️', Vehicles:'🚗', 'Vêtements':'👕', Armes:'⚔️', Bundles:'🎁', 'Pack Graphique':'🎨', Autres:'📦' };
+  return map[name] || '📦';
+}
+
+function selectCat(name, el) {
+  shopState.category = name; shopState.page = 1;
+  document.querySelectorAll('#catList .cat-item').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  const iconEl = el.querySelector('.cat-icon');
+  const icon = name ? (iconEl ? iconEl.textContent : '📦') : '🛒';
+  document.getElementById('catHeaderIcon').textContent = icon;
+  document.getElementById('catHeaderName').textContent = name || 'Tous les produits';
+  document.getElementById('browseSection').scrollIntoView({ behavior:'smooth', block:'start' });
+  loadProducts();
+}
+
+// ── FEATURED ──────────────────────────────────────────
+async function loadFeatured() {
+  try {
+    const data = await apiFetch('/shop/products/featured');
+    if (!data.length) return;
+    const section = document.getElementById('featuredSection');
+    section.style.display = 'block';
+    document.getElementById('featuredGrid').innerHTML = data.map(p => productCard(p)).join('');
+  } catch {}
+}
+
+// ── PRODUCTS ──────────────────────────────────────────
+async function loadProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '<div class="loading" style="grid-column:1/-1"><div class="spinner"></div></div>';
+  try {
+    const sort = document.getElementById('sortSelect').value;
+    const params = new URLSearchParams({ page: shopState.page, limit: 12 });
+    if (shopState.category) params.set('category', shopState.category);
+    const data = await apiFetch(`/shop/products?${params}`);
+    const products = sort === 'price_asc'
+      ? [...data.products].sort((a,b) => a.price - b.price)
+      : sort === 'price_desc'
+      ? [...data.products].sort((a,b) => b.price - a.price)
+      : data.products;
+
+    if (!products.length) {
+      grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><p>Aucun produit dans cette catégorie</p></div>';
+      document.getElementById('pagination').innerHTML = '';
+      document.getElementById('catHeaderCount').textContent = '0 produit';
+      return;
+    }
+    grid.innerHTML = products.map(p => productCard(p)).join('');
+    document.getElementById('catHeaderCount').textContent = `${data.total} produit${data.total>1?'s':''}`;
+    renderPagination(data.pages);
+  } catch(e) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><p>${e.message}</p></div>`;
+  }
+}
+
+function productCard(p) {
+  const stock = p.quantity;
+  const stockClass = stock === 0 ? 'out' : stock <= 3 ? 'low' : '';
+  const stockLabel = stock === 0 ? 'Rupture' : stock <= 3 ? `${stock} restant${stock>1?'s':''}` : `${stock} en stock`;
+  const thumb = p.thumbnail
+    ? `<img class="product-thumb" src="${p.thumbnail}" alt="" onerror="this.parentElement.innerHTML='<div class=product-thumb-empty><svg fill=none stroke=currentColor stroke-width=1.5 viewBox=0 0 24 24><rect x=3 y=3 width=18 height=18 rx=2/><circle cx=8.5 cy=8.5 r=1.5/><path d=M21 15l-5-5L5 21/></svg></div>'">`
+    : `<div class="product-thumb-empty"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>`;
+  return `
+    <div class="product-card" onclick="openProduct('${p._id}')">
+      ${thumb}
+      ${p.featured ? '<div class="product-featured-badge">En avant</div>' : ''}
+      <div class="product-stock-badge ${stockClass}">${stockLabel}</div>
+      <div class="product-body">
+        <div class="product-title">${p.title}</div>
+        <div class="product-desc">${p.description}</div>
+        <div class="product-footer">
+          <div class="product-price">${p.price.toFixed(2)} <span class="eur">EUR</span></div>
+          <span class="product-cat">${p.category}</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderPagination(pages) {
+  const el = document.getElementById('pagination');
+  if (pages <= 1) { el.innerHTML = ''; return; }
+  let html = '';
+  if (shopState.page > 1) html += `<button class="page-btn" onclick="goPage(${shopState.page-1})">‹</button>`;
+  for (let i=1; i<=pages; i++) {
+    if (i===1||i===pages||Math.abs(i-shopState.page)<=2) html += `<button class="page-btn ${i===shopState.page?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    else if (Math.abs(i-shopState.page)===3) html += `<span style="padding:0 4px;color:var(--text-dim)">…</span>`;
+  }
+  if (shopState.page < pages) html += `<button class="page-btn" onclick="goPage(${shopState.page+1})">›</button>`;
+  el.innerHTML = html;
+}
+function goPage(p) { shopState.page = p; loadProducts(); window.scrollTo({top:document.getElementById('browseSection').offsetTop,behavior:'smooth'}); }
+
+// ── PRODUCT MODAL ─────────────────────────────────────
+async function openProduct(id) {
+  const overlay = document.getElementById('productOverlay');
+  overlay.classList.add('open');
+  document.getElementById('productModalTitle').textContent = 'Chargement...';
+  document.getElementById('productModalBody').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const p = await apiFetch(`/shop/products/${id}`);
+    currentProduct = p;
+    currentQty = 1;
+    document.getElementById('productModalTitle').textContent = p.title;
+    renderProductModal(p);
+  } catch(e) {
+    document.getElementById('productModalBody').innerHTML = `<div class="empty"><p>${e.message}</p></div>`;
+  }
+}
+
+function renderProductModal(p) {
+  const stock = p.quantity;
+  const isOut = stock === 0;
+  const thumb = p.thumbnail ? `<img class="product-modal-thumb" src="${p.thumbnail}" alt="">` : '';
+  const authorId = p.author?._id;
+  const authorName = p.author?.username || 'Équipe';
+  const authorAvatar = p.author?.avatar;
+  const isAdmin = App.user && roleLevel(App.user.role) >= 1;
+
+  document.getElementById('productModalBody').innerHTML = `
+    ${thumb}
+    <div class="modal-author-block">
+      ${authorAvatar ? `<img src="${authorAvatar}" class="modal-author-ava" alt="">` : '<div class="modal-author-ava-placeholder"></div>'}
+      <div class="modal-author-info">
+        <a href="profile.html?id=${authorId}" class="modal-author-name" onclick="closeProductModal()">${authorName}</a>
+        <div class="modal-author-sub">Mis en vente par ${authorName}</div>
+      </div>
+      <span class="product-cat">${p.category}</span>
+    </div>
+
+    <div class="product-modal-meta">
+      ${p.featured ? '<span class="status status-approved" style="font-size:.7rem">⭐ En avant</span>' : ''}
+      <span style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:3px 10px;font-size:0.75rem;color:${stock===0?'var(--red)':stock<=3?'#e67e22':'var(--text-muted)'}">
+        ${stock === 0 ? '❌ Rupture de stock' : `📦 ${stock} en stock`}
+      </span>
+      <span style="font-size:.72rem;color:var(--text-dim)">${timeAgo(p.createdAt)}</span>
+    </div>
+
+    <div class="product-modal-price">${p.price.toFixed(2)} <span class="eur">EUR</span></div>
+
+    <p style="color:var(--text-muted);font-size:0.85rem;line-height:1.75;margin-bottom:1.4rem">${p.description}</p>
+
+    ${!isOut && App.user ? `
+      <div style="margin-bottom:.5rem;font-size:.8rem;font-weight:600;color:var(--text-muted)">Quantité</div>
+      <div class="qty-selector">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <div class="qty-val" id="qtyVal">1</div>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+      <div class="qty-total">Total : <strong id="qtyTotal">${p.price.toFixed(2)} EUR</strong></div>
+      <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center" onclick="buyProduct('${p._id}')">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Acheter
+      </button>
+    ` : isOut ? `
+      <div class="btn btn-outline btn-lg" style="width:100%;justify-content:center;opacity:.5;cursor:not-allowed">Rupture de stock</div>
+    ` : `
+      <a href="${API_BASE}/auth/discord" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;text-decoration:none">
+        ${DISCORD_SVG} Connexion requise
+      </a>
+    `}
+
+    ${isAdmin ? `
+      <div style="display:flex;gap:8px;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)">
+        <button class="btn btn-outline btn-sm" onclick="editProduct('${p._id}')">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Modifier
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p._id}')">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Supprimer
+        </button>
+        <label style="display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--text-muted);cursor:pointer;margin-left:auto">
+          <input type="checkbox" ${p.featured?'checked':''} style="accent-color:var(--red)" onchange="toggleFeatured('${p._id}',this.checked)"> En avant
+        </label>
+      </div>
+    ` : ''}
+  `;
+}
+
+function changeQty(delta) {
+  if (!currentProduct) return;
+  const max = currentProduct.quantity;
+  currentQty = Math.max(1, Math.min(max, currentQty + delta));
+  document.getElementById('qtyVal').textContent = currentQty;
+  document.getElementById('qtyTotal').textContent = (currentProduct.price * currentQty).toFixed(2) + ' EUR';
+}
+
+function closeProductModal() {
+  document.getElementById('productOverlay').classList.remove('open');
+  currentProduct = null; currentQty = 1;
+}
+
+// ── BUY ───────────────────────────────────────────────
+async function buyProduct(productId) {
+  if (!App.user) { showToast('Connectez-vous pour acheter', 'error'); return; }
+
+  // ── VÉRIFICATION TICKET SUPPORT OUVERT ──────────────
+  const _ss = window._supportState;
+  if (_ss && _ss.ticketId) {
+    const confirmed = await window._showConflictModal(
+      'Ticket support ouvert',
+      'Vous avez déjà un ticket support ouvert. Voulez-vous le fermer pour créer une commande boutique ?',
+      'support', 'shop'
+    );
+    if (!confirmed) return;
+    try {
+      await apiFetch(`/support/${_ss.ticketId}/close`, { method: 'PATCH', body: JSON.stringify({ reason: 'Fermé pour créer un ticket boutique' }) });
+      _ss.ticketId = null;
+      if (_ss.evtSource) { _ss.evtSource.close(); _ss.evtSource = null; }
+      const fab = document.getElementById('supportFab');
+      if (fab) fab.style.display = 'none';
+    } catch(e) { showToast('Impossible de fermer le ticket support : ' + e.message, 'error'); return; }
+  }
+
+  try {
+    const btn = document.querySelector('#productModalBody .btn-primary');
+    if (btn) { btn.disabled = true; btn.textContent = 'Ouverture du chat...'; }
+    const ticket = await apiFetch('/shop/tickets', { method: 'POST', body: JSON.stringify({ productId, quantity: currentQty }) });
+    closeProductModal();
+    openChatPanel(ticket._id, ticket.product?.title || 'Commande');
+    document.getElementById('myTicketsBox').style.display = 'block';
+    loadMyTickets();
+    showToast('Chat ouvert ! Un admin vous répondra bientôt.', 'success');
+  } catch(e) {
+    showToast(e.message, 'error');
+    const btn = document.querySelector('#productModalBody .btn-primary');
+    if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Acheter'; }
+  }
+}
+
+// ── CHAT PANEL ────────────────────────────────────────
+async function openChatPanel(ticketId, title) {
+  chatState.ticketId = ticketId;
+  document.getElementById('chatPanelTitle').textContent = title || 'Commande';
+  document.getElementById('chatMessages').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;padding:3rem"><div class="spinner" style="width:24px;height:24px;border-width:2px"></div></div>';
+  const overlay = document.getElementById('chatPanel');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  chatState.panelOpen = true;
+  document.getElementById('chatBubble').style.display = 'block';
+  await refreshChatMessages(ticketId);
+
+  // ── START SSE FOR REAL-TIME MESSAGES ──────────────────
+  if (chatState.evtSource) { chatState.evtSource.close(); chatState.evtSource = null; }
+  if (App.token) {
+    const src = new EventSource(`${API_BASE}/shop/tickets/${ticketId}/events?token=${App.token}`);
+    chatState.evtSource = src;
+    src.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      if (data.type === 'message') {
+        appendChatMessage(data.message);
+        scrollChatBottom();
+        // Badge si panel fermé
+        if (!chatState.panelOpen) {
+          const fab = document.getElementById('chatBubble');
+          if (fab) {
+            let badge = fab.querySelector('.chat-fab-unread');
+            if (!badge) { badge = document.createElement('span'); badge.className = 'chat-fab-unread chat-fab-badge'; fab.appendChild(badge); }
+            badge.style.display = 'flex';
+            badge.textContent = (parseInt(badge.textContent) || 0) + 1;
+          }
+        }
+      } else if (data.type === 'status') {
+        refreshChatMessages(ticketId);
+      }
+    };
+    src.onerror = () => {};
+  }
+}
+
+// Restore SSE connection if user already has an open shop ticket (page reload)
+async function restoreShopTicketSSE() {
+  if (!App.user || !App.token || chatState.evtSource) return;
+  try {
+    const tickets = await apiFetch('/shop/tickets/my');
+    const open = tickets.find(t => t.status === 'open');
+    if (!open) return;
+    chatState.ticketId = open._id;
+    const bubble = document.getElementById('chatBubble');
+    if (bubble) bubble.style.display = 'block';
+    if (chatState.evtSource) { chatState.evtSource.close(); chatState.evtSource = null; }
+    const src = new EventSource(`${API_BASE}/shop/tickets/${open._id}/events?token=${App.token}`);
+    chatState.evtSource = src;
+    src.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      if (data.type === 'message') {
+        if (chatState.panelOpen) { appendChatMessage(data.message); scrollChatBottom(); }
+        else {
+          const bub = document.getElementById('chatBubble');
+          if (bub) { let badge = bub.querySelector('.chat-fab-badge'); if (!badge) { badge = document.createElement('span'); badge.className = 'chat-fab-badge'; bub.appendChild(badge); } badge.style.display = 'flex'; badge.textContent = (parseInt(badge.textContent)||0)+1; }
+        }
+      } else if (data.type === 'status') {
+        if (chatState.panelOpen) refreshChatMessages(open._id);
+      }
+    };
+    src.onerror = () => { chatState.evtSource = null; };
+  } catch {}
+}
+
+async function refreshChatMessages(ticketId) {
+  try {
+    let ticket;
+    try { ticket = await apiFetch(`/shop/tickets/${ticketId}`); }
+    catch(e) {
+      // Ticket supprimé (vendu/fermé) — on ferme le chat proprement
+      if (e.message?.includes('404') || e.status === 404) {
+        closeChatPanelFinal();
+        loadMyTickets();
+        return;
+      }
+      throw e;
+    }
+    const msgEl = document.getElementById('chatMessages');
+    const statusBar = document.getElementById('chatStatusBar');
+    const inputArea = document.getElementById('chatInputArea');
+    const sub = document.getElementById('chatPanelSub');
+
+    if (ticket.status !== 'open') {
+      inputArea.style.display = 'none';
+      statusBar.style.display = 'block';
+      const labels = { sold: { cls: 'chat-status-sold', txt: '✅ Vente finalisée' }, closed: { cls: 'chat-status-closed', txt: `❌ Ticket fermé${ticket.closeReason ? ' — ' + ticket.closeReason : ''}` } };
+      const l = labels[ticket.status] || {};
+      statusBar.innerHTML = `<span class="${l.cls}">${l.txt}</span>`;
+      sub.textContent = ticket.status === 'sold' ? 'Vente finalisée' : 'Ticket fermé';
+    } else {
+      inputArea.style.display = 'flex';
+      statusBar.style.display = 'none';
+      sub.textContent = `${ticket.quantity}x ${ticket.product?.title} — ${ticket.totalPrice.toFixed(2)} €`;
+    }
+
+    msgEl.innerHTML = '';
+    ticket.messages.forEach(m => appendChatMessage(m));
+    scrollChatBottom();
+  } catch {}
+}
+
+function linkifyText(text) {
+  const urlRegex = /((https?:\/\/|www\.)[^\s<>"'&]+)/g;
+  return text.replace(urlRegex, (url) => {
+    const href = url.startsWith('http') ? url : 'https://' + url;
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer"
+      style="color:var(--red,#e53e3e);text-decoration:underline;cursor:pointer;word-break:break-all"
+      onclick="if(!event.ctrlKey&&!event.metaKey){event.preventDefault();showToast('Ctrl+clic pour ouvrir le lien','info');}"
+      title="Ctrl+clic pour ouvrir">${url}</a>`;
+  });
+}
+
+function appendChatMessage(m) {
+  const msgEl = document.getElementById('chatMessages');
+  if (!msgEl) return;
+  // Déduplique par _id
+  if (m._id && msgEl.querySelector('[data-mid="'+m._id+'"]')) return;
+  const isMe = m.sender?._id === App.user?._id || m.sender === App.user?._id;
+  const isSys = m.content?.startsWith('📦');
+
+  if (isSys) {
+    const div = document.createElement('div');
+    div.className = 'chat-msg-system';
+    if (m._id) div.dataset.mid = m._id;
+    div.textContent = m.content;
+    msgEl.appendChild(div);
+    return;
+  }
+
+  const wrap = document.createElement('div');
+  wrap.className = `chat-msg ${isMe ? 'mine' : ''}`;
+  if (m._id) wrap.dataset.mid = m._id;
+  const ava = m.sender?.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png';
+  const name = m.sender?.username || '?';
+  const imgHtml = m.imageUrl ? `<img src="${m.imageUrl}" class="chat-msg-img" alt="" style="cursor:pointer" onclick="window.open('${m.imageUrl}','_blank')">` : '';
+  const rawText = m.content ? escapeHtml(m.content) : '';
+  const ec = linkifyText(rawText);
+  wrap.innerHTML = `
+    <img src="${ava}" class="chat-msg-ava" alt="" title="${name}">
+    <div>
+      ${!isMe ? `<div style="font-size:.68rem;color:var(--text-dim);margin-bottom:2px">${name}</div>` : ''}
+      <div class="chat-msg-bubble">${ec}${imgHtml}</div>
+      <div class="chat-msg-time">${timeAgo(m.createdAt)}</div>
+    </div>`;
+  msgEl.appendChild(wrap);
+}
+
+function scrollChatBottom() {
+  const el = document.getElementById('chatMessages');
+  if (el) el.scrollTop = el.scrollHeight;
+}
+
+async function clearChatImg() {
+  window._chatImgData = null;
+  window._chatImgSelected = false;
+  const preview = document.getElementById('chatImgPreviewRow');
+  const btn = document.getElementById('chatImgBtn');
+  const fi = document.getElementById('chatImgFileInput');
+  if (preview) preview.classList.remove('show');
+  if (btn) btn.classList.remove('selected');
+  if (fi) fi.value = '';
+}
+async function sendChatMsg() {
+  const input = document.getElementById('chatInput');
+  const content = input.value.trim();
+  const imgData = window._chatImgData || _chatImgBase64;
+  if (!content && !imgData || !chatState.ticketId) return;
+  input.value = ''; input.style.height = 'auto';
+  clearChatImg();
+  _chatImgBase64 = null;
+  try {
+    await apiFetch(`/shop/tickets/${chatState.ticketId}/message`, { method: 'POST', body: JSON.stringify({ content, imageUrl: imgData || null }) });
+  } catch(e) {
+    showToast(e.message, 'error');
+    input.value = content; // Restore on error
+  }
+}
+
+function closeChatPanelFinal() {
+  // Called when ticket is deleted from server (sold/closed)
+  if (chatState.evtSource) { chatState.evtSource.close(); chatState.evtSource = null; }
+  chatState.ticketId = null;
+  chatState.panelOpen = false;
+  document.getElementById('chatPanel').classList.remove('open');
+  document.getElementById('chatBubble').style.display = 'none';
+}
+
+function toggleChatPanel() {
+  const overlay = document.getElementById('chatPanel');
+  if (overlay.classList.contains('open')) {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    chatState.panelOpen = false;
+  } else {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    chatState.panelOpen = true;
+    const msgs = document.getElementById('chatMessages');
+    if (msgs) msgs.scrollTop = msgs.scrollHeight;
+  }
+}
+
+// ── MY TICKETS ────────────────────────────────────────
+async function loadMyTickets() {
+  try {
+    const tickets = await apiFetch('/shop/tickets/my');
+    const el = document.getElementById('myTicketsList');
+    if (!tickets.length) { el.innerHTML = '<div style="font-size:.8rem;color:var(--text-dim);padding:.3rem 0">Aucune commande</div>'; return; }
+    el.innerHTML = tickets.slice(0, 5).map(t => {
+      const statusColor = { open: 'var(--green)', sold: '#e67e22', closed: 'var(--red)' }[t.status] || 'var(--text-dim)';
+      const statusLabel = { open: 'Ouvert', sold: 'Vendu', closed: 'Fermé' }[t.status] || t.status;
+      return `
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer" onclick="openChatFromTicket('${t._id}','${(t.product?.title||'Commande').replace(/'/g,"\\'")}')">
+          ${t.product?.thumbnail ? `<img src="${t.product.thumbnail}" style="width:32px;height:32px;object-fit:cover;border-radius:4px;flex-shrink:0">` : '<div style="width:32px;height:32px;background:var(--bg3);border-radius:4px;flex-shrink:0"></div>'}
+          <div style="flex:1;min-width:0">
+            <div style="font-size:.8rem;font-weight:600;color:var(--white);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.product?.title || '—'}</div>
+            <div style="font-size:.7rem;color:${statusColor}">${statusLabel}</div>
+          </div>
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--text-dim);flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>`;
+    }).join('');
+  } catch {}
+}
+
+async function openChatFromTicket(ticketId, title) {
+  await openChatPanel(ticketId, title);
+}
+
+// ── ADMIN: ADD/EDIT PRODUCT ───────────────────────────
+function openAddProductModal() {
+  document.getElementById('apTitle').value = '';
+  document.getElementById('apDesc').value = '';
+  document.getElementById('apCategory').value = '';
+  document.getElementById('apPrice').value = '';
+  document.getElementById('apQty').value = '1';
+  document.getElementById('apThumb').value = '';
+  document.getElementById('apFeatured').checked = false;
+  document.getElementById('apEditId').value = '';
+  document.getElementById('addProductModalTitle').textContent = 'Ajouter un produit';
+  document.getElementById('addProductOverlay').classList.add('open');
+}
+
+function editProduct(id) {
+  if (!currentProduct) return;
+  document.getElementById('apTitle').value = currentProduct.title || '';
+  document.getElementById('apDesc').value = currentProduct.description || '';
+  document.getElementById('apCategory').value = currentProduct.category || '';
+  document.getElementById('apPrice').value = currentProduct.price || '';
+  document.getElementById('apQty').value = currentProduct.quantity || 1;
+  document.getElementById('apThumb').value = currentProduct.thumbnail || '';
+  document.getElementById('apFeatured').checked = currentProduct.featured || false;
+  document.getElementById('apEditId').value = id;
+  document.getElementById('addProductModalTitle').textContent = 'Modifier le produit';
+  closeProductModal();
+  document.getElementById('addProductOverlay').classList.add('open');
+}
+
+async function saveProduct() {
+  const editId = document.getElementById('apEditId').value;
+  const body = {
+    title:       document.getElementById('apTitle').value.trim(),
+    description: document.getElementById('apDesc').value.trim(),
+    category:    document.getElementById('apCategory').value,
+    price:       parseFloat(document.getElementById('apPrice').value),
+    quantity:    parseInt(document.getElementById('apQty').value),
+    thumbnail:   document.getElementById('apThumb').value.trim() || null,
+    featured:    document.getElementById('apFeatured').checked,
+  };
+  if (!body.title || !body.description || !body.category || isNaN(body.price) || isNaN(body.quantity)) {
+    return showToast('Remplis tous les champs obligatoires', 'error');
+  }
+  try {
+    if (editId) {
+      await apiFetch(`/shop/products/${editId}`, { method: 'PATCH', body: JSON.stringify(body) });
+      showToast('Produit modifié', 'success');
+    } else {
+      await apiFetch('/shop/products', { method: 'POST', body: JSON.stringify(body) });
+      showToast('Produit ajouté !', 'success');
+    }
+    document.getElementById('addProductOverlay').classList.remove('open');
+    loadCategories();
+    loadFeatured();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+async function deleteProduct(id) {
+  if (!await vunyConfirm({ title: 'Supprimer le produit', msg: 'Retirer ce produit de la boutique ?', type: 'danger', okLabel: 'Supprimer' })) return;
+  try {
+    await apiFetch(`/shop/products/${id}`, { method: 'DELETE' });
+    showToast('Produit retiré', 'success');
+    closeProductModal();
+    loadCategories();
+    loadFeatured();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+async function toggleFeatured(id, val) {
+  try {
+    await apiFetch(`/shop/products/${id}`, { method: 'PATCH', body: JSON.stringify({ featured: val }) });
+    showToast(val ? 'Mis en avant' : 'Retiré de la une', 'success');
+    loadFeatured();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+// ── UTILS ─────────────────────────────────────────────
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'<br>');
+}
+
+let _chatImgBase64 = null;
+window._chatImgSelected = false;
+
+function handleChatImgFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    window._chatImgData = e.target.result;
+    window._chatImgSelected = true;
+    const preview = document.getElementById('chatImgPreviewRow');
+    const thumb = document.getElementById('chatImgPreviewThumb');
+    const nameEl = document.getElementById('chatImgPreviewName');
+    const btn = document.getElementById('chatImgBtn');
+    if (preview) preview.classList.add('show');
+    if (thumb) thumb.src = e.target.result;
+    if (nameEl) nameEl.textContent = file.name;
+    if (btn) btn.classList.add('selected');
+  };
+  reader.readAsDataURL(file);
+}
+</script>
+
+<!-- Custom confirm (copié de admin.html) -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon confirm-icon-danger" id="confirmIconWrap">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+    </div>
+    <div class="confirm-title" id="confirmTitle">Confirmation</div>
+    <div class="confirm-msg" id="confirmMsg"></div>
+    <div class="confirm-actions">
+      <button class="btn btn-outline" id="confirmCancelBtn">Annuler</button>
+      <button class="btn btn-danger" id="confirmOkBtn">Confirmer</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  let _resolve=null;
+  const overlay=document.getElementById('confirmOverlay');
+  const titleEl=document.getElementById('confirmTitle');
+  const msgEl=document.getElementById('confirmMsg');
+  const okBtn=document.getElementById('confirmOkBtn');
+  const cancelBtn=document.getElementById('confirmCancelBtn');
+  const iconWrap=document.getElementById('confirmIconWrap');
+  const ICONS={danger:`<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>`};
+  function close(r){overlay.classList.remove('open');if(_resolve){_resolve(r);_resolve=null;}}
+  okBtn.addEventListener('click',()=>close(true));
+  cancelBtn.addEventListener('click',()=>close(false));
+  overlay.addEventListener('click',e=>{if(e.target===overlay)close(false);});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('open'))close(false);});
+  window.vunyConfirm=function({title='Confirmation',msg='',type='danger',okLabel='Confirmer',cancelLabel='Annuler'}={}){
+    titleEl.textContent=title;msgEl.textContent=msg;okBtn.textContent=okLabel;cancelBtn.textContent=cancelLabel;
+    iconWrap.className='confirm-icon confirm-icon-'+type;iconWrap.innerHTML=ICONS[type]||ICONS.danger;
+    okBtn.className='btn '+(type==='danger'?'btn-danger':'btn-primary');
+    overlay.classList.add('open');setTimeout(()=>okBtn.focus(),50);
+    return new Promise(resolve=>{_resolve=resolve;});
+  };
+})();
+</script>
+</body>
+</html>

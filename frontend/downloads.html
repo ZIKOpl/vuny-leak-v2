@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vuny Leak V2 — Ressources</title>
+<link rel="icon" href="assets/favicon.ico">
+<script>
+// Redirect with any search/category param preserved
+const params = new URLSearchParams(window.location.search);
+const search = params.get('search');
+const category = params.get('category');
+let dest = 'index.html';
+if (search) dest += '?search=' + encodeURIComponent(search);
+else if (category) dest += '?category=' + encodeURIComponent(category);
+window.location.replace(dest);
+</script>
+</head>
+<body></body>
+</html>

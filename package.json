@@ -1,0 +1,8 @@
+{
+  "name": "vuny-leak-v2",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd backend && npm install",
+    "start": "cd backend && node server.js"
+  }
+}

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIP — Vuny Leak V2</title>
+<link rel="icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<header class="navbar" id="navbar"></header>
+<nav class="mobile-nav" id="mobileNav">
+  <a href="index.html">Accueil</a>
+  <a href="shop.html">Boutique</a>
+  <a href="vip.html" class="active">VIP</a>
+  <a href="about.html">À propos</a>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HERO VIP -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-radial"></div>
+    <div class="hero-content" id="vipHero">
+      <div class="hero-label">★ Zone Exclusive</div>
+      <h1 class="hero-title">ZONE <span class="accent">VIP</span></h1>
+      <p class="hero-subtitle">Ressources exclusives réservées aux membres VIP. Scripts, MLO, vehicles et contenus premium.</p>
+    </div>
+  </section>
+
+  <!-- CONTENU : non-VIP ou VIP -->
+  <div id="vipPageContent">
+    <div class="loading" style="padding:4rem"><div class="spinner"></div></div>
+  </div>
+
+</div>
+
+<!-- Modal +18 -->
+<div class="confirm-overlay" id="adultOverlay">
+  <div class="confirm-box" style="max-width:440px">
+    <div class="confirm-icon" style="background:rgba(215,38,56,.1);border:1px solid var(--red-border)">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <div class="confirm-title" style="font-size:1.3rem">Contenu +18</div>
+    <div class="confirm-msg">
+      Cette catégorie contient du <strong style="color:var(--white)">contenu réservé aux adultes (+18)</strong>.<br><br>
+      Pour y accéder, tu dois rejoindre notre serveur Discord dédié et obtenir la vérification d'âge.
+    </div>
+    <div style="margin-bottom:1.2rem">
+      <a href="https://discord.gg/VOTRE_INVITE_18" target="_blank" id="adult18DiscordBtn"
+         class="btn btn-danger" style="width:100%;justify-content:center;margin-bottom:.5rem;padding:11px">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007q.121.1.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/></svg>
+        Rejoindre le serveur +18
+      </a>
+    </div>
+    <div class="confirm-actions" style="justify-content:center">
+      <button class="btn btn-outline" onclick="document.getElementById('adultOverlay').classList.remove('open')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Resource Modal (même que index) -->
+<div class="overlay" id="resourceOverlay">
+  <div class="modal" style="max-width:820px">
+    <div class="modal-head">
+      <div class="modal-head-title" id="modalTitle"></div>
+      <button class="modal-close" onclick="closeResourceModal()">&#10005;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<footer class="footer" id="footer"></footer>
+<script src="js/app.js"></script>
+<script>
+// ── CONFIG — remplace par tes vrais liens ──
+const DISCORD_INVITE     = 'https://discord.gg/VOTRE_INVITE';
+const DISCORD_VIP_SERVER = 'https://discord.gg/VOTRE_INVITE_VIP';
+const DISCORD_18_SERVER  = 'https://discord.gg/VOTRE_INVITE_18';
+
+// Update the +18 discord link dynamically
+document.getElementById('adult18DiscordBtn').href = DISCORD_18_SERVER;
+
+// ── STATE ──
+let vipState = { category: null, page: 1, cats: [], catCounts: {}, searchQuery: null };
+
+// ── INIT ──
+(async () => {
+  await initAuth();
+  renderNavbar('vip');
+  renderFooter();
+  renderVipPage();
+})();
+
+function renderVipPage() {
+  const content = document.getElementById('vipPageContent');
+
+  if (!App.user || !isVip(App.user.role)) {
+    // ─── PAS VIP ───────────────────────────────────────────────
+    document.getElementById('vipHero').innerHTML = `
+      <div class="hero-label">★ Zone Exclusive</div>
+      <h1 class="hero-title">ACCÈS <span class="accent">VIP</span></h1>
+      <p class="hero-subtitle">
+        Cette zone est réservée aux membres VIP.<br>
+        Rejoins notre serveur Discord et ouvre un ticket pour acheter ton accès.
+      </p>
+      <div class="hero-actions">
+        <a href="${DISCORD_INVITE}" target="_blank" class="btn btn-primary btn-lg">
+          ${DISCORD_SVG} Rejoindre le Discord
+        </a>
+        ${!App.user ? `<a href="${API_BASE}/auth/discord" class="btn btn-outline btn-lg">${DISCORD_SVG} Se connecter</a>` : ''}
+      </div>
+    `;
+    content.innerHTML = `
+      <div style="max-width:900px;margin:0 auto;padding:2.5rem 2rem 3rem">
+        <div class="about-pillars" style="margin-bottom:2rem">
+          <div class="about-pillar">
+            <div class="about-pillar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            <div class="about-pillar-title">Contenu exclusif</div>
+            <p class="about-pillar-text">Scripts, MLO, véhicules et ressources premium introuvables ailleurs. Mis à jour chaque semaine.</p>
+          </div>
+          <div class="about-pillar">
+            <div class="about-pillar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div class="about-pillar-title">Communauté privée</div>
+            <p class="about-pillar-text">Accès au salon VIP privé sur Discord. Échanges directs avec les membres et le staff.</p>
+          </div>
+          <div class="about-pillar">
+            <div class="about-pillar-icon"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <div class="about-pillar-title">Mises à jour régulières</div>
+            <p class="about-pillar-text">Nouveau contenu ajouté régulièrement. Ton accès est valable sans limite de durée.</p>
+          </div>
+        </div>
+        <div class="about-block">
+          <h3>Comment obtenir l'accès VIP ?</h3>
+          <div class="rules-compact">
+            <div class="rule-compact"><div class="rule-compact-num">1</div>Rejoins notre serveur Discord via le bouton ci-dessus.</div>
+            <div class="rule-compact"><div class="rule-compact-num">2</div>Rends-toi dans le canal de tickets et ouvre un ticket "Achat VIP".</div>
+            <div class="rule-compact"><div class="rule-compact-num">3</div>Effectue le paiement selon les instructions données par le staff.</div>
+            <div class="rule-compact"><div class="rule-compact-num">4</div>Une fois validé, le staff t'accordera l'accès VIP sur le site.</div>
+            <div class="rule-compact"><div class="rule-compact-num">5</div>Reconnecte-toi ici avec Discord pour accéder à la zone VIP.</div>
+          </div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  // ─── A LE VIP ─────────────────────────────────────────────────
+  document.getElementById('vipHero').innerHTML = `
+    <div class="hero-label">★ Accès VIP actif</div>
+    <h1 class="hero-title">ZONE <span class="accent">VIP</span></h1>
+    <p class="hero-subtitle">Bienvenue, <strong style="color:var(--white)">${App.user.username}</strong> ! Accède à toutes les ressources exclusives.</p>
+
+  `;
+
+  content.innerHTML = `
+    <div class="main-grid">
+      <div class="main-content">
+        <!-- BROWSE VIP -->
+        <div class="section" id="vipBrowseSection">
+          <div class="cat-header">
+            <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1">
+              <span id="vipCatHeaderIcon" style="font-size:1.4rem;flex-shrink:0">⭐</span>
+              <div style="min-width:0">
+                <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--white);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="vipCatHeaderName">Toutes les ressources VIP</div>
+                <div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px" id="vipCatHeaderCount"></div>
+              </div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <span class="sort-label">Trier par</span>
+            <select class="sort-select" id="vipSortSelect" onchange="loadVipResources()">
+              <option value="createdAt">Plus récents</option>
+              <option value="rating">Mieux notés</option>
+              <option value="downloads">Plus téléchargés</option>
+              <option value="views">Plus vus</option>
+            </select>
+          </div>
+          <div class="resources-grid" id="vipResourcesGrid">
+            <div class="loading" style="grid-column:1/-1"><div class="spinner"></div></div>
+          </div>
+          <div class="pagination" id="vipPagination"></div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR VIP -->
+      <div class="main-sidebar">
+        <div class="sidebar-box" >
+          <div class="sidebar-label">Catégories VIP</div>
+          <div class="cat-list" id="vipCatList">
+            <div class="loading" style="padding:1rem 0"><div class="spinner" style="margin:0 auto"></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  loadVipCategoriesAndResources();
+}
+
+// ── CHARGEMENT CATÉGORIES + RESSOURCES VIP ──
+async function loadVipCategoriesAndResources() {
+  try {
+    const [cats, stats] = await Promise.all([
+      apiFetch('/categories'),
+      apiFetch('/resources/stats?vipOnly=true')
+    ]);
+    vipState.cats = cats;
+    const countMap = {};
+    (stats.byCategory || []).forEach(b => { countMap[b._id] = b.count; });
+    vipState.catCounts = countMap;
+    const total = stats.total || 0;
+
+    // Catégorie +18 spéciale (toujours ajoutée)
+    const list = document.getElementById('vipCatList');
+    if (!list) return;
+    list.innerHTML = `
+      <div class="cat-item active" onclick="selectVipCat(null,this)" id="vipCatAll">
+        <div class="cat-item-left"><span class="cat-icon">⭐</span><span>Toutes les ressources</span></div>
+        <span class="cat-count">${total}</span>
+      </div>
+      ${cats.map(c => `
+        <div class="cat-item" onclick="selectVipCat('${c.name}',this)">
+          <div class="cat-item-left"><span class="cat-icon">${c.icon || '📦'}</span><span>${c.name}</span></div>
+          <span class="cat-count">${countMap[c.name] || 0}</span>
+        </div>
+      `).join('')}
+      <div class="cat-item cat-18" onclick="open18Gate()">
+        <div class="cat-item-left"><span class="cat-icon">🔞</span><span style="color:var(--red)">+18</span></div>
+        <span class="cat-count" >Accès requis</span>
+      </div>
+    `;
+    loadVipResources();
+  } catch(e) {
+    const list = document.getElementById('vipCatList');
+    if (list) list.innerHTML = '<div class="empty" style="padding:.5rem"><p>Erreur</p></div>';
+    loadVipResources();
+  }
+}
+
+function selectVipCat(name, el) {
+  vipState.category = name; vipState.page = 1; vipState.searchQuery = null;
+  document.querySelectorAll('#vipCatList .cat-item').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  if (!name) {
+    document.getElementById('vipCatHeaderIcon').textContent = '⭐';
+    document.getElementById('vipCatHeaderName').textContent = 'Toutes les ressources VIP';
+  } else {
+    const cat = vipState.cats.find(c => c.name === name);
+    document.getElementById('vipCatHeaderIcon').textContent = cat?.icon || '📦';
+    document.getElementById('vipCatHeaderName').textContent = name;
+  }
+  const count = name ? (vipState.catCounts[name] || 0) : Object.values(vipState.catCounts).reduce((a,b)=>a+b,0);
+  document.getElementById('vipCatHeaderCount').textContent = `${count} fichier${count>1?'s':''}`;
+  document.getElementById('vipBrowseSection').scrollIntoView({ behavior:'smooth', block:'start' });
+  loadVipResources();
+}
+
+function open18Gate() {
+  document.getElementById('adultOverlay').classList.add('open');
+}
+
+async function loadVipResources() {
+  const grid = document.getElementById('vipResourcesGrid');
+  if (!grid) return;
+  grid.innerHTML = '<div class="loading" style="grid-column:1/-1"><div class="spinner"></div></div>';
+  try {
+    const sort = document.getElementById('vipSortSelect')?.value || 'createdAt';
+    const params = new URLSearchParams({ sort, page: vipState.page, limit: 12, vipOnly: 'true' });
+    if (vipState.category) params.set('category', vipState.category);
+    const data = await apiFetch(`/resources?${params}`);
+    if (!data.resources?.length) {
+      grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><p>Aucune ressource VIP dans cette catégorie</p></div>';
+      document.getElementById('vipPagination').innerHTML = '';
+      return;
+    }
+    grid.innerHTML = data.resources.map(r => resourceCard(r)).join('');
+    renderVipPagination(data.pages);
+  } catch {
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><p>Erreur de chargement</p></div>';
+  }
+}
+
+function renderVipPagination(pages) {
+  const el = document.getElementById('vipPagination');
+  if (!el || pages <= 1) { if(el) el.innerHTML = ''; return; }
+  let html = '';
+  if (vipState.page > 1) html += `<button class="page-btn" onclick="vipGoPage(${vipState.page-1})">‹</button>`;
+  for (let i=1; i<=pages; i++) {
+    if (i===1||i===pages||Math.abs(i-vipState.page)<=2) html += `<button class="page-btn ${i===vipState.page?'active':''}" onclick="vipGoPage(${i})">${i}</button>`;
+    else if (Math.abs(i-vipState.page)===3) html += `<span style="padding:0 4px;color:var(--text-dim)">…</span>`;
+  }
+  if (vipState.page < pages) html += `<button class="page-btn" onclick="vipGoPage(${vipState.page+1})">›</button>`;
+  el.innerHTML = html;
+}
+
+function vipGoPage(p) {
+  vipState.page = p; loadVipResources();
+  document.getElementById('vipBrowseSection')?.scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>

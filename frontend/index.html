@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vuny Leak V2 — Ressources FiveM</title>
+<link rel="icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<header class="navbar" id="navbar"></header>
+<div id="announcementBanners"></div>
+<nav class="mobile-nav" id="mobileNav">
+  <a href="index.html" class="active">Accueil</a>
+  <a href="shop.html">Boutique</a>
+  <a href="about.html">À propos</a>
+  <a href="submit.html" id="mobileSubmitLink" style="display:none">Soumettre</a>
+</nav>
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-radial"></div>
+    <div class="hero-content">
+      <div class="hero-label">Plateforme de ressources FiveM</div>
+      <h1 class="hero-title">VUNY LEAK <span class="accent">V2</span></h1>
+      <p class="hero-subtitle">Parcourez, téléchargez et partagez des ressources FiveM vérifiées. Scripts, MLO, Vehicles et bien plus.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-lg" onclick="document.getElementById('browseSection').scrollIntoView({behavior:'smooth'})">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Explorer les ressources
+        </button>
+        <a href="submit.html" class="btn btn-outline btn-lg" id="submitBtn" style="display:none">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Importer un fichier
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="main-grid">
+    <div class="main-content">
+
+      <!-- TOP 5 -->
+      <div class="section">
+        <div class="section-head">
+          <h2 class="section-title">Top <span class="accent">5</span> des téléchargements</h2>
+          <div class="section-line"></div>
+        </div>
+        <div class="top5-grid" id="top5Grid"><div class="loading" style="grid-column:1/-1"><div class="spinner"></div></div></div>
+      </div>
+
+      <!-- BROWSE -->
+      <div class="section" id="browseSection">
+        <div class="cat-header">
+          <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1">
+            <span id="catHeaderIcon" style="font-size:1.4rem;flex-shrink:0">📦</span>
+            <div style="min-width:0">
+              <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--white);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="catHeaderName">Toutes les ressources</div>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px" id="catHeaderCount"></div>
+            </div>
+          </div>
+          <a href="submit.html" class="btn btn-outline btn-sm" id="submitBtnCat" style="display:none;flex-shrink:0">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Soumettre un fichier
+          </a>
+        </div>
+        <div class="sort-bar">
+          <span class="sort-label">Trier par</span>
+          <select class="sort-select" id="sortSelect" onchange="loadResources()">
+            <option value="createdAt">Plus récents</option>
+            <option value="rating">Mieux notés</option>
+            <option value="downloads">Plus téléchargés</option>
+            <option value="views">Plus vus</option>
+          </select>
+        </div>
+        <div class="resources-grid" id="resourcesGrid"><div class="loading" style="grid-column:1/-1"><div class="spinner"></div></div></div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="main-sidebar">
+      <div class="sidebar-box">
+        <div class="sidebar-label">Toutes les catégories</div>
+        <div class="cat-list" id="catList"><div class="loading" style="padding:1rem 0"><div class="spinner" style="margin:0 auto"></div></div></div>
+      </div>
+
+      <!-- STATS with Discord -->
+      <div class="sidebar-box">
+        <div class="sidebar-label">Statistiques membres</div>
+        <div style="display:flex;flex-direction:column">
+          <div class="sidebar-stat-row">
+            <div class="sidebar-stat-label">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Membres inscrits
+            </div>
+            <div class="sidebar-stat-val" id="statMembers">—</div>
+          </div>
+          <div class="sidebar-stat-row">
+            <div class="sidebar-stat-label">
+              <svg fill="currentColor" viewBox="0 0 16 16" style="width:13px;height:13px;color:currentColor"><path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007q.121.1.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/></svg>
+              Membres Discord
+            </div>
+            <div class="sidebar-stat-val" id="statDiscordMembers">—</div>
+          </div>
+          <div class="sidebar-stat-row">
+            <div class="sidebar-stat-label">
+              <svg fill="currentColor" viewBox="0 0 16 16" style="width:13px;height:13px;color:currentColor"><path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007q.121.1.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/></svg>
+              En ligne Discord
+            </div>
+            <div class="sidebar-stat-val" id="statDiscordOnline">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-box">
+        <div class="sidebar-label">Grandir ensemble</div>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:.8rem;line-height:1.5">Vous aimez Vuny Leak V2 ? Partagez avec vos amis !</p>
+        <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="try{navigator.clipboard.writeText(location.origin).then(()=>showToast('Lien copié !','success')).catch(()=>{const ta=document.createElement('textarea');ta.value=location.origin;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Lien copié !','success');});}catch(e){showToast('Impossible de copier','error');}">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          Partager
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="resourceOverlay">
+  <div class="modal" style="max-width:820px">
+    <div class="modal-head"><div class="modal-head-title" id="modalTitle"></div><button class="modal-close" onclick="closeResourceModal()">&#10005;</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+<div id="toast-container"></div>
+<footer class="footer" id="footer"></footer>
+<script src="js/app.js"></script>
+<script>
+let homeState = { category: null, page: 1, catCounts: {}, cats: [], searchQuery: null };
+
+(async () => {
+  await initAuth();
+  renderNavbar('home');
+  renderFooter();
+  if (App.user) {
+    document.getElementById('submitBtn').style.display = 'inline-flex';
+    document.getElementById('submitBtnCat').style.display = 'inline-flex';
+    const ml = document.getElementById('mobileSubmitLink');
+    if (ml) ml.style.display = 'block';
+  }
+  loadTop5();
+  await loadCategories();
+  loadStats();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchQ = urlParams.get('search');
+  if (searchQ) { window.history.replaceState({}, '', window.location.pathname); performSearch(searchQ); }
+})();
+
+window.performSearch = function(q) {
+  homeState.searchQuery = q; homeState.page = 1; homeState.category = null;
+  document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
+  const all = document.getElementById('catAll');
+  if(all) all.classList.add('active');
+  document.getElementById('catHeaderIcon').textContent = '🔍';
+  document.getElementById('catHeaderName').textContent = `Résultats pour "${q}"`;
+  document.getElementById('browseSection').scrollIntoView({behavior:'smooth'});
+  loadResources();
+  const si = document.getElementById('globalSearch');
+  if(si) si.value = q;
+};
+
+async function loadTop5() {
+  try {
+    const data = await apiFetch('/resources/top5');
+    const el = document.getElementById('top5Grid');
+    if (!data.length) { el.innerHTML = '<div class="empty" style="grid-column:1/-1"><p>Aucune ressource</p></div>'; return; }
+    el.innerHTML = data.map((r,i) => resourceCard(r,i)).join('');
+  } catch { document.getElementById('top5Grid').innerHTML = '<div class="empty" style="grid-column:1/-1"><p>Erreur</p></div>'; }
+}
+
+async function loadCategories() {
+  try {
+    const [cats, stats] = await Promise.all([apiFetch('/categories'), apiFetch('/resources/stats')]);
+    homeState.cats = cats;
+    const countMap = {};
+    (stats.byCategory || []).forEach(b => { countMap[b._id] = b.count; });
+    homeState.catCounts = countMap;
+    const total = stats.total || 0;
+    const list = document.getElementById('catList');
+    list.innerHTML = `
+      <div class="cat-item active" onclick="selectCat(null,this)" id="catAll">
+        <div class="cat-item-left"><span class="cat-icon">📋</span><span>Toutes les catégories</span></div>
+        <span class="cat-count">${total}</span>
+      </div>
+      ${cats.map(c => `
+        <div class="cat-item" onclick="selectCat('${c.name}',this)">
+          <div class="cat-item-left"><span class="cat-icon">${c.icon || '📦'}</span><span>${c.name}</span></div>
+          <span class="cat-count">${countMap[c.name] || 0}</span>
+        </div>
+      `).join('')}
+    `;
+    loadResources();
+  } catch(e) {
+    document.getElementById('catList').innerHTML = '<div class="empty" style="padding:.5rem"><p>Erreur</p></div>';
+    loadResources();
+  }
+}
+
+function selectCat(name, el) {
+  homeState.category = name; homeState.page = 1; homeState.searchQuery = null;
+  document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  if (!name) {
+    document.getElementById('catHeaderIcon').textContent = '📋';
+    document.getElementById('catHeaderName').textContent = 'Toutes les ressources';
+  } else {
+    const cat = homeState.cats.find(c => c.name === name);
+    document.getElementById('catHeaderIcon').textContent = cat?.icon || '📦';
+    document.getElementById('catHeaderName').textContent = name;
+  }
+  const count = name ? (homeState.catCounts[name] || 0) : Object.values(homeState.catCounts).reduce((a,b)=>a+b,0);
+  document.getElementById('catHeaderCount').textContent = `${count} fichier${count>1?'s':''}`;
+  document.getElementById('browseSection').scrollIntoView({ behavior:'smooth', block:'start' });
+  loadResources();
+}
+
+async function loadResources() {
+  const grid = document.getElementById('resourcesGrid');
+  grid.innerHTML = '<div class="loading" style="grid-column:1/-1"><div class="spinner"></div></div>';
+  try {
+    const sort = document.getElementById('sortSelect').value;
+    const params = new URLSearchParams({ sort, page: homeState.page, limit: 12 });
+    if (homeState.category) params.set('category', homeState.category);
+    if (homeState.searchQuery) params.set('search', homeState.searchQuery);
+    const data = await apiFetch(`/resources?${params}`);
+    if (!data.resources?.length) {
+      grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><p>Aucune ressource dans cette catégorie</p></div>';
+      document.getElementById('pagination').innerHTML = ''; return;
+    }
+    grid.innerHTML = data.resources.map(r => resourceCard(r)).join('');
+    renderPagination(data.pages);
+  } catch { grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><p>Erreur de chargement</p></div>'; }
+}
+
+function renderPagination(pages) {
+  const el = document.getElementById('pagination');
+  if (pages <= 1) { el.innerHTML = ''; return; }
+  let html = '';
+  if (homeState.page > 1) html += `<button class="page-btn" onclick="goPage(${homeState.page-1})">‹</button>`;
+  for (let i=1; i<=pages; i++) {
+    if (i===1||i===pages||Math.abs(i-homeState.page)<=2) html += `<button class="page-btn ${i===homeState.page?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    else if (Math.abs(i-homeState.page)===3) html += `<span style="padding:0 4px;color:var(--text-dim)">…</span>`;
+  }
+  if (homeState.page < pages) html += `<button class="page-btn" onclick="goPage(${homeState.page+1})">›</button>`;
+  el.innerHTML = html;
+}
+function goPage(p) { homeState.page = p; loadResources(); window.scrollTo({top:document.getElementById('browseSection').offsetTop,behavior:'smooth'}); }
+
+async function loadStats() {
+  try {
+    const [s1, s2, discord] = await Promise.allSettled([
+      apiFetch('/resources/stats'),
+      apiFetch('/admin/stats'),
+      apiFetch('/admin/discord-stats')
+    ]);
+    if (s2.status==='fulfilled') {
+      document.getElementById('statMembers').textContent = (s2.value.totalUsers ?? 0).toLocaleString('fr-FR');
+    }
+    if (discord.status==='fulfilled' && discord.value?.guildId) {
+      document.getElementById('statDiscordMembers').textContent = (discord.value.memberCount ?? '—').toLocaleString?.('fr-FR') ?? discord.value.memberCount ?? '—';
+      document.getElementById('statDiscordOnline').textContent = (discord.value.onlineCount ?? '—').toLocaleString?.('fr-FR') ?? discord.value.onlineCount ?? '—';
+    }
+  } catch {}
+}
+
+// ── ANNONCES ──────────────────────────────────────────────
+async function loadAnnouncementBanners() {
+  try {
+    const data = await apiFetch('/announcements');
+    if (!data || !data.length) return;
+    const container = document.getElementById('announcementBanners');
+    if (!container) return;
+
+    // Styles injected once
+    if (!document.getElementById('ann-style')) {
+      const style = document.createElement('style');
+      style.id = 'ann-style';
+      style.textContent = `
+        .ann-banner {
+          position: fixed; top: 62px; left: 50%; transform: translateX(-50%) translateY(-120%);
+          z-index: 490; width: calc(100% - 2rem); max-width: 700px;
+          background: var(--bg2); border: 1px solid var(--border);
+          border-radius: 12px; overflow: hidden;
+          box-shadow: 0 8px 32px rgba(0,0,0,.6);
+          transition: transform .45s cubic-bezier(.34,1.56,.64,1), opacity .45s ease;
+          opacity: 0; display: none;
+        }
+        .ann-banner.show { transform: translateX(-50%) translateY(12px); opacity: 1; }
+        .ann-banner-inner { display: flex; gap: 0; }
+        .ann-banner-img { width: 100px; height: 100%; object-fit: cover; flex-shrink: 0; }
+        .ann-banner-content { padding: .9rem 1rem; flex: 1; min-width: 0; }
+        .ann-banner-title { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: .25rem; line-height: 1.2; }
+        .ann-banner-desc { font-size: .82rem; line-height: 1.55; opacity: .9; }
+        .ann-banner-close {
+          position: absolute; top: .5rem; right: .5rem;
+          width: 24px; height: 24px; border-radius: 6px;
+          background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+          color: #fff; display: flex; align-items: center; justify-content: center;
+          cursor: pointer; font-size: 14px; line-height: 1; transition: background .15s;
+        }
+        .ann-banner-close:hover { background: rgba(255,255,255,.18); }
+        .ann-banner-progress {
+          height: 2px; background: var(--red);
+          transform-origin: left; animation: ann-progress linear forwards;
+        }
+        @keyframes ann-progress { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+      `;
+      document.head.appendChild(style);
+    }
+
+    let current = 0;
+    const banners = [];
+
+    function showBanner(idx) {
+      if (idx >= data.length) return;
+      const a = data[idx];
+
+      // Remove previous
+      banners.forEach(b => b.remove());
+      banners.length = 0;
+
+      const div = document.createElement('div');
+      div.className = 'ann-banner';
+      div.style.position = 'fixed';
+      div.innerHTML = `
+        <button class="ann-banner-close" onclick="this.closest('.ann-banner').remove()">✕</button>
+        <div style="height:2px;background:var(--border)"><div class="ann-banner-progress" style="animation-duration:12s" id="ann-prog-${idx}"></div></div>
+        <div class="ann-banner-inner">
+          ${a.imageUrl ? `<img class="ann-banner-img" src="${a.imageUrl}" onerror="this.style.display='none'">` : ''}
+          <div class="ann-banner-content">
+            <div class="ann-banner-title" style="color:${a.titleColor || '#fff'}">${a.title}</div>
+            ${a.description ? `<div class="ann-banner-desc" style="color:${a.descColor || '#aaa'}">${a.description}</div>` : ''}
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(div);
+      banners.push(div);
+
+      // Trigger animation
+      requestAnimationFrame(() => {
+        div.style.display = 'block';
+        requestAnimationFrame(() => div.classList.add('show'));
+      });
+
+      // Auto-dismiss after 12s
+      setTimeout(() => {
+        div.classList.remove('show');
+        setTimeout(() => {
+          div.remove();
+          current++;
+          if (current < data.length) showBanner(current);
+        }, 500);
+      }, 12000);
+    }
+
+    showBanner(0);
+  } catch(e) { console.warn('Announcements:', e.message); }
+}
+
+loadAnnouncementBanners();
+</script>
+</body>
+</html>

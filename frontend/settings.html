@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paramètres — Vuny Leak V2</title>
+<link rel="icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="css/main.css">
+<script>
+// Défini tôt pour que les onclick inline fonctionnent
+function switchTab(name, el) {
+  document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+  document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+</script>
+<style>
+.settings-layout{display:grid;grid-template-columns:220px 1fr;gap:1.5rem;max-width:960px;margin:2rem auto;padding:0 2rem 3rem}
+@media(max-width:750px){.settings-layout{grid-template-columns:1fr}}
+.settings-nav{display:flex;flex-direction:column;gap:2px}
+.settings-nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius);font-size:0.82rem;color:var(--text-muted);cursor:pointer;transition:all 0.15s;border:1px solid transparent}
+.settings-nav-item:hover{background:var(--bg3);color:var(--text)}
+.settings-nav-item.active{background:var(--red-dim);color:var(--red);border-color:var(--red-border)}
+.settings-nav-item svg{width:15px;height:15px;flex-shrink:0}
+.settings-nav-sep{height:1px;background:var(--border);margin:6px 0}
+.settings-section{display:none}
+.settings-section.active{display:block}
+.settings-section-title{font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:.3rem}
+.settings-section-sub{font-size:0.8rem;color:var(--text-muted);margin-bottom:1.5rem}
+.setting-block{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1rem;overflow:hidden}
+.setting-block-head{padding:.9rem 1.2rem;border-bottom:1px solid var(--border);font-size:0.78rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.07em;background:var(--bg3)}
+.setting-block-body{padding:1.2rem}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-info{flex:1;min-width:0}
+.toggle-label{font-size:0.83rem;font-weight:500}
+.toggle-desc{font-size:0.75rem;color:var(--text-muted);margin-top:2px}
+.toggle-switch{position:relative;width:38px;height:20px;flex-shrink:0;margin-left:1rem}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--bg4);border-radius:20px;cursor:pointer;transition:background .2s;border:1px solid var(--border)}
+.toggle-slider::before{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:var(--text-dim);bottom:2px;left:2px;transition:transform .2s,background .2s}
+input:checked+.toggle-slider{background:rgba(215,38,56,.2);border-color:var(--red-border)}
+input:checked+.toggle-slider::before{transform:translateX(18px);background:var(--red)}
+</style>
+</head>
+<body>
+<header class="navbar" id="navbar"></header>
+<nav class="mobile-nav" id="mobileNav"><a href="index.html">Accueil</a><a href="shop.html">Boutique</a><a href="about.html">À propos</a></nav>
+<div class="page-wrap">
+  <div class="settings-page-hero">
+    <div class="settings-page-hero-inner">
+      <h1>
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Paramètres
+      </h1>
+      <p>Gérez les paramètres de votre compte</p>
+    </div>
+  </div>
+
+  <div class="settings-layout">
+    <div>
+      <div class="settings-nav">
+        <div class="settings-nav-item active" onclick="switchTab('apercu',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Aperçu du profil
+        </div>
+        <div class="settings-nav-item" onclick="switchTab('securite',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Sécurité & confidentialité
+        </div>
+        <div class="settings-nav-item" onclick="switchTab('notifications',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Notifications
+        </div>
+        <div class="settings-nav-item" onclick="switchTab('badges',this)">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+          Mes badges
+        </div>
+        <div class="settings-nav-sep"></div>
+        <div class="settings-nav-item" onclick="switchTab('discord',this)">
+          <svg fill="currentColor" viewBox="0 0 16 16"><path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007q.121.1.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/></svg>
+          Discord
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <!-- APERÇU -->
+      <div class="settings-section active" id="tab-apercu">
+        <div class="settings-section-title">Aperçu du profil</div>
+        <div class="settings-section-sub">Informations visibles par les autres membres</div>
+        <div class="setting-block">
+          <div class="setting-block-head">Identité Discord</div>
+          <div class="setting-block-body">
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem">
+              <img id="settingsAvatar" style="width:64px;height:64px;border-radius:50%;object-fit:cover;background:var(--bg3)" src="" alt="">
+              <div>
+                <div id="settingsUsername" style="font-family:var(--font-display);font-size:1.1rem;font-weight:700"></div>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">Votre avatar et nom proviennent de Discord.</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Biographie</label>
+              <textarea class="form-input" id="settingsBio" style="min-height:80px" placeholder="Présentez-vous en quelques mots..."></textarea>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <button class="btn btn-primary btn-sm" onclick="saveBio()">Sauvegarder</button>
+              <span class="save-indicator" id="bioSaved">✓ Sauvegardé</span>
+            </div>
+          </div>
+        </div>
+        <div class="setting-block">
+          <div class="setting-block-head">Informations du compte</div>
+          <div class="setting-block-body">
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-label">Identifiant Discord</div><div class="toggle-desc" id="settingsDiscordId" style="font-family:monospace;font-size:0.78rem"></div></div>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-label">Rôle sur la plateforme</div><div style="margin-top:4px" id="settingsRole"></div></div>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-label">Membre depuis</div><div class="toggle-desc" id="settingsJoined"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SÉCURITÉ -->
+      <div class="settings-section" id="tab-securite">
+        <div class="settings-section-title">Sécurité & Confidentialité</div>
+        <div class="settings-section-sub">Gérez la visibilité de votre compte</div>
+        <div class="setting-block">
+          <div class="setting-block-head">Options de confidentialité</div>
+          <div class="setting-block-body">
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-label">Afficher votre statut en ligne</div>
+                <div class="toggle-desc">Permet aux autres membres de voir si vous êtes en ligne</div>
+              </div>
+              <label class="toggle-switch"><input type="checkbox" id="toggleOnline" checked onchange="savePrivacyPref('showOnline', this.checked)"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-label">Autoriser les commentaires</div>
+                <div class="toggle-desc">Les membres peuvent laisser des commentaires sur vos ressources</div>
+              </div>
+              <label class="toggle-switch"><input type="checkbox" id="toggleComments" checked onchange="savePrivacyPref('allowComments', this.checked)"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-label">Profil visible publiquement</div>
+                <div class="toggle-desc">Votre profil peut être consulté par tous les visiteurs</div>
+              </div>
+              <label class="toggle-switch"><input type="checkbox" id="togglePublic" checked onchange="savePrivacyPref('publicProfile', this.checked)"><span class="toggle-slider"></span></label>
+            </div>
+            <div style="margin-top:.8rem;display:flex;align-items:center;gap:10px">
+              <span class="save-indicator" id="privacySaved">✓ Préférences sauvegardées</span>
+            </div>
+          </div>
+        </div>
+        <div class="setting-block" style="border-color:var(--red-border)">
+          <div class="setting-block-head" style="color:var(--red)">Zone de danger</div>
+          <div class="setting-block-body">
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-label">Supprimer mon compte</div>
+                <div class="toggle-desc">Cette action est irréversible. Toutes vos données seront supprimées.</div>
+              </div>
+              <button class="btn btn-danger btn-sm" onclick="showToast('Contactez un administrateur pour supprimer votre compte','info')">Supprimer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS -->
+      <div class="settings-section" id="tab-notifications">
+        <div class="settings-section-title">Préférences de notification</div>
+        <div class="settings-section-sub">Choisissez les événements pour lesquels vous souhaitez être notifié</div>
+        <div class="setting-block">
+          <div class="setting-block-head">Notifications du site</div>
+          <div class="setting-block-body">
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-label">Ressource approuvée</div><div class="toggle-desc">Notifié lorsqu'une de vos soumissions est approuvée</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="notifApproved" checked onchange="saveNotifPref()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-label">Ressource refusée</div><div class="toggle-desc">Notifié lorsqu'une de vos soumissions est refusée</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="notifRejected" checked onchange="saveNotifPref()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-label">Nouveaux commentaires</div><div class="toggle-desc">Notifié lorsque quelqu'un commente vos ressources</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="notifComments" checked onchange="saveNotifPref()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-label">Messages administrateur</div><div class="toggle-desc">Notifié des messages importants de l'équipe</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="notifAdmin" checked onchange="saveNotifPref()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-label">Nouveau follower</div><div class="toggle-desc">Notifié quand quelqu'un commence à vous suivre</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="notifFollow" checked onchange="saveNotifPref()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-label">Réponse support</div><div class="toggle-desc">Notifié quand un staff répond à votre ticket support</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="notifSupportReply" checked onchange="saveNotifPref()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-label">Réponse commande boutique</div><div class="toggle-desc">Notifié quand un staff répond à votre ticket boutique</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="notifShopReply" checked onchange="saveNotifPref()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-label">Badge obtenu</div><div class="toggle-desc">Notifié quand vous obtenez un nouveau badge</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="notifBadge" checked onchange="saveNotifPref()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-label">Votre ressource entre dans le Top 5</div><div class="toggle-desc">Notifié quand une de vos ressources rejoint le classement Top 5</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="notifTop5" checked onchange="saveNotifPref()"><span class="toggle-slider"></span></label>
+            </div>
+            <div style="margin-top:.8rem;display:flex;align-items:center;gap:10px">
+              <span class="save-indicator" id="notifSaved">✓ Préférences sauvegardées</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BADGES -->
+      <div class="settings-section" id="tab-badges">
+        <div class="settings-section-title">Mes badges</div>
+        <div class="settings-section-sub">Choisissez quels badges afficher sur votre profil public</div>
+        <div class="setting-block">
+          <div class="setting-block-head">Badges débloqués</div>
+          <div class="setting-block-body" id="badgesSettingsList">
+            <div style="text-align:center;padding:2rem;color:var(--text-dim);font-size:.85rem">
+              <div class="spinner" style="width:20px;height:20px;margin:0 auto 1rem;border-width:2px"></div>
+              Chargement...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DISCORD -->
+      <div class="settings-section" id="tab-discord">
+        <div class="settings-section-title">Intégration Discord</div>
+        <div class="settings-section-sub">Votre compte est lié à Discord via OAuth2</div>
+        <div class="setting-block">
+          <div class="setting-block-head">Compte lié</div>
+          <div class="setting-block-body">
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;padding-bottom:1.2rem;border-bottom:1px solid var(--border)">
+              <div style="width:40px;height:40px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007q.121.1.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/></svg>
+              </div>
+              <div>
+                <div style="font-weight:600;font-size:0.9rem" id="discordLinkName"></div>
+                <div style="font-size:0.75rem;color:var(--green)">✓ Compte connecté</div>
+              </div>
+            </div>
+            <p style="font-size:0.8rem;color:var(--text-muted);line-height:1.7">
+              Votre compte Vuny Leak V2 est lié à votre compte Discord. La connexion utilise le protocole OAuth2 sécurisé. Aucun mot de passe n'est stocké sur nos serveurs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<footer class="footer" id="footer"></footer>
+<script src="js/app.js"></script>
+<script>
+let userPrefs = {};
+
+(async () => {
+  await initAuth();
+  renderNavbar('');
+  renderFooter();
+  if (!App.user) { window.location.href = 'index.html'; return; }
+
+  document.getElementById('settingsAvatar').src = App.user.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png';
+  document.getElementById('settingsUsername').textContent = App.user.username;
+  document.getElementById('settingsBio').value = App.user.bio || '';
+  document.getElementById('settingsDiscordId').textContent = App.user.discordId;
+  document.getElementById('settingsRole').innerHTML = roleBadge(App.user.role);
+  document.getElementById('settingsJoined').textContent = new Date(App.user.createdAt || App.user.joinedAt).toLocaleDateString('fr-FR');
+  document.getElementById('discordLinkName').textContent = App.user.username;
+
+  // Load prefs from localStorage
+  try {
+    userPrefs = JSON.parse(localStorage.getItem('vuny_prefs') || '{}');
+    const boolPref = (id, key, def=true) => {
+      const el = document.getElementById(id);
+      if (el) el.checked = userPrefs[key] !== undefined ? userPrefs[key] : def;
+    };
+    boolPref('toggleOnline', 'showOnline');
+    boolPref('toggleComments', 'allowComments');
+    boolPref('togglePublic', 'publicProfile');
+    boolPref('notifApproved', 'notifApproved');
+    boolPref('notifRejected', 'notifRejected');
+    boolPref('notifComments', 'notifComments');
+    boolPref('notifAdmin', 'notifAdmin');
+    boolPref('notifFollow', 'notifFollow');
+    boolPref('notifSupportReply', 'notifSupportReply');
+    boolPref('notifShopReply', 'notifShopReply');
+    boolPref('notifBadge', 'notifBadge');
+    boolPref('notifTop5', 'notifTop5');
+  } catch {}
+
+  // Load badges
+  loadBadgeSettings();
+})();
+
+async function loadBadgeSettings() {
+  const list = document.getElementById('badgesSettingsList');
+  if (!list || !App.user) return;
+  list.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-dim);font-size:.85rem"><div class="spinner" style="width:20px;height:20px;margin:0 auto 1rem;border-width:2px"></div>Chargement...</div>';
+  try {
+    const badges = await apiFetch(`/badges/user/${App.user._id}/all`);
+    if (!badges || !badges.length) {
+      list.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-dim);font-size:.85rem">Vous n\'avez pas encore de badges.</div>';
+      return;
+    }
+    list.innerHTML = badges.map(b => `
+      <div class="toggle-row">
+        <div class="toggle-info" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:1.6rem;line-height:1">${b.emoji}</span>
+          <div>
+            <div class="toggle-label">${b.name}</div>
+            <div class="toggle-desc">${b.description || 'Badge exclusif'}</div>
+          </div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" ${b.visible ? 'checked' : ''} onchange="toggleBadgeVisibility('${b.key}', this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>`).join('') + '<div style="margin-top:.8rem;display:flex;align-items:center;gap:10px"><span class="save-indicator" id="badgeSaved">✓ Sauvegardé</span></div>';
+  } catch {
+    list.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-dim);font-size:.85rem">Erreur lors du chargement.</div>';
+  }
+}
+
+async function toggleBadgeVisibility(key, visible) {
+  try {
+    await apiFetch('/badges/user/me/disabled', { method: 'PATCH', body: JSON.stringify({ key, visible }) });
+    const saved = document.getElementById('badgeSaved');
+    if (saved) { saved.classList.add('show'); setTimeout(() => saved.classList.remove('show'), 2000); }
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+function flashSaved(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+async function saveBio() {
+  const bio = document.getElementById('settingsBio').value;
+  try {
+    await apiFetch('/users/me/profile', { method: 'PATCH', body: JSON.stringify({ bio }) });
+    flashSaved('bioSaved');
+    showToast('Biographie sauvegardée', 'success');
+  } catch (err) {
+    showToast(err.message, 'error');
+  }
+}
+
+function savePrivacyPref(key, value) {
+  userPrefs[key] = value;
+  localStorage.setItem('vuny_prefs', JSON.stringify(userPrefs));
+  flashSaved('privacySaved');
+  // Also send to API if endpoint exists
+  apiFetch('/users/me/profile', { method: 'PATCH', body: JSON.stringify({ prefs: userPrefs }) }).catch(() => {});
+}
+
+function saveNotifPref() {
+  const getPref = (id) => { const el = document.getElementById(id); return el ? el.checked : true; };
+  userPrefs.notifApproved = getPref('notifApproved');
+  userPrefs.notifRejected = getPref('notifRejected');
+  userPrefs.notifComments = getPref('notifComments');
+  userPrefs.notifAdmin = getPref('notifAdmin');
+  userPrefs.notifFollow = getPref('notifFollow');
+  userPrefs.notifSupportReply = getPref('notifSupportReply');
+  userPrefs.notifShopReply = getPref('notifShopReply');
+  userPrefs.notifBadge = getPref('notifBadge');
+  userPrefs.notifTop5 = getPref('notifTop5');
+  localStorage.setItem('vuny_prefs', JSON.stringify(userPrefs));
+  flashSaved('notifSaved');
+  apiFetch('/users/me/profile', { method: 'PATCH', body: JSON.stringify({ prefs: userPrefs }) }).catch(() => {});
+}
+</script>
+</body>
+</html>

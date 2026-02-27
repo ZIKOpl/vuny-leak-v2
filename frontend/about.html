@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>À propos — Vuny Leak V2</title>
+<link rel="icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<header class="navbar" id="navbar"></header>
+<nav class="mobile-nav" id="mobileNav"><a href="index.html">Accueil</a><a href="shop.html">Boutique</a><a href="about.html" class="active">À propos</a></nav>
+<div class="page-wrap">
+
+  <!-- HERO compact -->
+  <section style="background:var(--bg2);border-bottom:1px solid var(--border);padding:3rem 2rem;text-align:center;position:relative;overflow:hidden">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(215,38,56,.08) 0%,transparent 65%);pointer-events:none"></div>
+    <div style="position:relative">
+      <div class="hero-label">Plateforme FiveM</div>
+      <h1 style="font-family:var(--font-display);font-size:2.2rem;font-weight:700;color:var(--white);margin-bottom:.6rem">À propos de Vuny Leak V2</h1>
+      <p style="color:var(--text-muted);font-size:0.88rem;max-width:480px;margin:0 auto;line-height:1.7">
+        Une plateforme communautaire dédiée au partage et à la découverte de ressources FiveM francophones.
+      </p>
+    </div>
+  </section>
+
+  <div class="about-container">
+
+    <!-- PILLARS -->
+    <div class="about-pillars">
+      <div class="about-pillar">
+        <div class="about-pillar-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="about-pillar-title">Sécurité & Confiance</div>
+        <p class="about-pillar-text">Chaque ressource est examinée manuellement par notre équipe avant publication. Aucun contenu malveillant toléré.</p>
+      </div>
+      <div class="about-pillar">
+        <div class="about-pillar-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="about-pillar-title">Communauté ouverte</div>
+        <p class="about-pillar-text">Inscription via Discord, partage de créations, téléchargements libres. La plateforme appartient à sa communauté.</p>
+      </div>
+      <div class="about-pillar">
+        <div class="about-pillar-icon">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="about-pillar-title">Qualité avant tout</div>
+        <p class="about-pillar-text">Système de notation et d'avis communautaires. Les meilleures ressources sont automatiquement mises en avant.</p>
+      </div>
+    </div>
+
+    <!-- BLOCKS -->
+    <div class="about-block">
+      <h3>Notre mission</h3>
+      <p>Vuny Leak V2 est une plateforme de partage de ressources dédiée à la communauté FiveM francophone. Notre objectif est de centraliser scripts, MLO, bases de serveur, véhicules et autres ressources en un seul endroit fiable et accessible.</p>
+      <p>Que vous soyez développeur souhaitant partager votre travail ou administrateur en quête de ressources, Vuny Leak V2 s'adapte. La connexion se fait via Discord, garantissant l'identité des membres et la traçabilité des publications.</p>
+    </div>
+
+    <div class="about-block">
+      <h3>Fonctionnement</h3>
+      <p>Chaque ressource soumise passe par un processus de validation : un membre de l'équipe vérifie son authenticité et sa conformité avant approbation. Les utilisateurs peuvent noter, commenter et télécharger. Un système de notifications informe les auteurs en temps réel.</p>
+    </div>
+
+    <div class="about-block">
+      <h3>Règles de la communauté</h3>
+      <div class="rules-compact">
+        <div class="rule-compact"><div class="rule-compact-num">1</div>Ne soumettez que des ressources dont vous êtes l'auteur ou pour lesquelles vous disposez des droits de distribution.</div>
+        <div class="rule-compact"><div class="rule-compact-num">2</div>Le contenu malveillant, virus, backdoors ou code nuisible sont strictement interdits et entraînent un bannissement permanent.</div>
+        <div class="rule-compact"><div class="rule-compact-num">3</div>Les ressources doivent correspondre à leur description. Toute tromperie délibérée sera sanctionnée.</div>
+        <div class="rule-compact"><div class="rule-compact-num">4</div>Les commentaires doivent rester constructifs et respectueux. Les comportements abusifs sont sanctionnés.</div>
+        <div class="rule-compact"><div class="rule-compact-num">5</div>Les ressources payantes doivent indiquer clairement leur prix et pointer vers un lien d'achat légitime.</div>
+        <div class="rule-compact"><div class="rule-compact-num">6</div>Toute tentative de contournement des restrictions ou d'abus du système entraîne une suspension du compte.</div>
+      </div>
+    </div>
+
+    <div class="about-block">
+      <h3>Confidentialité & Données</h3>
+      <p>Vuny Leak V2 collecte uniquement les informations nécessaires : identifiant Discord, nom d'utilisateur et avatar. Ces données ne sont jamais revendues ni partagées. Les connexions sont sécurisées via OAuth2 Discord. Suppression de compte possible sur demande auprès de l'administration.</p>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<footer class="footer" id="footer"></footer>
+<script src="js/app.js"></script>
+<script>
+(async () => {
+  await initAuth();
+  renderNavbar('about');
+  renderFooter();
+})();
+</script>
+</body>
+</html>

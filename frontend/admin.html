@@ -1,0 +1,2971 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administration — Vuny Leak V2</title>
+<link rel="icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="css/main.css">
+<style>
+.qa-layout-btn{padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg3);color:var(--text-muted);font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s}
+.qa-layout-btn.active,.qa-layout-btn:hover{border-color:var(--red-border);background:var(--red-dim);color:var(--red)}
+</style>
+</head>
+<body>
+<header class="navbar" id="navbar"></header>
+<nav class="mobile-nav" id="mobileNav"><a href="index.html">Accueil</a><a href="about.html">À propos</a></nav>
+
+<div class="page-wrap">
+<div class="admin-layout">
+
+<!-- SIDEBAR -->
+<div class="admin-sidebar">
+  <div style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--red);margin-bottom:1.5rem;letter-spacing:0.05em">ADMINISTRATION</div>
+
+  <div class="admin-sidebar-title">Général</div>
+  <div class="admin-nav active" onclick="showPage('overview',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Vue d'ensemble
+  </div>
+  <div class="admin-nav" onclick="showPage('staff-chat',this)" id="navStaffChat">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Chat Staff
+    <span class="admin-badge" id="staffChatBadge" style="display:none">0</span>
+  </div>
+
+  <div class="admin-sidebar-title" style="margin-top:1.2rem">Annonces</div>
+  <div class="admin-nav" onclick="showPage('announcements',this)">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>
+    Annonces
+  </div>
+  <div class="admin-sidebar-title" style="margin-top:1.2rem">Ressources</div>
+  <div class="admin-nav" onclick="showPage('pending',this)" id="navPending">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    En attente
+    <span class="admin-badge" id="pendingBadge" style="display:none">0</span>
+  </div>
+  <div class="admin-nav" onclick="showPage('resources',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+    Toutes les ressources
+  </div>
+  <div class="admin-nav" onclick="showPage('categories',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    Catégories
+  </div>
+
+  <div class="admin-sidebar-title" style="margin-top:1.2rem">Membres</div>
+  <div class="admin-nav" onclick="showPage('users',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Gestion des membres
+  </div>
+  <div class="admin-nav" onclick="showPage('vip',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    Accès VIP
+  </div>
+
+  <div class="admin-sidebar-title" style="margin-top:1.2rem">Boutique</div>
+  <div class="admin-nav" onclick="showPage('shop-categories',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="2" cy="6" r="1" fill="currentColor"/><circle cx="2" cy="12" r="1" fill="currentColor"/><circle cx="2" cy="18" r="1" fill="currentColor"/></svg>
+    Catégories boutique
+  </div>
+  <div class="admin-nav" onclick="showPage('shop-products',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    Produits
+  </div>
+  <div class="admin-nav" onclick="showPage('shop-tickets',this)" id="navShopTickets">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Tickets
+    <span class="admin-badge" id="shopTicketsBadge" style="display:none">0</span>
+  </div>
+
+  <div class="admin-sidebar-title" style="margin-top:1.2rem">Support</div>
+  <div class="admin-nav" onclick="showPage('support-tickets',this)" id="navSupportTickets">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.51 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.44 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 6 6l.79-.79a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    Tickets support
+    <span class="admin-badge" id="supportTicketsBadge" style="display:none">0</span>
+  </div>
+
+  <div class="admin-sidebar-title" style="margin-top:1.2rem">Badges</div>
+  <div class="admin-nav" onclick="showPage('badges',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+    Gestion des badges
+  </div>
+
+  <div class="admin-sidebar-title" style="margin-top:1.2rem">Logs</div>
+  <div class="admin-nav" onclick="showPage('logs-site',this)">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    Logs site
+  </div>
+  <div class="admin-nav" onclick="showPage('logs-discord',this)">
+    <svg fill="currentColor" viewBox="0 0 16 16" style="color:currentColor"><path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007q.121.1.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/></svg>
+    Logs Discord
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="admin-content">
+
+  <!-- OVERVIEW -->
+  <div class="admin-page active" id="page-overview">
+    <div class="page-head">
+      <div><div class="page-head-title">Vue d'ensemble</div><div class="page-head-sub">Statistiques et activité de la plateforme</div></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-danger btn-sm" onclick="clearAllNotifications()" title="Supprimer toutes les notifications de la DB">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Vider les notifications
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="loadOverview()">Actualiser</button>
+      </div>
+    </div>
+    <div class="ov-stats-grid" id="ovStatsGrid">
+      <div class="loading" style="grid-column:1/-1"><div class="spinner"></div></div>
+    </div>
+    <div class="ov-bottom-grid">
+      <div class="ov-panel">
+        <div class="ov-panel-head">Activité récente</div>
+        <div class="ov-panel-body" id="ovActivity"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+      <div class="ov-panel">
+        <div class="ov-panel-head" style="display:flex;align-items:center;justify-content:space-between">
+          Actions rapides
+          <button onclick="openQuickActionsEditor()" style="background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:3px 10px;font-size:.72rem;font-weight:600;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text-muted)'">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Éditer
+          </button>
+        </div>
+        <div class="ov-panel-body">
+          <div id="quickActionsGrid" style="display:grid;gap:6px;grid-template-columns:1fr 1fr"></div>
+          <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--border)">
+            <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);margin-bottom:.8rem">Admin connecté</div>
+            <div id="adminInfoBox"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉDITEUR ACTIONS RAPIDES -->
+  <div id="qaEditorOverlay" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.7);align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;max-width:560px;width:100%;max-height:85vh;display:flex;flex-direction:column">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+        <div>
+          <div style="font-family:var(--font-display);font-size:1rem;font-weight:700">Personnaliser les actions rapides</div>
+          <div style="font-size:.75rem;color:var(--text-muted);margin-top:2px">Glissez pour réorganiser · Choisissez la disposition</div>
+        </div>
+        <button onclick="closeQuickActionsEditor()" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-muted)">✕</button>
+      </div>
+      <div style="padding:16px 20px;overflow-y:auto;flex:1">
+        <!-- Disposition -->
+        <div style="margin-bottom:14px">
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-dim);margin-bottom:8px">Disposition</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="qa-layout-btn active" onclick="setQaLayout(1,this)">1 colonne</button>
+            <button class="qa-layout-btn" onclick="setQaLayout(2,this)">2 colonnes</button>
+            <button class="qa-layout-btn" onclick="setQaLayout(3,this)">3 colonnes</button>
+          </div>
+        </div>
+        <!-- Liste des actions disponibles -->
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-dim);margin-bottom:8px">Actions disponibles</div>
+        <div id="qaAvailableList" style="display:flex;flex-direction:column;gap:4px;margin-bottom:14px"></div>
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-dim);margin-bottom:8px">Actives (glissez pour réorganiser)</div>
+        <div id="qaActiveList" style="display:flex;flex-direction:column;gap:4px;min-height:50px;border:1px dashed var(--border);border-radius:10px;padding:8px"></div>
+      </div>
+      <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0">
+        <button class="btn btn-outline btn-sm" onclick="closeQuickActionsEditor()">Annuler</button>
+        <button class="btn btn-primary btn-sm" onclick="saveQuickActions()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Sauvegarder
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAFF CHAT -->
+  <div class="admin-page" id="page-staff-chat">
+    <div class="page-head">
+      <div><div class="page-head-title">Chat Staff</div><div class="page-head-sub">Espace de discussion interne entre admins</div></div>
+      <button class="btn btn-danger btn-sm" onclick="clearStaffChat()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        Clear chat
+      </button>
+    </div>
+    <div style="display:flex;flex-direction:column;height:calc(100vh - 160px);background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden">
+      <div id="staffChatMessages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:6px">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+      <div id="staffChatImgPreview" class="img-send-preview" style="display:none;align-items:center;gap:10px;padding:8px 14px;background:var(--bg3);border-top:1px solid var(--border)">
+        <img id="staffChatImgThumb" src="" alt="" style="height:48px;border-radius:6px;object-fit:cover;border:1px solid var(--border)">
+        <span id="staffChatImgName" style="font-size:.75rem;color:var(--text-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis"></span>
+        <button onclick="clearStaffChatImg()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;line-height:1">✕</button>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:8px;padding:12px 14px;border-top:1px solid var(--border);background:var(--bg3)">
+        <input type="file" id="staffChatImgInput" accept="image/*" style="display:none" onchange="onStaffChatImgSelect(event)">
+        <textarea id="staffChatInput" class="chat-modal-input" placeholder="Message au staff..." rows="1"
+          style="flex:1;resize:none;min-height:38px"
+          oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendStaffMsg();}"></textarea>
+        <button onclick="document.getElementById('staffChatImgInput').click()" id="staffChatImgBtn"
+          style="background:var(--bg4);border:1px solid var(--border);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-muted);flex-shrink:0;transition:all .15s"
+          title="Joindre une image">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </button>
+        <button onclick="sendStaffMsg()" class="chat-modal-send-btn" style="width:36px;height:36px;flex-shrink:0">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PENDING -->
+  <div class="admin-page" id="page-pending">
+    <div class="page-head"><div><div class="page-head-title">Ressources en attente</div><div class="page-head-sub">Examinez et approuvez ou refusez les soumissions</div></div><button class="btn btn-ghost btn-sm" onclick="loadPending()">Actualiser</button></div>
+    <div id="pendingContent"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- RESOURCES -->
+  <div class="admin-page" id="page-resources">
+    <div class="page-head">
+      <div><div class="page-head-title">Toutes les ressources</div><div class="page-head-sub">Gérez l'ensemble des ressources</div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-ghost btn-sm" data-status="" onclick="setResFilter('',this)">Toutes</button>
+        <button class="btn btn-ghost btn-sm" data-status="pending" onclick="setResFilter('pending',this)">En attente</button>
+        <button class="btn btn-ghost btn-sm" data-status="vip" onclick="setResFilter('vip',this)">
+          <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          VIP uniquement
+        </button>
+        <button class="btn btn-ghost btn-sm" data-status="approved" onclick="setResFilter('approved',this)">Approuvées</button>
+        <button class="btn btn-ghost btn-sm" data-status="rejected" onclick="setResFilter('rejected',this)">Refusées</button>
+      </div>
+    </div>
+    <div id="resourcesContent"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="admin-page" id="page-categories">
+    <div class="page-head">
+      <div><div class="page-head-title">Catégories</div><div class="page-head-sub">Ajoutez, modifiez ou supprimez des catégories</div></div>
+      <button class="btn btn-primary btn-sm" onclick="openCatModal()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouvelle catégorie
+      </button>
+    </div>
+    <div id="categoriesContent"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- USERS -->
+  <div class="admin-page" id="page-users">
+    <div class="page-head"><div><div class="page-head-title">Gestion des membres</div><div class="page-head-sub">Bannissez, restreignez ou promouvez des membres</div></div></div>
+    <div style="margin-bottom:1rem;display:flex;gap:8px">
+      <input class="form-input" style="max-width:280px" id="userSearch" placeholder="Rechercher par nom ou ID Discord..." onkeydown="if(event.key==='Enter')loadUsers(this.value)">
+      <button class="btn btn-primary btn-sm" onclick="loadUsers(document.getElementById('userSearch').value)">Rechercher</button>
+    </div>
+    <div id="usersContent"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- LOGS SITE -->
+  <div class="admin-page" id="page-logs-site">
+    <div class="page-head">
+      <div><div class="page-head-title">Logs site</div><div class="page-head-sub">Historique des actions sur la plateforme</div></div>
+      <button class="btn btn-danger btn-sm" onclick="cleanLogs()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        Tout nettoyer
+      </button>
+    </div>
+    <div class="log-filter-bar" id="logFilterBar">
+      <button class="log-filter-pill active" onclick="setLogFilter(null,this)">Tous</button>
+      <button class="log-filter-pill" onclick="setLogFilter('resource_approved',this)">Approuvés</button>
+      <button class="log-filter-pill" onclick="setLogFilter('resource_rejected',this)">Refusés</button>
+      <button class="log-filter-pill" onclick="setLogFilter('resource_deleted',this)">Supprimés</button>
+      <button class="log-filter-pill" onclick="setLogFilter('user_banned',this)">Bans</button>
+      <button class="log-filter-pill" onclick="setLogFilter('user_unbanned',this)">Débans</button>
+      <button class="log-filter-pill" onclick="setLogFilter('category_created',this)">Catégories</button>
+      <button class="log-filter-pill" onclick="setLogFilter('shop_ticket_sold',this)">Ventes</button>
+      <button class="log-filter-pill" onclick="setLogFilter('shop_ticket_created',this)">Tickets</button>
+      <button class="log-filter-pill" onclick="setLogFilter('shop_product_created',this)">Produits boutique</button>
+    </div>
+    <div id="logsContent"><div class="loading"><div class="spinner"></div></div></div>
+    <div class="pagination" id="logsPagination"></div>
+  </div>
+
+  <!-- ANNONCES -->
+  <div class="admin-page" id="page-announcements">
+    <div class="page-head">
+      <div><div class="page-head-title">Annonces</div><div class="page-head-sub">Gérez les annonces affichées sur la page d'accueil</div></div>
+      <button class="btn btn-primary btn-sm" onclick="openAnnouncementModal()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouvelle annonce
+      </button>
+    </div>
+    <div id="announcementsList"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- MODAL ANNONCE -->
+  <div class="overlay" id="announcementOverlay">
+    <div class="modal" style="max-width:540px">
+      <div class="modal-head">
+        <div class="modal-title" id="announcementModalTitle">Nouvelle annonce</div>
+        <button class="modal-close" onclick="closeAnnouncementModal()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="announcementEditId">
+        <div class="form-group">
+          <label class="form-label">Titre <span class="req">*</span></label>
+          <input class="form-input" id="annTitle" placeholder="Titre de l'annonce">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-input" id="annDesc" placeholder="Description de l'annonce..." style="min-height:80px"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Image (URL)</label>
+          <input class="form-input" id="annImageUrl" placeholder="https://exemple.com/image.png">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="form-group">
+            <label class="form-label">Couleur du titre</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input type="color" id="annTitleColor" value="#ffffff" style="width:36px;height:36px;border:1px solid var(--border);border-radius:6px;background:none;cursor:pointer;padding:2px">
+              <input class="form-input" id="annTitleColorHex" value="#ffffff" style="flex:1" oninput="document.getElementById('annTitleColor').value=this.value">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Couleur de la description</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input type="color" id="annDescColor" value="#aaaaaa" style="width:36px;height:36px;border:1px solid var(--border);border-radius:6px;background:none;cursor:pointer;padding:2px">
+              <input class="form-input" id="annDescColorHex" value="#aaaaaa" style="flex:1" oninput="document.getElementById('annDescColor').value=this.value">
+            </div>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Statut</label>
+          <select class="form-input sort-select" id="annActive">
+            <option value="true">Active (visible)</option>
+            <option value="false">Inactive (masquée)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeAnnouncementModal()">Annuler</button>
+        <button class="btn btn-primary" onclick="saveAnnouncement()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIP -->
+  <div class="admin-page" id="page-vip">
+    <div class="page-head">
+      <div>
+        <div class="page-head-title">Accès VIP</div>
+        <div class="page-head-sub">Gérez les membres ayant accès à la zone VIP</div>
+      </div>
+    </div>
+
+    <!-- Ajouter un VIP - même style que gestion membres -->
+    <div style="margin-bottom:1rem;display:flex;gap:8px">
+      <input class="form-input" style="max-width:280px" id="vipSearchInput" placeholder="Rechercher par nom ou ID Discord..." onkeydown="if(event.key==='Enter')doVipSearch()">
+      <button class="btn btn-primary btn-sm" onclick="doVipSearch()">Rechercher</button>
+    </div>
+    <div id="vipSearchResults" style="margin-bottom:1.5rem"></div>
+
+    <!-- Liste VIP actuels - style table identique à gestion membres -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem">
+      <div style="font-size:0.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim)">Membres VIP actuels</div>
+      <button class="btn btn-ghost btn-sm" onclick="loadVipMembers()">Actualiser</button>
+    </div>
+    <div id="vipMembersList"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- LOGS DISCORD -->
+  <div class="admin-page" id="page-logs-discord">
+    <div class="page-head"><div><div class="page-head-title">Logs Discord</div><div class="page-head-sub">Envoyez les logs dans un canal Discord via webhook</div></div></div>
+    <div style="max-width:700px">
+      <div class="sidebar-box" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:0">
+        <div class="form-group">
+          <label class="form-label">URL du Webhook Discord</label>
+          <input class="form-input" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
+          <div class="form-help">Créez un webhook dans les paramètres de votre canal Discord</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Événements à envoyer</label>
+          <div class="webhook-events" id="webhookEvents">
+            <label class="webhook-event-item"><input type="checkbox" value="resource_approved"> ✅ Ressource approuvée</label>
+            <label class="webhook-event-item"><input type="checkbox" value="resource_rejected"> ❌ Ressource refusée</label>
+            <label class="webhook-event-item"><input type="checkbox" value="resource_deleted"> 🗑️ Ressource supprimée</label>
+            <label class="webhook-event-item"><input type="checkbox" value="resource_submitted"> 📩 Nouvelle soumission</label>
+
+            <label class="webhook-event-item"><input type="checkbox" value="user_banned"> 🔨 Membre banni</label>
+            <label class="webhook-event-item"><input type="checkbox" value="user_unbanned"> 🔓 Membre débanni</label>
+            <label class="webhook-event-item"><input type="checkbox" value="user_restricted"> 🚫 Membre restreint</label>
+            <label class="webhook-event-item"><input type="checkbox" value="user_promoted"> ⬆️ Membre promu</label>
+
+            <label class="webhook-event-item"><input type="checkbox" value="category_created"> 📂 Catégorie créée</label>
+            <label class="webhook-event-item"><input type="checkbox" value="category_deleted"> 🗑️ Catégorie supprimée</label>
+            <label class="webhook-event-item"><input type="checkbox" value="category_updated"> ✏️ Catégorie modifiée</label>
+
+            <label class="webhook-event-item"><input type="checkbox" value="shop_product_created"> 🛍️ Produit créé</label>
+            <label class="webhook-event-item"><input type="checkbox" value="shop_product_deleted"> 🗑️ Produit supprimé</label>
+            <label class="webhook-event-item"><input type="checkbox" value="shop_ticket_created"> 🛒 Ticket ouvert</label>
+            <label class="webhook-event-item"><input type="checkbox" value="shop_ticket_sold"> 💳 Vente finalisée</label>
+            <label class="webhook-event-item"><input type="checkbox" value="shop_ticket_closed"> 🔒 Ticket fermé</label>
+            <label class="webhook-event-item"><input type="checkbox" value="shop_category_created"> 📦 Catégorie boutique créée</label>
+
+            <label class="webhook-event-item"><input type="checkbox" value="admin_login"> 🔑 Connexion admin</label>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1rem">
+          <button class="btn btn-primary" onclick="saveWebhook()">Sauvegarder</button>
+          <button class="btn btn-outline" onclick="testWebhook()">Tester</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SHOP CATEGORIES -->
+  <div class="admin-page" id="page-shop-categories">
+    <div class="page-head">
+      <div><div class="page-head-title">Boutique — Catégories</div><div class="page-head-sub">Gérez les catégories et assignez des produits</div></div>
+      <button class="btn btn-primary btn-sm" onclick="openShopCatModal()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouvelle catégorie
+      </button>
+    </div>
+    <div id="shopCategoriesContent"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- SHOP PRODUCTS -->
+  <div class="admin-page" id="page-shop-products">
+    <div class="page-head">
+      <div><div class="page-head-title">Boutique — Produits</div><div class="page-head-sub">Gérez les produits de la boutique</div></div>
+      <button class="btn btn-primary btn-sm" onclick="openAdminAddProduct()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Ajouter un produit
+      </button>
+    </div>
+    <div id="shopProductsContent"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- SHOP TICKETS -->
+  <div class="admin-page" id="page-shop-tickets">
+    <div class="page-head">
+      <div><div class="page-head-title">Boutique — Tickets</div><div class="page-head-sub">Gérez les commandes clients</div></div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm admin-ticket-filter active" data-tfilter="open" onclick="setTicketFilter('open',this)">Ouverts</button>
+        <button class="btn btn-ghost btn-sm admin-ticket-filter" data-tfilter="sold" onclick="setTicketFilter('sold',this)">Vendus</button>
+        <button class="btn btn-ghost btn-sm admin-ticket-filter" data-tfilter="closed" onclick="setTicketFilter('closed',this)">Fermés</button>
+        <button class="btn btn-ghost btn-sm admin-ticket-filter" data-tfilter="" onclick="setTicketFilter('',this)">Tous</button>
+        <button class="btn btn-ghost btn-sm" onclick="loadShopTickets()">↺</button>
+      </div>
+    </div>
+    <div id="shopTicketsContent"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- SUPPORT TICKETS PAGE -->
+  <div class="admin-page" id="page-support-tickets">
+    <div class="page-head">
+      <div><div class="page-head-title">Tickets support</div><div class="page-head-sub">Gérez les demandes d'aide des membres</div></div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm admin-support-filter active" data-sfilter="open" onclick="setSupportFilter('open',this)">Ouverts</button>
+        <button class="btn btn-ghost btn-sm admin-support-filter" data-sfilter="closed" onclick="setSupportFilter('closed',this)">Fermés</button>
+        <button class="btn btn-ghost btn-sm admin-support-filter" data-sfilter="" onclick="setSupportFilter('',this)">Tous</button>
+        <button class="btn btn-ghost btn-sm" onclick="loadSupportTickets()">↺</button>
+      </div>
+    </div>
+    <div id="supportTicketsContent"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+
+  <!-- BADGES PAGE -->
+  <div class="admin-page" id="page-badges">
+    <div class="page-head">
+      <div><div class="page-head-title">🏅 Gestion des badges</div><div class="page-head-sub">Créez et gérez les badges attribués aux membres</div></div>
+      <button class="btn btn-primary btn-sm" onclick="openAddBadgeModal()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouveau badge
+      </button>
+    </div>
+    <div id="badgesContent"><div class="loading"><div class="spinner"></div></div></div>
+  </div>
+
+</div><!-- /admin-content -->
+</div><!-- /admin-layout -->
+
+<!-- SUPPORT ADMIN CHAT — centered modal overlay -->
+<div class="admin-chat-modal-overlay" id="supportAdminChatPanel">
+  <div class="admin-chat-modal-box">
+    <div class="chat-modal-head">
+      <div class="chat-modal-icon" style="background:var(--red-dim);border:1px solid var(--red-border)">
+        <svg width="18" height="18" fill="none" stroke="var(--red)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.51 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.44 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 6 6l.79-.79a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <div class="chat-modal-info">
+        <div class="chat-modal-title" id="supportAdminChatTitle">Support</div>
+        <div class="chat-modal-sub" id="supportAdminChatSub">Ticket support</div>
+      </div>
+      <button class="chat-modal-close" onclick="toggleSupportAdminPanel()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="chat-modal-messages" id="supportAdminMessages"></div>
+    <div id="supportAdminStatus" style="display:none" class="chat-modal-status"></div>
+    <div id="supportAdminImgPreviewRow" class="img-send-preview">
+      <img id="supportAdminImgThumb" src="" alt="" style="height:60px;border-radius:8px;object-fit:cover;border:1px solid var(--border)">
+      <span id="supportAdminImgName" style="font-size:.75rem;color:var(--text-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis"></span>
+      <button class="img-send-preview-remove" onclick="clearSupportAdminImgPreview()">✕</button>
+    </div>
+    <div id="supportAdminInputArea" class="chat-modal-input-area">
+      <input type="file" id="supportAdminImgInput" accept="image/*" style="display:none" onchange="handleSupportAdminImg(event)">
+      <textarea id="supportAdminInput" class="chat-modal-input" placeholder="Message..." rows="1"
+        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendSupportAdminMsg();}"></textarea>
+      <button class="chat-modal-img-btn" id="supportAdminImgBtn" onclick="document.getElementById('supportAdminImgInput').click()" title="Joindre une image">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </button>
+      <button class="chat-modal-send-btn" onclick="sendSupportAdminMsg()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN NOTIFICATION TOAST (new ticket alerts) -->
+<div id="adminAlertToast" style="position:fixed;top:1.2rem;right:1.2rem;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none" id="adminAlertArea"></div>
+
+</div><!-- /page-wrap -->
+
+<!-- MODALS -->
+<!-- ═══ SHOP MODALS ══════════════════════════════════════════ -->
+
+<!-- Add/Edit Product Modal -->
+<div class="overlay" id="shopProductOverlay">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head">
+      <div class="modal-head-title" id="shopProdModalTitle">Ajouter un produit</div>
+      <button class="modal-close" onclick="document.getElementById('shopProductOverlay').classList.remove('open')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Titre <span class="req">*</span></label>
+        <input class="form-input" id="shopProdTitle" placeholder="Nom du produit">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description <span class="req">*</span></label>
+        <textarea class="form-input" id="shopProdDesc" placeholder="Description..." style="min-height:85px"></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group">
+          <label class="form-label">Catégorie <span class="req">*</span></label>
+          <select class="form-input" id="shopProdCat">
+            <option value="">Choisir...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prix (EUR) <span class="req">*</span></label>
+          <input class="form-input" id="shopProdPrice" type="number" min="0" step="0.01" placeholder="9.99">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group">
+          <label class="form-label">Quantité en stock <span class="req">*</span></label>
+          <input class="form-input" id="shopProdQty" type="number" min="0" value="1">
+        </div>
+        <div class="form-group" style="display:flex;align-items:flex-end">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding-bottom:4px">
+            <input type="checkbox" id="shopProdFeatured" style="accent-color:var(--red);width:15px;height:15px">
+            <span style="font-size:.82rem;color:var(--text-muted)">⭐ Mettre en avant</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">URL miniature (optionnel)</label>
+        <input class="form-input" id="shopProdThumb" placeholder="https://...">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="document.getElementById('shopProductOverlay').classList.remove('open')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveAdminProduct()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Enregistrer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Shop Category Modal -->
+<div class="overlay" id="shopCatOverlay">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-head">
+      <div class="modal-head-title" id="shopCatModalTitle">Nouvelle catégorie boutique</div>
+      <button class="modal-close" onclick="document.getElementById('shopCatOverlay').classList.remove('open')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="shopCatEditId">
+      <div style="display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:end">
+        <div class="form-group">
+          <label class="form-label">Icône</label>
+          <div style="position:relative">
+            <button type="button" id="shopCatIconBtn"
+              onclick="toggleEmojiPicker()"
+              style="width:56px;height:38px;font-size:1.5rem;background:var(--bg4);border:1px solid var(--border);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s"
+              onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--border)'">📦</button>
+            <input type="hidden" id="shopCatIcon" value="📦">
+            <!-- Emoji picker panel -->
+            <div id="emojiPickerPanel" style="display:none;position:absolute;left:0;top:44px;z-index:9999;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:10px;width:280px;box-shadow:0 8px 32px rgba(0,0,0,.6)">
+              <input id="emojiSearch" placeholder="🔍 Rechercher..." oninput="filterEmojis(this.value)"
+                style="width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);font-size:.82rem;margin-bottom:8px;box-sizing:border-box;outline:none">
+              <div id="emojiGrid" style="display:grid;grid-template-columns:repeat(8,1fr);gap:2px;max-height:200px;overflow-y:auto"></div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nom <span class="req">*</span></label>
+          <input class="form-input" id="shopCatName" placeholder="Ex: Scripts, MLO, Véhicules...">
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:4px">
+        <label class="form-label">Description (optionnel)</label>
+        <input class="form-input" id="shopCatDesc" placeholder="Courte description de la catégorie">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ordre d'affichage</label>
+        <input class="form-input" id="shopCatOrder" type="number" value="0" min="0" style="max-width:120px">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="document.getElementById('shopCatOverlay').classList.remove('open')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveShopCategory()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Enregistrer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Assign Products Modal -->
+<div class="overlay" id="shopCatAssignOverlay">
+  <div class="modal" style="max-width:540px">
+    <div class="modal-head">
+      <div class="modal-head-title" id="shopCatAssignTitle">Produits de la catégorie</div>
+      <button class="modal-close" onclick="document.getElementById('shopCatAssignOverlay').classList.remove('open')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px">Cochez les produits à assigner à cette catégorie.</p>
+      <div id="shopCatAssignList" style="max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="document.getElementById('shopCatAssignOverlay').classList.remove('open')">Fermer</button>
+      <button class="btn btn-primary" onclick="saveProductAssignments()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        Enregistrer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Close Ticket Modal -->
+<div class="overlay" id="ticketCloseOverlay">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head">
+      <div class="modal-head-title">Fermer le ticket</div>
+      <button class="modal-close" onclick="document.getElementById('ticketCloseOverlay').classList.remove('open')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:1rem">Le client recevra une notification avec la raison de fermeture.</p>
+      <input type="hidden" id="ticketCloseId">
+      <div class="form-group">
+        <label class="form-label">Raison (optionnel)</label>
+        <input class="form-input" id="ticketCloseReason" placeholder="Ex: Commande annulée par le client...">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="document.getElementById('ticketCloseOverlay').classList.remove('open')">Annuler</button>
+      <button class="btn btn-danger" onclick="confirmCloseTicket()">Fermer le ticket</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Chat Overlay (full-screen modal) -->
+<!-- BOUTIQUE ADMIN CHAT — centered modal overlay -->
+<div class="admin-chat-modal-overlay" id="adminChatOverlay">
+  <div class="admin-chat-modal-box">
+    <div class="chat-modal-head">
+      <div class="chat-modal-icon" style="background:var(--red-dim);border:1px solid var(--red-border)">
+        <svg width="18" height="18" fill="none" stroke="var(--red)" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </div>
+      <div class="chat-modal-info">
+        <div class="chat-modal-title" id="adminChatTitle">Ticket boutique</div>
+        <div class="chat-modal-sub" id="adminChatSub">Chat en temps réel</div>
+      </div>
+      <button class="chat-modal-close" onclick="closeAdminChat()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="padding:0 20px" id="adminOrderRecap"></div>
+    <div class="chat-modal-messages" id="adminChatMessages"></div>
+    <div id="adminChatStatus" style="display:none" class="chat-modal-status"></div>
+    <div id="adminImgPreviewStrip" class="img-send-preview">
+      <img id="adminImgPreview" src="" alt="">
+      <span id="adminImgPreviewName" style="font-size:.75rem;color:var(--text-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis"></span>
+      <button class="img-send-preview-remove" onclick="clearAdminImg(event)">✕</button>
+    </div>
+    <div id="adminImgDropArea" style="display:none;padding:8px 12px;border-top:1px solid var(--border,#e5e7eb)">
+      <div id="adminImgDropZone" style="position:relative;display:flex;align-items:center;gap:8px;background:var(--surface2,#f9fafb);border:1px dashed var(--border,#e5e7eb);border-radius:8px;padding:8px 10px">
+        <span id="adminImgDropLabel" style="font-size:13px;color:var(--text2,#6b7280)">Aucune image sélectionnée</span>
+        <img id="adminImgPreview" src="" style="display:none;max-height:60px;max-width:120px;border-radius:4px;object-fit:contain">
+        <button id="adminImgClearBtn" style="display:none;margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text2,#6b7280);font-size:16px;line-height:1" onclick="clearAdminImg()" title="Supprimer">&#10005;</button>
+      </div>
+    </div>
+    <div id="adminChatInputArea" class="chat-modal-input-area">
+      <input type="file" id="adminImgFileInput" accept="image/*" style="display:none" onchange="handleAdminImgFile(event)">
+      <textarea id="adminChatInput" class="chat-modal-input" placeholder="Message..." rows="1"
+        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAdminMsg();}"></textarea>
+      <button class="chat-modal-img-btn" id="adminImgBtn" onclick="document.getElementById('adminImgFileInput').click()" title="Joindre une image">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </button>
+      <button class="chat-modal-send-btn" onclick="sendAdminMsg()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="rejectOverlay">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head"><div class="modal-head-title">Refuser la ressource</div><button class="modal-close" onclick="document.getElementById('rejectOverlay').classList.remove('open')">&#10005;</button></div>
+    <div class="modal-body"><div class="form-group"><label class="form-label">Raison du refus</label><textarea class="form-input" id="rejectReason" placeholder="Expliquez pourquoi cette ressource ne peut pas être publiée..."></textarea></div></div>
+    <div class="modal-foot"><button class="btn btn-outline" onclick="document.getElementById('rejectOverlay').classList.remove('open')">Annuler</button><button class="btn btn-danger" onclick="confirmReject()">Confirmer le refus</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="banOverlay">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head"><div class="modal-head-title" id="banModalTitle">Gérer le membre</div><button class="modal-close" onclick="document.getElementById('banOverlay').classList.remove('open')">&#10005;</button></div>
+    <div class="modal-body" id="banModalBody"></div>
+    <div class="modal-foot"><button class="btn btn-outline" onclick="document.getElementById('banOverlay').classList.remove('open')">Annuler</button><button class="btn btn-danger" id="banConfirmBtn">Confirmer</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="catModalOverlay">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head"><div class="modal-head-title" id="catModalTitle">Nouvelle catégorie</div><button class="modal-close" onclick="document.getElementById('catModalOverlay').classList.remove('open')">&#10005;</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Icône (emoji)</label><input class="form-input" id="catIcon" placeholder="📦" maxlength="4"></div>
+      <div class="form-group"><label class="form-label">Nom <span class="req">*</span></label><input class="form-input" id="catName" placeholder="Ex: Scripts, MLO, Vehicles..."></div>
+      <div class="form-group"><label class="form-label">Ordre d'affichage</label><input class="form-input" id="catOrder" type="number" min="0" value="0"></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" onclick="document.getElementById('catModalOverlay').classList.remove('open')">Annuler</button><button class="btn btn-primary" id="catConfirmBtn" onclick="saveCat()">Créer</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="resourceOverlay">
+  <div class="modal" style="max-width:820px">
+    <div class="modal-head"><div class="modal-head-title" id="modalTitle"></div><button class="modal-close" onclick="closeResourceModal()">&#10005;</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<footer class="footer" id="footer"></footer>
+
+<!-- Confirm Dialog -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon confirm-icon-danger" id="confirmIconWrap">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+    </div>
+    <div class="confirm-title" id="confirmTitle">Confirmation</div>
+    <div class="confirm-msg" id="confirmMsg">Êtes-vous sûr de vouloir effectuer cette action ?</div>
+    <div class="confirm-actions">
+      <button class="btn btn-outline" id="confirmCancelBtn">Annuler</button>
+      <button class="btn btn-danger" id="confirmOkBtn">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+let adminState = { rejectId:null, banUserId:null, resourceFilter:'', logFilter:null, logPage:1, catEditId:null };
+
+(async () => {
+  await initAuth();
+  renderNavbar('');
+  renderFooter();
+  if (!requireAdmin()) return;
+  loadOverview();
+  // Start staff chat SSE in background for unread notifications
+  setTimeout(() => startStaffChatSSE(), 1000);
+})();
+
+function showPage(name, el) {
+  const pages = document.querySelectorAll('.admin-page');
+  const navItems = document.querySelectorAll('.admin-nav');
+
+  // Animate out current page
+  const current = document.querySelector('.admin-page.active');
+  if (current && current.id !== 'page-' + name) {
+    current.style.opacity = '0';
+    current.style.transform = 'translateY(8px)';
+  }
+
+  // Smooth nav highlight transition
+  navItems.forEach(n => {
+    n.style.transition = 'background .3s, color .3s, border-color .3s';
+    n.classList.remove('active');
+  });
+
+  setTimeout(() => {
+    pages.forEach(p => p.classList.remove('active'));
+    const next = document.getElementById('page-' + name);
+    if (next) {
+      next.style.opacity = '0';
+      next.style.transform = 'translateY(8px)';
+      next.classList.add('active');
+      requestAnimationFrame(() => {
+        next.style.transition = 'opacity .25s ease, transform .25s ease';
+        next.style.opacity = '1';
+        next.style.transform = 'translateY(0)';
+      });
+    }
+  }, current ? 120 : 0);
+
+  if (el) el.classList.add('active');
+
+  if (name==='pending') loadPending();
+  if (name==='resources') loadResources();
+  if (name==='users') loadUsers();
+  if (name==='categories') loadCategoriesAdmin();
+  if (name==='logs-site') loadLogs();
+  if (name==='logs-discord') loadWebhookSettings();
+  if (name==='announcements') loadAnnouncements();
+  if (name==='vip') loadVipMembers();
+  if (name==='shop-categories') loadShopCategories();
+  if (name==='shop-products') loadShopProducts();
+  if (name==='shop-tickets') loadShopTickets();
+  if (name==='support-tickets') loadSupportTickets();
+  if (name==='badges') loadBadges();
+  if (name==='staff-chat') initStaffChat();
+}
+
+// ── OVERVIEW ─────────────────────────────────
+async function loadOverview() {
+  try {
+    const s = await apiFetch('/admin/stats');
+    // BIG STATS GRID
+    document.getElementById('ovStatsGrid').innerHTML = `
+      <div class="ov-stat">
+        <div class="ov-stat-icon" style="background:rgba(39,174,96,.12);border:1px solid rgba(39,174,96,.25)">
+          <svg width="18" height="18" fill="none" stroke="#27ae60" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="ov-stat-val ov-stat-green">${s.totalUsers.toLocaleString()}</div>
+        <div class="ov-stat-label">Membres inscrits</div>
+      </div>
+      <div class="ov-stat">
+        <div class="ov-stat-icon" style="background:var(--red-dim);border:1px solid var(--red-border)">
+          <svg width="18" height="18" fill="none" stroke="var(--red)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="ov-stat-val">${s.totalResources.toLocaleString()}</div>
+        <div class="ov-stat-label">Ressources approuvées</div>
+      </div>
+      <div class="ov-stat">
+        <div class="ov-stat-icon" style="background:rgba(230,126,34,.12);border:1px solid rgba(230,126,34,.3)">
+          <svg width="18" height="18" fill="none" stroke="#e67e22" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="ov-stat-val" style="color:#e67e22">${s.pendingResources}</div>
+        <div class="ov-stat-label">En attente</div>
+        <div class="ov-stat-sub">${s.pendingResources > 0 ? 'Action requise' : 'Tout est à jour'}</div>
+      </div>
+      <div class="ov-stat">
+        <div class="ov-stat-icon" style="background:rgba(41,128,185,.12);border:1px solid rgba(41,128,185,.3)">
+          <svg width="18" height="18" fill="none" stroke="#2980b9" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div class="ov-stat-val" style="color:#2980b9">${s.totalDownloads.toLocaleString()}</div>
+        <div class="ov-stat-label">Téléchargements totaux</div>
+      </div>
+    `;
+    // Pending badge
+    if (s.pendingResources > 0) {
+      const b=document.getElementById('pendingBadge'); b.textContent=s.pendingResources; b.style.display='inline-block';
+      const opc = document.getElementById('ovPendingCount');
+      if (opc) opc.textContent = s.pendingResources;
+    }
+    // Admin info
+    document.getElementById('adminInfoBox').innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px">
+        <img src="${App.user.avatar}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--border)" alt="">
+        <div><div style="font-weight:600;font-size:0.85rem">${App.user.username}</div><div style="margin-top:4px">${roleBadge(App.user.role)}</div></div>
+      </div>`;
+    // Load activity
+    loadOverviewActivity();
+    // Load quick actions
+    renderQuickActions();
+    // Load shop ticket badge
+    apiFetch('/shop/tickets/count-open').then(d => {
+      const sb = document.getElementById('shopTicketsBadge');
+      if (sb && d.count > 0) { sb.textContent = d.count; sb.style.display = 'inline-block'; }
+    }).catch(()=>{});
+  } catch(err) {
+    document.getElementById('ovStatsGrid').innerHTML=`<div class="empty" style="grid-column:1/-1"><p>${err.message}</p></div>`;
+  }
+}
+
+// ── QUICK ACTIONS SYSTEM ─────────────────────────────────────────────────────
+const QA_ALL_ACTIONS = [
+  { id: 'pending',         label: 'En attente',            icon: '⏳', page: 'pending',         variant: 'danger' },
+  { id: 'users',           label: 'Gérer les membres',     icon: '👥', page: 'users',           variant: 'outline' },
+  { id: 'categories',      label: 'Catégories',            icon: '🗂️', page: 'categories',      variant: 'outline' },
+  { id: 'resources',       label: 'Toutes les ressources', icon: '📁', page: 'resources',       variant: 'outline' },
+  { id: 'announcements',   label: 'Annonces',              icon: '📢', page: 'announcements',   variant: 'outline' },
+  { id: 'shop-products',   label: 'Produits boutique',     icon: '🛒', page: 'shop-products',   variant: 'outline' },
+  { id: 'shop-tickets',    label: 'Tickets boutique',      icon: '🎫', page: 'shop-tickets',    variant: 'outline' },
+  { id: 'support-tickets', label: 'Tickets support',       icon: '💬', page: 'support-tickets', variant: 'outline' },
+  { id: 'badges',          label: 'Gestion badges',        icon: '🏅', page: 'badges',          variant: 'outline' },
+  { id: 'vip',             label: 'Accès VIP',             icon: '🔒', page: 'vip',             variant: 'outline' },
+  { id: 'logs-site',       label: 'Logs site',             icon: '📋', page: 'logs-site',       variant: 'outline' },
+  { id: 'shop-categories', label: 'Catégories boutique',   icon: '📦', page: 'shop-categories', variant: 'outline' },
+];
+
+function _getQaPrefs() {
+  const uid = App.user?._id || 'default';
+  try {
+    const raw = localStorage.getItem('vuny_qa_' + uid);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return { cols: 2, active: ['pending', 'users', 'categories'] };
+}
+function _setQaPrefs(prefs) {
+  const uid = App.user?._id || 'default';
+  localStorage.setItem('vuny_qa_' + uid, JSON.stringify(prefs));
+}
+
+function renderQuickActions() {
+  const grid = document.getElementById('quickActionsGrid');
+  if (!grid) return;
+  const prefs = _getQaPrefs();
+  grid.style.gridTemplateColumns = `repeat(${prefs.cols}, 1fr)`;
+  const activeIds = prefs.active || [];
+  if (!activeIds.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;font-size:.8rem;color:var(--text-dim);text-align:center;padding:1rem">Aucune action configurée.<br><a href="#" onclick="openQuickActionsEditor();return false" style="color:var(--red)">Ajouter des actions →</a></div>';
+    return;
+  }
+  grid.innerHTML = activeIds.map(id => {
+    const a = QA_ALL_ACTIONS.find(x => x.id === id);
+    if (!a) return '';
+    const badgePart = a.id === 'pending'
+      ? `<span id="ovPendingCount" style="margin-left:auto;background:var(--red);color:#fff;font-size:.65rem;padding:1px 5px;border-radius:8px;font-weight:700"></span>`
+      : '';
+    const cls = a.variant === 'danger' ? 'btn btn-danger btn-sm' : 'btn btn-outline btn-sm';
+    return `<button class="${cls}" style="justify-content:flex-start;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"
+      onclick="showPage('${a.page}',document.querySelector('[onclick*=${a.page.replace('-','\\\\-')}]'))">
+      <span style="flex-shrink:0">${a.icon}</span>
+      <span style="overflow:hidden;text-overflow:ellipsis">${a.label}</span>${badgePart}
+    </button>`;
+  }).join('');
+}
+
+// ── ÉDITEUR QA ────────────────────────────────────────
+let _qaEditPrefs = null;
+let _qaDragSrc = null;
+
+function openQuickActionsEditor() {
+  _qaEditPrefs = JSON.parse(JSON.stringify(_getQaPrefs()));
+  document.getElementById('qaEditorOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  _renderQaEditor();
+}
+function closeQuickActionsEditor() {
+  document.getElementById('qaEditorOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function setQaLayout(cols, btn) {
+  _qaEditPrefs.cols = cols;
+  document.querySelectorAll('.qa-layout-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function saveQuickActions() {
+  _setQaPrefs(_qaEditPrefs);
+  closeQuickActionsEditor();
+  renderQuickActions();
+  showToast('Actions rapides mises à jour !', 'success');
+}
+
+function _renderQaEditor() {
+  const activeIds = _qaEditPrefs.active;
+  const availList = document.getElementById('qaAvailableList');
+  const activeList = document.getElementById('qaActiveList');
+
+  // Sync layout buttons
+  document.querySelectorAll('.qa-layout-btn').forEach(b => b.classList.remove('active'));
+  const colsBtns = document.querySelectorAll('.qa-layout-btn');
+  const colMap = { 1: 0, 2: 1, 3: 2 };
+  if (colsBtns[colMap[_qaEditPrefs.cols]]) colsBtns[colMap[_qaEditPrefs.cols]].classList.add('active');
+
+  // Available (not active)
+  const available = QA_ALL_ACTIONS.filter(a => !activeIds.includes(a.id));
+  availList.innerHTML = available.length ? available.map(a => `
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;font-size:.82rem">
+      <span>${a.icon}</span>
+      <span style="flex:1">${a.label}</span>
+      <button onclick="_qaAdd('${a.id}')" style="background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);border-radius:6px;padding:2px 8px;font-size:.72rem;font-weight:700;cursor:pointer">+ Ajouter</button>
+    </div>`).join('') : '<div style="font-size:.8rem;color:var(--text-dim);text-align:center;padding:.5rem">Toutes les actions sont actives</div>';
+
+  // Active list (draggable)
+  activeList.innerHTML = activeIds.length ? activeIds.map(id => {
+    const a = QA_ALL_ACTIONS.find(x => x.id === id);
+    if (!a) return '';
+    return `<div draggable="true" data-id="${a.id}"
+      ondragstart="_qaDragStart(event)"
+      ondragover="_qaDragOver(event)"
+      ondrop="_qaDrop(event)"
+      style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;font-size:.82rem;cursor:grab;user-select:none">
+      <span style="color:var(--text-dim);font-size:.9rem">⠿</span>
+      <span>${a.icon}</span>
+      <span style="flex:1">${a.label}</span>
+      <button onclick="_qaRemove('${a.id}')" style="background:var(--bg4);border:1px solid var(--border);color:var(--text-dim);border-radius:6px;padding:2px 8px;font-size:.72rem;cursor:pointer" title="Retirer">✕</button>
+    </div>`;
+  }).join('') : '<div style="font-size:.8rem;color:var(--text-dim);text-align:center;padding:1rem">Aucune action active — ajoutez-en ci-dessus</div>';
+}
+
+function _qaAdd(id) {
+  if (!_qaEditPrefs.active.includes(id)) _qaEditPrefs.active.push(id);
+  _renderQaEditor();
+}
+function _qaRemove(id) {
+  _qaEditPrefs.active = _qaEditPrefs.active.filter(x => x !== id);
+  _renderQaEditor();
+}
+function _qaDragStart(e) {
+  _qaDragSrc = e.currentTarget.dataset.id;
+  e.dataTransfer.effectAllowed = 'move';
+}
+function _qaDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+}
+function _qaDrop(e) {
+  e.preventDefault();
+  const target = e.currentTarget.dataset.id;
+  if (!target || target === _qaDragSrc) return;
+  const arr = _qaEditPrefs.active;
+  const from = arr.indexOf(_qaDragSrc);
+  const to = arr.indexOf(target);
+  if (from === -1 || to === -1) return;
+  arr.splice(from, 1);
+  arr.splice(to, 0, _qaDragSrc);
+  _renderQaEditor();
+}
+
+async function loadOverviewActivity() {
+  try {
+    const logs = await apiFetch('/admin/recent-activity');
+    const el = document.getElementById('ovActivity');
+    if (!el) return;
+    if (!logs.length) { el.innerHTML='<div class="empty" style="padding:1rem 0"><p>Aucune activité</p></div>'; return; }
+    el.innerHTML = logs.map(l => `
+      <div class="ov-activity-item">
+        <img class="ov-activity-ava" src="${(l.actor || l.user)?.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" alt="" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+        <div class="ov-activity-text" title="${l.message || l.description}">${l.message || l.description || '—'}</div>
+        <div class="ov-activity-time">${timeAgo(l.createdAt)}</div>
+      </div>
+    `).join('');
+  } catch { document.getElementById('ovActivity').innerHTML='<div class="empty" style="padding:1rem 0"><p>Erreur</p></div>'; }
+}
+
+// ── PENDING ───────────────────────────────────
+async function loadPending() {
+  document.getElementById('pendingContent').innerHTML='<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const data = await apiFetch('/admin/pending');
+    if (!data.length) { document.getElementById('pendingContent').innerHTML='<div class="empty"><p>Aucune ressource en attente</p></div>'; return; }
+    document.getElementById('pendingContent').innerHTML=`
+      <div class="table-wrap"><table>
+        <thead><tr><th>Ressource</th><th>Auteur</th><th>Catégorie</th><th>Type</th><th>Soumis</th><th>Actions</th></tr></thead>
+        <tbody>${data.map(r=>`<tr>
+          <td><div class="resource-preview-row">${r.thumbnail?`<img class="resource-thumb-sm" src="${r.thumbnail}" alt="">`:'<div class="resource-thumb-sm"></div>'}<div><div class="resource-title-sm">${r.title}${r.vipOnly?'<span style="display:inline-block;margin-left:5px;font-size:0.6rem;font-weight:800;background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);border-radius:3px;padding:1px 5px;vertical-align:middle">VIP</span>':''}</div><div class="resource-cat-sm">${r.category}</div></div></div></td>
+          <td><div class="td-user"><img src="${r.author?.avatar||'https://cdn.discordapp.com/embed/avatars/0.png'}" alt=""><div><div class="td-user-name">${r.author?.username||'Inconnu'}</div><div class="td-user-id">${r.author?.discordId||''}</div></div></div></td>
+          <td>${r.category}</td>
+          <td><span class="${r.resourceType==='free'?'badge-free':'badge-paid'}">${r.resourceType==='free'?'GRATUIT':r.price+' EUR'}</span></td>
+          <td style="font-size:0.78rem;color:var(--text-muted)">${timeAgo(r.createdAt)}</td>
+          <td><div style="display:flex;gap:5px;flex-wrap:wrap">
+            <button class="btn btn-success btn-sm" onclick="approveResource('${r._id}')">Approuver</button>
+            <button class="btn btn-danger btn-sm" onclick="showRejectModal('${r._id}')">Refuser</button>
+            <button class="btn btn-outline btn-sm" onclick="openResource('${r._id}')">Voir</button>
+          </div></td>
+        </tr>`).join('')}</tbody>
+      </table></div>`;
+  } catch(err) { document.getElementById('pendingContent').innerHTML=`<div class="empty"><p>${err.message}</p></div>`; }
+}
+
+async function approveResource(id) {
+  try { await apiFetch(`/admin/resources/${id}/approve`,{method:'PATCH'}); showToast('Ressource approuvée','success'); loadPending(); loadOverview(); }
+  catch(err) { showToast(err.message,'error'); }
+}
+function showRejectModal(id) { adminState.rejectId=id; document.getElementById('rejectReason').value=''; document.getElementById('rejectOverlay').classList.add('open'); }
+async function confirmReject() {
+  const reason = document.getElementById('rejectReason').value.trim();
+  try { await apiFetch(`/admin/resources/${adminState.rejectId}/reject`,{method:'PATCH',body:JSON.stringify({reason})}); showToast('Ressource refusée','info'); document.getElementById('rejectOverlay').classList.remove('open'); loadPending(); }
+  catch(err) { showToast(err.message,'error'); }
+}
+
+// ── RESOURCES ─────────────────────────────────
+function setResFilter(s,btn) { adminState.resourceFilter=s; document.querySelectorAll('[data-status]').forEach(b=>b.className='btn btn-ghost btn-sm'); if(btn) btn.className='btn btn-primary btn-sm'; loadResources(); }
+async function loadResources() {
+  document.getElementById('resourcesContent').innerHTML='<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const p=new URLSearchParams({limit:50});
+    if(adminState.resourceFilter === 'vip') {
+      p.set('vipOnly','true');
+    } else if(adminState.resourceFilter) {
+      p.set('status',adminState.resourceFilter);
+    }
+    const data=await apiFetch(`/admin/all-resources?${p}`);
+    document.getElementById('resourcesContent').innerHTML=`
+      <div class="table-wrap"><table>
+        <thead><tr><th>Titre</th><th>Auteur</th><th>Catégorie</th><th>Statut</th><th>DL</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody>${data.resources.map(r=>`<tr>
+          <td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600">${r.title}${r.vipOnly?'<span style="display:inline-block;margin-left:5px;font-size:0.6rem;font-weight:800;background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);border-radius:3px;padding:1px 5px;vertical-align:middle">VIP</span>':''}</td>
+          <td>${r.author?.username||'Inconnu'}</td>
+          <td style="font-size:0.78rem;color:var(--text-muted)">${r.category}</td>
+          <td><span class="status status-${r.status}">${r.status}</span></td>
+          <td>${r.downloads}</td>
+          <td style="font-size:0.78rem;color:var(--text-muted)">${timeAgo(r.createdAt)}</td>
+          <td><div style="display:flex;gap:4px">
+            ${r.status==='pending'?`<button class="btn btn-success btn-sm" onclick="approveResource('${r._id}')">Approuver</button>`:''}
+            <button class="btn btn-outline btn-sm" onclick="openResource('${r._id}')">Voir</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteResource('${r._id}')">Supprimer</button>
+          </div></td>
+        </tr>`).join('')}</tbody>
+      </table></div>`;
+  } catch(err) { document.getElementById('resourcesContent').innerHTML=`<div class="empty"><p>${err.message}</p></div>`; }
+}
+async function deleteResource(id) {
+  if(!await vunyConfirm({ title:'Supprimer la ressource', msg:'Supprimer définitivement cette ressource ? Cette action est irréversible.', type:'danger', okLabel:'Supprimer' })) return;
+  try { await apiFetch(`/admin/resources/${id}`,{method:'DELETE'}); showToast('Supprimée','success'); loadResources(); }
+  catch(err) { showToast(err.message,'error'); }
+}
+
+// ── CATEGORIES ────────────────────────────────
+async function loadCategoriesAdmin() {
+  document.getElementById('categoriesContent').innerHTML='<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const [cats, stats] = await Promise.all([apiFetch('/categories'), apiFetch('/resources/stats')]);
+    const countMap={};
+    (stats.byCategory||[]).forEach(b=>{ countMap[b._id]=b.count; });
+    document.getElementById('categoriesContent').innerHTML=`
+      <div style="display:flex;flex-direction:column;gap:0;max-width:700px">
+        ${cats.map(c=>`
+          <div class="cat-admin-row">
+            <div class="cat-admin-icon">${c.icon||'📦'}</div>
+            <div class="cat-admin-name">${c.name}</div>
+            <div class="cat-admin-count">${countMap[c.name]||0} ressource${(countMap[c.name]||0)>1?'s':''}</div>
+            <div style="display:flex;gap:5px;margin-left:8px">
+              <button class="btn btn-outline btn-sm" onclick="openCatModal('${c._id}','${c.icon}','${c.name}',${c.order})">Modifier</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteCat('${c._id}','${c.name}')">Supprimer</button>
+            </div>
+          </div>
+        `).join('')}
+        ${cats.length===0?'<div class="empty"><p>Aucune catégorie. Créez-en une !</p></div>':''}
+      </div>`;
+  } catch(err) { document.getElementById('categoriesContent').innerHTML=`<div class="empty"><p>${err.message}</p></div>`; }
+}
+
+function openCatModal(id, icon, name, order) {
+  adminState.catEditId = id || null;
+  document.getElementById('catModalTitle').textContent = id ? 'Modifier la catégorie' : 'Nouvelle catégorie';
+  document.getElementById('catConfirmBtn').textContent = id ? 'Modifier' : 'Créer';
+  document.getElementById('catIcon').value = icon || '📦';
+  document.getElementById('catName').value = name || '';
+  document.getElementById('catOrder').value = order ?? 0;
+  document.getElementById('catModalOverlay').classList.add('open');
+}
+
+async function saveCat() {
+  const name = document.getElementById('catName').value.trim();
+  const icon = document.getElementById('catIcon').value.trim() || '📦';
+  const order = parseInt(document.getElementById('catOrder').value) || 0;
+  if (!name) return showToast('Nom requis','error');
+  try {
+    if (adminState.catEditId) {
+      await apiFetch(`/categories/${adminState.catEditId}`,{method:'PATCH',body:JSON.stringify({name,icon,order})});
+      showToast('Catégorie modifiée','success');
+    } else {
+      await apiFetch('/categories',{method:'POST',body:JSON.stringify({name,icon,order})});
+      showToast('Catégorie créée','success');
+    }
+    document.getElementById('catModalOverlay').classList.remove('open');
+    loadCategoriesAdmin();
+  } catch(err) { showToast(err.message,'error'); }
+}
+
+async function deleteCat(id, name) {
+  if(!await vunyConfirm({ title:'Supprimer la catégorie', msg:`Supprimer la catégorie "${name}" ? Les ressources existantes garderont cette catégorie.`, type:'danger', okLabel:'Supprimer' })) return;
+  try { await apiFetch(`/categories/${id}`,{method:'DELETE'}); showToast('Catégorie supprimée','success'); loadCategoriesAdmin(); }
+  catch(err) { showToast(err.message,'error'); }
+}
+
+// ── USERS ─────────────────────────────────────
+async function loadUsers(search='') {
+  document.getElementById('usersContent').innerHTML='<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const p=new URLSearchParams({limit:30}); if(search) p.set('search',search);
+    const data=await apiFetch(`/admin/users?${p}`);
+    document.getElementById('usersContent').innerHTML=`
+      <div class="table-wrap"><table>
+        <thead><tr><th>Membre</th><th>Rôle</th><th>Statut</th><th>Publication</th><th>Téléch.</th><th>Inscription</th><th>Actions</th></tr></thead>
+        <tbody>${data.users.map(u=>`<tr>
+          <td><div class="td-user"><img src="${u.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" alt=""><div><div class="td-user-name">${u.username}</div><div class="td-user-id">${u.discordId}</div></div></div></td>
+          <td>${roleBadge(u.role)}</td>
+          <td>${u.isBanned?`<span class="status status-banned">Banni</span>${u.banReason?`<div class="ban-reason-text">${u.banReason}</div>`:''}` : `<span class="status status-active">Actif</span>`}</td>
+          <td style="color:${u.canUpload?'var(--green)':'var(--red)'}">${u.canUpload?'Autorisée':'Bloquée'}</td>
+          <td style="color:${u.canDownload?'var(--green)':'var(--red)'}">${u.canDownload?'Autorisé':'Bloqué'}</td>
+          <td style="font-size:0.78rem;color:var(--text-muted)">${new Date(u.createdAt).toLocaleDateString('fr-FR')}</td>
+          <td><div style="display:flex;gap:4px;flex-wrap:wrap">
+            ${u._id!==App.user._id?(u.isBanned?`<button class="btn btn-success btn-sm" onclick="unbanUser('${u._id}')">Débannir</button>`:`<button class="btn btn-danger btn-sm" onclick="showBanModal('${u._id}','${u.username}')">Bannir</button>`):''}
+            <button class="btn btn-outline btn-sm" onclick="showRestrictModal('${u._id}',${u.canUpload},${u.canDownload})">Restreindre</button>
+            ${App.user&&roleLevel(App.user.role)>roleLevel(u.role)&&u._id!==App.user._id?`
+            <select class="sort-select" style="padding:4px 8px;font-size:0.75rem" onchange="promoteUser('${u._id}',this.value);this.value=''" >
+              <option value="">Changer le rôle</option>
+              <option value="user">Membre</option>
+              ${roleLevel(App.user.role)>=1?'<option value="admin">Admin</option>':''}
+              ${roleLevel(App.user.role)>=2?'<option value="owner">Owner</option>':''}
+            </select>
+          `:''}
+            <a href="profile.html?id=${u._id}" class="btn btn-ghost btn-sm">Profil</a>
+          </div></td>
+        </tr>`).join('')}</tbody>
+      </table></div>`;
+  } catch(err) { document.getElementById('usersContent').innerHTML=`<div class="empty"><p>${err.message}</p></div>`; }
+}
+
+function showBanModal(uid,username) {
+  adminState.banUserId=uid;
+  document.getElementById('banModalTitle').textContent=`Bannir ${username}`;
+  document.getElementById('banModalBody').innerHTML=`
+    <div class="form-group"><label class="form-label">Raison <span class="req">*</span></label><textarea class="form-input" id="banReason" placeholder="Violation des règles..."></textarea></div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="chkBanUpload" checked style="accent-color:var(--red)"> Interdire la publication</label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="chkBanDownload" checked style="accent-color:var(--red)"> Interdire le téléchargement</label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="chkBanFull" checked style="accent-color:var(--red)"> Bannir le compte</label>
+    </div>`;
+  document.getElementById('banConfirmBtn').textContent='Bannir';
+  document.getElementById('banConfirmBtn').onclick=confirmBan;
+  document.getElementById('banOverlay').classList.add('open');
+}
+async function confirmBan() {
+  const reason=document.getElementById('banReason')?.value?.trim();
+  if(!reason) return showToast('La raison est requise','error');
+  try {
+    await apiFetch(`/admin/users/${adminState.banUserId}/ban`,{method:'PATCH',body:JSON.stringify({reason,banUpload:document.getElementById('chkBanUpload')?.checked,banDownload:document.getElementById('chkBanDownload')?.checked})});
+    showToast('Membre banni','success'); document.getElementById('banOverlay').classList.remove('open'); loadUsers();
+  } catch(err) { showToast(err.message,'error'); }
+}
+async function unbanUser(id) {
+  if(!await vunyConfirm({ title:'Débannir le membre', msg:'Retirer le bannissement de ce membre ?', type:'warning', okLabel:'Débannir' })) return;
+  try { await apiFetch(`/admin/users/${id}/unban`,{method:'PATCH'}); showToast('Membre débanni','success'); loadUsers(); }
+  catch(err) { showToast(err.message,'error'); }
+}
+function showRestrictModal(uid,canUpload,canDownload) {
+  adminState.banUserId=uid;
+  document.getElementById('banModalTitle').textContent='Restreindre le membre';
+  document.getElementById('banModalBody').innerHTML=`
+    <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem">Limitez les permissions sans bannir le compte.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:0.82rem">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rUpload" ${canUpload?'':'checked'} style="accent-color:var(--red)"> Bloquer la publication</label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="rDownload" ${canDownload?'':'checked'} style="accent-color:var(--red)"> Bloquer le téléchargement</label>
+    </div>`;
+  document.getElementById('banConfirmBtn').textContent='Appliquer';
+  document.getElementById('banConfirmBtn').onclick=async()=>{
+    try {
+      await apiFetch(`/admin/users/${adminState.banUserId}/restrict`,{method:'PATCH',body:JSON.stringify({canUpload:!document.getElementById('rUpload').checked,canDownload:!document.getElementById('rDownload').checked})});
+      showToast('Restrictions appliquées','success'); document.getElementById('banOverlay').classList.remove('open'); loadUsers();
+    } catch(err) { showToast(err.message,'error'); }
+  };
+  document.getElementById('banOverlay').classList.add('open');
+}
+async function promoteUser(id,role) {
+  if(!role) return;
+  if(!await vunyConfirm({ title:'Changer le rôle', msg:`Changer le rôle en "${roleLabel(role)}" ?`, type:'warning', okLabel:'Confirmer' })) return;
+  try {
+    await apiFetch(`/admin/users/${id}/set-admin`,{method:'PATCH',body:JSON.stringify({role})});
+    showToast('Rôle mis à jour','success');
+    loadUsers();
+  }
+  catch(err) { showToast(err.message,'error'); }
+}
+
+// ── LOGS ──────────────────────────────────────
+const LOG_DOT = { resource_approved:'log-dot-green', resource_submitted:'log-dot-blue', user_unbanned:'log-dot-green', resource_rejected:'log-dot-red', resource_deleted:'log-dot-red', user_banned:'log-dot-red', user_restricted:'log-dot-yellow', category_updated:'log-dot-yellow', webhook_updated:'log-dot-yellow', category_created:'log-dot-blue', admin_login:'log-dot-purple', user_promoted:'log-dot-yellow', vip_granted:'log-dot-yellow', vip_revoked:'log-dot-red', vip_media_added:'log-dot-blue', vip_media_deleted:'log-dot-red', shop_product_created:'log-dot-green', shop_product_deleted:'log-dot-red', shop_product_updated:'log-dot-yellow', shop_category_created:'log-dot-blue', shop_category_deleted:'log-dot-red', shop_category_updated:'log-dot-yellow', shop_ticket_created:'log-dot-blue', shop_ticket_sold:'log-dot-green', shop_ticket_closed:'log-dot-red', support_ticket_created:'log-dot-purple', support_ticket_closed:'log-dot-yellow', badge_created:'log-dot-yellow', badge_deleted:'log-dot-red' };
+const LOG_EMOJI = { resource_approved:'✅', resource_rejected:'❌', resource_deleted:'🗑️', resource_submitted:'📤', user_banned:'🔨', user_unbanned:'✅', user_restricted:'⚠️', user_promoted:'⭐', category_created:'📁', category_deleted:'🗑️', category_updated:'✏️', admin_login:'🔐', webhook_updated:'🔧', vip_granted:'👑', vip_revoked:'❌', vip_media_added:'🎬', vip_media_deleted:'🗑️', shop_product_created:'🛍️', shop_product_deleted:'🗑️', shop_product_updated:'✏️', shop_category_created:'📦', shop_category_deleted:'🗑️', shop_category_updated:'✏️', shop_ticket_created:'🛒', shop_ticket_sold:'✅', shop_ticket_closed:'❌', support_ticket_created:'🎫', support_ticket_closed:'🔒', badge_created:'🏅', badge_deleted:'🗑️' };
+
+function setLogFilter(type, btn) {
+  adminState.logFilter=type; adminState.logPage=1;
+  document.querySelectorAll('.log-filter-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  loadLogs();
+}
+
+async function loadLogs() {
+  document.getElementById('logsContent').innerHTML='<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const p=new URLSearchParams({page:adminState.logPage,limit:50});
+    if(adminState.logFilter) p.set('type',adminState.logFilter);
+    const data=await apiFetch(`/logs?${p}`);
+    if(!data.logs.length) { document.getElementById('logsContent').innerHTML='<div class="empty"><p>Aucun log</p></div>'; document.getElementById('logsPagination').innerHTML=''; return; }
+    document.getElementById('logsContent').innerHTML=`
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.2rem">
+        ${data.logs.map(l=>`
+          <div class="log-entry">
+            <div class="log-dot ${LOG_DOT[l.type]||'log-dot-blue'}"></div>
+            <div>
+              <div class="log-msg">${LOG_EMOJI[l.type] || '📋'} ${l.message}</div>
+              <div class="log-meta">Par <strong>${l.actorName}</strong> ${l.target?`→ ${l.target}`:''} · ${timeAgo(l.createdAt)}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>`;
+    // Pagination
+    const pages=data.pages;
+    let pHtml='';
+    if(pages>1) {
+      if(adminState.logPage>1) pHtml+=`<button class="page-btn" onclick="goLogPage(${adminState.logPage-1})">‹</button>`;
+      for(let i=1;i<=pages;i++) pHtml+=`<button class="page-btn ${i===adminState.logPage?'active':''}" onclick="goLogPage(${i})">${i}</button>`;
+      if(adminState.logPage<pages) pHtml+=`<button class="page-btn" onclick="goLogPage(${adminState.logPage+1})">›</button>`;
+    }
+    document.getElementById('logsPagination').innerHTML=pHtml;
+  } catch(err) { document.getElementById('logsContent').innerHTML=`<div class="empty"><p>${err.message}</p></div>`; }
+}
+
+function goLogPage(p) { adminState.logPage=p; loadLogs(); }
+
+async function cleanLogs() {
+  if(!await vunyConfirm({ title:'Supprimer tous les logs', msg:'Supprimer TOUS les logs ? Cette action est irréversible.', type:'danger', okLabel:'Tout supprimer' })) return;
+  try { await apiFetch('/logs/clean',{method:'DELETE'}); showToast('Logs supprimés','success'); loadLogs(); }
+  catch(err) { showToast(err.message,'error'); }
+}
+
+// ── WEBHOOK ───────────────────────────────────
+async function loadWebhookSettings() {
+  try {
+    const s=await apiFetch('/logs/webhook');
+    document.getElementById('webhookUrl').value=s.url||'';
+    const events=s.events||[];
+    document.querySelectorAll('.webhook-event-item input').forEach(cb=>{
+      cb.checked=events.includes(cb.value)||(events.length===0);
+    });
+  } catch {}
+}
+
+async function saveWebhook() {
+  const url=document.getElementById('webhookUrl').value.trim();
+  const events=[...document.querySelectorAll('.webhook-event-item input:checked')].map(cb=>cb.value);
+  try { await apiFetch('/logs/webhook',{method:'POST',body:JSON.stringify({url,events})}); showToast('Webhook sauvegardé','success'); }
+  catch(err) { showToast(err.message,'error'); }
+}
+
+async function testWebhook() {
+  const url=document.getElementById('webhookUrl').value.trim();
+  if(!url) return showToast('Entrez une URL de webhook d\'abord','error');
+  try {
+    await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'Vuny Leak V2 — Test',content:'✅ Webhook Vuny Leak V2 opérationnel !'})});
+    showToast('Message de test envoyé','success');
+  } catch { showToast('Erreur lors du test','error'); }
+}
+
+// ── NOTIFICATIONS ADMIN ───────────────────────
+async function clearAllNotifications() {
+  if (!await vunyConfirm({ title:'Supprimer les notifications', msg:'Supprimer toutes les notifications de la base de données ?', type:'danger', okLabel:'Tout supprimer' })) return;
+  try {
+    const r = await apiFetch('/admin/notifications', { method: 'DELETE' });
+    showToast(r.message || 'Notifications supprimées', 'success');
+  } catch(err) { showToast(err.message, 'error'); }
+}
+
+// ── ANNONCES ──────────────────────────────────
+let editingAnnouncementId = null;
+
+async function loadAnnouncements() {
+  const el = document.getElementById('announcementsList');
+  if (!el) return;
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const data = await apiFetch('/announcements/all');
+    if (!data.length) {
+      el.innerHTML = '<div class="empty"><p>Aucune annonce. Créez-en une !</p></div>';
+      return;
+    }
+    el.innerHTML = `<div class="table-wrap"><table>
+      <thead><tr><th>Titre</th><th>Description</th><th>Statut</th><th>Créée le</th><th>Actions</th></tr></thead>
+      <tbody>${data.map(a => `<tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            ${a.imageUrl ? `<img src="${a.imageUrl}" style="width:36px;height:36px;border-radius:6px;object-fit:cover;flex-shrink:0" onerror="this.style.display='none'">` : ''}
+            <span style="font-weight:600;color:${a.titleColor || '#fff'}">${a.title}</span>
+          </div>
+        </td>
+        <td style="max-width:220px;color:var(--text-muted);font-size:0.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.description || '—'}</td>
+        <td>${a.active
+          ? '<span class="status status-approved">Active</span>'
+          : '<span class="status status-banned">Inactive</span>'
+        }</td>
+        <td style="font-size:0.78rem;color:var(--text-muted)">${new Date(a.createdAt).toLocaleDateString('fr-FR')}</td>
+        <td><div style="display:flex;gap:4px">
+          <button class="btn btn-outline btn-sm" onclick="editAnnouncement(${JSON.stringify(a).replace(/'/g, "\'")})">Modifier</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteAnnouncement('${a._id}')">Supprimer</button>
+        </div></td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  } catch(err) { el.innerHTML = `<div class="empty"><p>${err.message}</p></div>`; }
+}
+
+function openAnnouncementModal() {
+  editingAnnouncementId = null;
+  document.getElementById('announcementModalTitle').textContent = 'Nouvelle annonce';
+  document.getElementById('announcementEditId').value = '';
+  document.getElementById('annTitle').value = '';
+  document.getElementById('annDesc').value = '';
+  document.getElementById('annImageUrl').value = '';
+  document.getElementById('annTitleColor').value = '#ffffff';
+  document.getElementById('annTitleColorHex').value = '#ffffff';
+  document.getElementById('annDescColor').value = '#aaaaaa';
+  document.getElementById('annDescColorHex').value = '#aaaaaa';
+  document.getElementById('annActive').value = 'true';
+  document.getElementById('announcementOverlay').classList.add('open');
+}
+
+function closeAnnouncementModal() {
+  document.getElementById('announcementOverlay').classList.remove('open');
+  editingAnnouncementId = null;
+}
+
+function editAnnouncement(a) {
+  editingAnnouncementId = a._id;
+  document.getElementById('announcementModalTitle').textContent = "Modifier l'annonce";
+  document.getElementById('annTitle').value = a.title || '';
+  document.getElementById('annDesc').value = a.description || '';
+  document.getElementById('annImageUrl').value = a.imageUrl || '';
+  const tc = a.titleColor || '#ffffff';
+  const dc = a.descColor || '#aaaaaa';
+  document.getElementById('annTitleColor').value = tc;
+  document.getElementById('annTitleColorHex').value = tc;
+  document.getElementById('annDescColor').value = dc;
+  document.getElementById('annDescColorHex').value = dc;
+  document.getElementById('annActive').value = a.active ? 'true' : 'false';
+  document.getElementById('announcementOverlay').classList.add('open');
+}
+
+async function saveAnnouncement() {
+  const title = document.getElementById('annTitle').value.trim();
+  if (!title) return showToast('Titre requis', 'error');
+  const body = {
+    title,
+    description: document.getElementById('annDesc').value.trim(),
+    imageUrl: document.getElementById('annImageUrl').value.trim() || null,
+    titleColor: document.getElementById('annTitleColor').value,
+    descColor: document.getElementById('annDescColor').value,
+    active: document.getElementById('annActive').value === 'true',
+  };
+  try {
+    if (editingAnnouncementId) {
+      await apiFetch(`/announcements/${editingAnnouncementId}`, { method: 'PATCH', body: JSON.stringify(body) });
+      showToast('Annonce modifiée', 'success');
+    } else {
+      await apiFetch('/announcements', { method: 'POST', body: JSON.stringify(body) });
+      showToast('Annonce créée', 'success');
+    }
+    closeAnnouncementModal();
+    loadAnnouncements();
+  } catch(err) { showToast(err.message, 'error'); }
+}
+
+async function deleteAnnouncement(id) {
+  if (!await vunyConfirm({ title:'Supprimer l\'annonce', msg:'Supprimer définitivement cette annonce ?', type:'danger', okLabel:'Supprimer' })) return;
+  try {
+    await apiFetch(`/announcements/${id}`, { method: 'DELETE' });
+    showToast('Annonce supprimée', 'success');
+    loadAnnouncements();
+  } catch(err) { showToast(err.message, 'error'); }
+}
+
+// Sync color pickers
+document.addEventListener('change', e => {
+  if (e.target.id === 'annTitleColor') document.getElementById('annTitleColorHex').value = e.target.value;
+  if (e.target.id === 'annDescColor') document.getElementById('annDescColorHex').value = e.target.value;
+});
+
+// ── VIP ───────────────────────────────────────
+async function loadVipMembers() {
+  const list = document.getElementById('vipMembersList');
+  if (!list) return;
+  list.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const data = await apiFetch('/admin/vip-users');
+    if (!data.length) {
+      list.innerHTML = '<div class="empty"><p>Aucun membre VIP pour le moment</p></div>';
+      return;
+    }
+    list.innerHTML = `
+      <div class="table-wrap"><table>
+        <thead><tr><th>Membre</th><th>Rôle</th><th>Discord ID</th><th>Depuis</th><th>Actions</th></tr></thead>
+        <tbody>${data.map(u => `<tr>
+          <td><div class="td-user">
+            <img src="${u.avatar || "https://cdn.discordapp.com/embed/avatars/0.png"}" alt="" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+            <div><div class="td-user-name">${u.username}</div></div>
+          </div></td>
+          <td>${roleBadge(u.role)}</td>
+          <td style="font-size:0.78rem;color:var(--text-muted)">${u.discordId}</td>
+          <td style="font-size:0.78rem;color:var(--text-muted)">${u.vipGrantedAt ? new Date(u.vipGrantedAt).toLocaleDateString('fr-FR') : '—'}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="revokeVip('${u._id}','${u.username}')">Retirer VIP</button></td>
+        </tr>`).join('')}</tbody>
+      </table></div>`;
+  } catch(err) { list.innerHTML = `<div class="empty"><p>${err.message}</p></div>`; }
+}
+
+async function doVipSearch() {
+  const q = document.getElementById('vipSearchInput')?.value?.trim();
+  const results = document.getElementById('vipSearchResults');
+  if (!q) { results.innerHTML = ''; return; }
+  results.innerHTML = '<div class="loading" style="padding:.5rem"><div class="spinner"></div></div>';
+  try {
+    const data = await apiFetch(`/admin/search-user?q=${encodeURIComponent(q)}`);
+    if (!data.length) {
+      results.innerHTML = '<div class="empty"><p>Aucun utilisateur trouvé</p></div>';
+      return;
+    }
+    results.innerHTML = `
+      <div class="table-wrap"><table>
+        <thead><tr><th>Membre</th><th>Rôle actuel</th><th>Discord ID</th><th>Action</th></tr></thead>
+        <tbody>${data.map(u => `<tr>
+          <td><div class="td-user">
+            <img src="${u.avatar || "https://cdn.discordapp.com/embed/avatars/0.png"}" alt="" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+            <div><div class="td-user-name">${u.username}</div></div>
+          </div></td>
+          <td>${roleBadge(u.role)}</td>
+          <td style="font-size:0.78rem;color:var(--text-muted)">${u.discordId}</td>
+          <td>${u.role === 'vip'
+            ? `<button class="btn btn-danger btn-sm" onclick="revokeVip('${u._id}','${u.username}')">Retirer VIP</button>`
+            : `<button class="btn btn-success btn-sm" onclick="grantVip('${u._id}','${u.username}')">Accorder VIP</button>`
+          }</td>
+        </tr>`).join('')}</tbody>
+      </table></div>`;
+  } catch(err) { results.innerHTML = `<div class="empty"><p>${err.message}</p></div>`; }
+}
+
+async function grantVip(id, name) {
+  try {
+    await apiFetch(`/admin/vip-users/${id}`, { method: 'POST' });
+    showToast(`VIP accordé à ${name}`, 'success');
+    document.getElementById('vipSearchResults').innerHTML = '';
+    document.getElementById('vipSearchInput').value = '';
+    loadVipMembers();
+  } catch(err) { showToast(err.message, 'error'); }
+}
+
+async function revokeVip(id, name) {
+  if (!await vunyConfirm({ title:'Retirer le VIP', msg:`Retirer le statut VIP de ${name} ?`, type:'warning', okLabel:'Retirer' })) return;
+  try {
+    await apiFetch(`/admin/vip-users/${id}`, { method: 'DELETE' });
+    showToast(`VIP retiré pour ${name}`, 'success');
+    document.getElementById('vipSearchResults').innerHTML = '';
+    loadVipMembers();
+  } catch(err) { showToast(err.message, 'error'); }
+}
+
+// =============================================
+// CUSTOM CONFIRM — remplace window.confirm()
+// =============================================
+(function() {
+  let _resolve = null;
+
+  const overlay = document.getElementById('confirmOverlay');
+  const titleEl = document.getElementById('confirmTitle');
+  const msgEl   = document.getElementById('confirmMsg');
+  const okBtn   = document.getElementById('confirmOkBtn');
+  const cancelBtn = document.getElementById('confirmCancelBtn');
+  const iconWrap = document.getElementById('confirmIconWrap');
+
+  const ICONS = {
+    danger: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>`,
+    warning: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+    info: `<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+  };
+
+  function close(result) {
+    overlay.classList.remove('open');
+    if (_resolve) { _resolve(result); _resolve = null; }
+  }
+
+  okBtn.addEventListener('click', () => close(true));
+  cancelBtn.addEventListener('click', () => close(false));
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) close(false); });
+
+  // Global function
+  window.vunyConfirm = function({ title = 'Confirmation', msg = '', type = 'danger', okLabel = 'Confirmer', cancelLabel = 'Annuler' } = {}) {
+    titleEl.textContent = title;
+    msgEl.textContent = msg;
+    okBtn.textContent = okLabel;
+    cancelBtn.textContent = cancelLabel;
+
+    iconWrap.className = 'confirm-icon confirm-icon-' + type;
+    iconWrap.innerHTML = ICONS[type] || ICONS.danger;
+
+    okBtn.className = 'btn ' + (type === 'danger' ? 'btn-danger' : type === 'warning' ? 'btn-primary' : 'btn-outline');
+
+    overlay.classList.add('open');
+    setTimeout(() => okBtn.focus(), 50);
+
+    return new Promise(resolve => { _resolve = resolve; });
+  };
+})();
+
+
+// ═══════════════════════════════════════════════════
+// BOUTIQUE — ADMIN FUNCTIONS
+// ═══════════════════════════════════════════════════
+
+let shopAdminState = { ticketFilter: 'open', activeChatId: null, chatEvtSource: null };
+let _adminChatSrc = null;
+let _adminChatCurrentId = null;
+
+async function loadShopProducts() {
+  const el = document.getElementById('shopProductsContent');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const data = await apiFetch('/shop/products?limit=50');
+    if (!data.products.length) { el.innerHTML = '<div class="empty"><p>Aucun produit.</p></div>'; return; }
+    el.innerHTML = `<div class="table-wrap"><table>
+      <thead><tr><th>Produit</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+      <tbody>${data.products.map(p => `<tr>
+        <td><div style="display:flex;align-items:center;gap:8px">
+          ${p.thumbnail?`<img src="${p.thumbnail}" style="width:36px;height:36px;object-fit:cover;border-radius:6px;flex-shrink:0">`:'<div style="width:36px;height:36px;background:var(--bg3);border-radius:6px;flex-shrink:0"></div>'}
+          <div><div style="font-weight:600;font-size:.83rem">${p.title}</div>${p.featured?'<span style="font-size:.65rem;color:var(--red);font-weight:700">⭐ EN AVANT</span>':''}</div>
+        </div></td>
+        <td style="font-size:.78rem;color:var(--text-muted)">${p.category}</td>
+        <td style="font-weight:700">${p.price.toFixed(2)} €</td>
+        <td><span style="font-weight:700;color:${p.quantity===0?'var(--red)':p.quantity<=3?'#e67e22':'var(--green)'}">${p.quantity}</span></td>
+        <td><span class="status ${p.active?'status-approved':'status-rejected'}">${p.active?'Actif':'Retiré'}</span></td>
+        <td style="font-size:.75rem;color:var(--text-dim)">${timeAgo(p.createdAt)}</td>
+        <td><div style="display:flex;gap:4px">
+          <button class="btn btn-outline btn-sm" onclick="openAdminEditProduct('${p._id}')">Modifier</button>
+          <button class="btn btn-danger btn-sm" onclick="adminDeleteProduct('${p._id}')">Supprimer</button>
+        </div></td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  } catch(e) { el.innerHTML = `<div class="empty"><p>${e.message}</p></div>`; }
+}
+
+let _editingProdId = null;
+
+function openAdminAddProduct() {
+  _editingProdId = null;
+  ['shopProdTitle','shopProdDesc','shopProdPrice','shopProdThumb'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('shopProdCat').value = '';
+  document.getElementById('shopProdQty').value = '1';
+  document.getElementById('shopProdFeatured').checked = false;
+  document.getElementById('shopProdModalTitle').textContent = 'Ajouter un produit';
+  loadShopCatSelect();
+  document.getElementById('shopProductOverlay').classList.add('open');
+}
+
+async function openAdminEditProduct(id) {
+  try {
+    const p = await apiFetch(`/shop/products/${id}`);
+    _editingProdId = id;
+    await loadShopCatSelect();
+    document.getElementById('shopProdTitle').value = p.title||'';
+    document.getElementById('shopProdDesc').value = p.description||'';
+    document.getElementById('shopProdCat').value = p.category||'';
+    document.getElementById('shopProdPrice').value = p.price||'';
+    document.getElementById('shopProdQty').value = p.quantity||1;
+    document.getElementById('shopProdThumb').value = p.thumbnail||'';
+    document.getElementById('shopProdFeatured').checked = p.featured||false;
+    document.getElementById('shopProdModalTitle').textContent = 'Modifier le produit';
+    document.getElementById('shopProductOverlay').classList.add('open');
+  } catch(e) { showToast(e.message,'error'); }
+}
+
+async function saveAdminProduct() {
+  const body = {
+    title: document.getElementById('shopProdTitle').value.trim(),
+    description: document.getElementById('shopProdDesc').value.trim(),
+    category: document.getElementById('shopProdCat').value,
+    price: parseFloat(document.getElementById('shopProdPrice').value),
+    quantity: parseInt(document.getElementById('shopProdQty').value),
+    thumbnail: document.getElementById('shopProdThumb').value.trim()||null,
+    featured: document.getElementById('shopProdFeatured').checked,
+  };
+  if (!body.title||!body.description||!body.category||isNaN(body.price)||isNaN(body.quantity))
+    return showToast('Remplis tous les champs requis','error');
+  try {
+    if (_editingProdId) {
+      await apiFetch(`/shop/products/${_editingProdId}`,{method:'PATCH',body:JSON.stringify(body)});
+      showToast('Produit modifié','success');
+    } else {
+      await apiFetch('/shop/products',{method:'POST',body:JSON.stringify(body)});
+      showToast('Produit créé !','success');
+    }
+    document.getElementById('shopProductOverlay').classList.remove('open');
+    loadShopProducts();
+  } catch(e) { showToast(e.message,'error'); }
+}
+
+async function adminDeleteProduct(id) {
+  if (!await vunyConfirm({title:'Supprimer le produit',msg:'Retirer ce produit de la boutique ?',type:'danger',okLabel:'Supprimer'})) return;
+  try {
+    await apiFetch(`/shop/products/${id}`,{method:'DELETE'});
+    showToast('Produit retiré','success');
+    loadShopProducts();
+  } catch(e) { showToast(e.message,'error'); }
+}
+
+function setTicketFilter(f,btn) {
+  shopAdminState.ticketFilter=f;
+  document.querySelectorAll('.admin-ticket-filter').forEach(b=>{b.classList.remove('btn-primary');b.classList.add('btn-ghost');});
+  if(btn){btn.classList.add('btn-primary');btn.classList.remove('btn-ghost');}
+  loadShopTickets();
+}
+
+async function loadShopTickets() {
+  const el = document.getElementById('shopTicketsContent');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const q = shopAdminState.ticketFilter ? `?status=${shopAdminState.ticketFilter}` : '';
+    const tickets = await apiFetch(`/shop/tickets${q}`);
+    const openCount = tickets.filter(t=>t.status==='open').length;
+    const badge = document.getElementById('shopTicketsBadge');
+    if (badge) { badge.textContent=openCount; badge.style.display=openCount>0?'inline-block':'none'; }
+
+    if (!tickets.length) { el.innerHTML='<div class="empty"><p>Aucun ticket</p></div>'; return; }
+
+    const sColors={open:'status-approved',sold:'status-pending',closed:'status-rejected'};
+    const sLabels={open:'Ouvert',sold:'Vendu',closed:'Fermé'};
+    el.innerHTML=`<div class="table-wrap"><table>
+      <thead><tr><th>Client</th><th>Produit</th><th>Qté</th><th>Total</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+      <tbody>${tickets.map(t=>`<tr>
+        <td><div style="display:flex;align-items:center;gap:8px">
+          <img src="${t.buyer?.avatar||'https://cdn.discordapp.com/embed/avatars/0.png'}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0">
+          <div><div style="font-weight:600;font-size:.83rem">${t.buyer?.username||'?'}</div>${roleBadge(t.buyer?.role||'user')}</div>
+        </div></td>
+        <td><div style="display:flex;align-items:center;gap:6px">
+          ${t.product?.thumbnail?`<img src="${t.product.thumbnail}" style="width:28px;height:28px;object-fit:cover;border-radius:4px;flex-shrink:0">`:''}
+          <div style="font-size:.82rem;font-weight:600;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.product?.title||'—'}</div>
+        </div></td>
+        <td style="font-weight:600;text-align:center">${t.quantity}x</td>
+        <td style="font-weight:700">${t.totalPrice.toFixed(2)} €</td>
+        <td><span class="status ${sColors[t.status]||''}">${sLabels[t.status]||t.status}</span></td>
+        <td style="font-size:.75rem;color:var(--text-dim)">${timeAgo(t.createdAt)}</td>
+        <td><div style="display:flex;gap:4px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" onclick="openAdminChat('${t._id}','${(t.product?.title||'Ticket').replace(/'/g,"\'")}','${(t.buyer?.username||'Client').replace(/'/g,"\'")}')">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat
+          </button>
+          ${t.status==='open'?`
+          <button class="btn btn-success btn-sm" onclick="markTicketSold('${t._id}')">Vendu ✓</button>
+          <button class="btn btn-danger btn-sm" onclick="promptCloseTicket('${t._id}')">Fermer</button>`:''}
+        </div></td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  } catch(e) { el.innerHTML=`<div class="empty"><p>${e.message}</p></div>`; }
+}
+
+async function markTicketSold(id) {
+  if (!await vunyConfirm({title:'Marquer comme vendu',msg:'La vente est confirmée ? Le stock sera déduit et le client notifié.',type:'warning',okLabel:'Confirmer la vente'})) return;
+  try {
+    await apiFetch(`/shop/tickets/${id}/sold`,{method:'PATCH'});
+    showToast('Vente enregistrée, stock déduit','success');
+    loadShopTickets();
+    if (shopAdminState.activeChatId===id) refreshAdminChat(id);
+  } catch(e) { showToast(e.message,'error'); }
+}
+
+async function promptCloseTicket(id) {
+  document.getElementById('ticketCloseId').value = id;
+  document.getElementById('ticketCloseReason').value = '';
+  document.getElementById('ticketCloseOverlay').classList.add('open');
+}
+
+async function confirmCloseTicket() {
+  const id = document.getElementById('ticketCloseId').value;
+  const reason = document.getElementById('ticketCloseReason').value.trim();
+  try {
+    await apiFetch(`/shop/tickets/${id}/close`,{method:'PATCH',body:JSON.stringify({reason})});
+    showToast('Ticket fermé','info');
+    document.getElementById('ticketCloseOverlay').classList.remove('open');
+    loadShopTickets();
+    if (shopAdminState.activeChatId===id) refreshAdminChat(id);
+  } catch(e) { showToast(e.message,'error'); }
+}
+
+// ── ADMIN CHAT ────────────────────────────────────
+
+function openAdminChat(ticketId, productTitle, buyerName) {
+  _adminChatCurrentId = ticketId;
+  shopAdminState.activeChatId = ticketId;
+  document.getElementById('adminChatTitle').textContent = productTitle;
+  document.getElementById('adminChatSub').textContent = 'Client : ' + buyerName;
+  document.getElementById('adminChatMessages').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;padding:3rem"><div class="spinner" style="width:24px;height:24px;border-width:2px"></div></div>';
+  document.getElementById('adminChatOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  refreshAdminChat(ticketId);
+
+  // Start SSE for real-time sync
+  if (_adminChatSrc) { _adminChatSrc.close(); _adminChatSrc = null; }
+  if (App.token) {
+    const src = new EventSource(`${API_BASE}/shop/tickets/${ticketId}/events?token=${App.token}`);
+    _adminChatSrc = src;
+    src.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      if (data.type === 'message') {
+        appendAdminChatMsg(data.message);
+        scrollAdminChat();
+      } else if (data.type === 'status') {
+        refreshAdminChat(ticketId);
+        loadShopTickets();
+      }
+    };
+    src.onerror = () => {};
+  }
+}
+
+function closeAdminChat() {
+  document.getElementById('adminChatOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  if (_adminChatSrc) { _adminChatSrc.close(); _adminChatSrc = null; }
+  _adminChatCurrentId = null;
+  shopAdminState.activeChatId = null;
+}
+
+async function refreshAdminChat(ticketId) {
+  try {
+    const ticket = await apiFetch(`/shop/tickets/${ticketId}`);
+    const msgEl = document.getElementById('adminChatMessages');
+    const inputArea = document.getElementById('adminChatInputArea');
+    const statusEl = document.getElementById('adminChatStatus');
+
+    // Order recap
+    document.getElementById('adminOrderRecap').innerHTML = `
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:.8rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        ${ticket.product?.thumbnail?`<img src="${ticket.product.thumbnail}" style="width:32px;height:32px;object-fit:cover;border-radius:6px;flex-shrink:0">`:''}
+        <div style="flex:1;min-width:120px">
+          <div style="font-weight:700;color:var(--white)">${ticket.product?.title||'—'}</div>
+          <div style="color:var(--text-muted)">${ticket.quantity}× — <strong style="color:var(--white)">${ticket.totalPrice.toFixed(2)} €</strong></div>
+        </div>
+        ${ticket.status==='open'?`
+        <button class="btn btn-success btn-sm" onclick="markTicketSold('${ticketId}')">✅ Vendu</button>
+        <button class="btn btn-danger btn-sm" onclick="promptCloseTicket('${ticketId}')">✕ Fermer</button>
+        `:`<span class="status ${ticket.status==='sold'?'status-approved':'status-rejected'}">${ticket.status==='sold'?'Vendu':'Fermé'}</span>`}
+      </div>`;
+
+    if (ticket.status!=='open') {
+      inputArea.style.display='none';
+      statusEl.style.display='block';
+      statusEl.innerHTML = ticket.status==='sold'
+        ? '<span style="color:var(--green)">✅ Vente finalisée</span>'
+        : `<span style="color:var(--red)">❌ Fermé${ticket.closeReason?' — '+ticket.closeReason:''}</span>`;
+    } else {
+      inputArea.style.display='flex';
+      statusEl.style.display='none';
+    }
+
+    msgEl.innerHTML='';
+    ticket.messages.forEach(m => appendAdminChatMsg(m));
+    scrollAdminChat();
+  } catch(e) { showToast(e.message,'error'); }
+}
+
+function appendAdminChatMsg(m) {
+  const msgEl = document.getElementById('adminChatMessages');
+  if (!msgEl) return;
+  // Déduplique par _id pour éviter double affichage SSE
+  if (m._id && msgEl.querySelector('[data-mid="'+m._id+'"]')) return;
+  const isMe = m.sender?._id===App.user?._id||m.sender===App.user?._id;
+  const isSys = m.content?.startsWith('📦');
+  if (isSys) {
+    const div=document.createElement('div');
+    div.style.cssText='display:block;margin:6px auto;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:.75rem;color:var(--text-muted);text-align:center;max-width:90%;white-space:pre-line';
+    if (m._id) div.dataset.mid = m._id;
+    div.textContent=m.content; msgEl.appendChild(div); return;
+  }
+  const wrap=document.createElement('div');
+  if (m._id) wrap.dataset.mid = m._id;
+  wrap.style.cssText=`display:flex;gap:7px;align-items:flex-start;max-width:85%;${isMe?'align-self:flex-end;margin-left:auto;flex-direction:row-reverse':''}`;
+  const ava=m.sender?.avatar||'https://cdn.discordapp.com/embed/avatars/0.png';
+  const name=m.sender?.username||'?';
+  const imgHtml=m.imageUrl?`<img src="${m.imageUrl}" style="max-width:200px;border-radius:8px;display:block;margin-top:4px;cursor:pointer" onclick="window.open('${m.imageUrl}','_blank')" alt="">`:'';
+  const rawText=(m.content||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  const ec = linkifyText(rawText);
+  wrap.innerHTML=`
+    <img src="${ava}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0" title="${name}" alt="">
+    <div>
+      ${!isMe?`<div style="font-size:.68rem;color:var(--text-dim);margin-bottom:2px">${name}</div>`:''}
+      <div style="background:${isMe?'var(--red-dim)':'var(--bg3)'};border:1px solid ${isMe?'var(--red-border)':'var(--border)'};border-radius:${isMe?'12px 12px 3px 12px':'12px 12px 12px 3px'};padding:8px 11px;font-size:.82rem;color:var(--text);line-height:1.55;word-break:break-word">${ec}${imgHtml}</div>
+      <div style="font-size:.65rem;color:var(--text-dim);margin-top:3px;text-align:${isMe?'left':'right'}">${timeAgo(m.createdAt)}</div>
+    </div>`;
+  msgEl.appendChild(wrap);
+}
+
+// Transforme les URLs en liens — Ctrl+clic pour ouvrir
+function linkifyText(text) {
+  const urlRegex = /((https?:\/\/|www\.)[^\s<>"'&]+)/g;
+  return text.replace(urlRegex, (url) => {
+    const href = url.startsWith('http') ? url : 'https://' + url;
+    return `<a href="${href}" target="_blank" rel="noopener noreferrer"
+      style="color:var(--red);text-decoration:underline;cursor:pointer;word-break:break-all"
+      onclick="if(!event.ctrlKey&&!event.metaKey){event.preventDefault();showToast('Ctrl+clic pour ouvrir le lien','info');}"
+      title="Ctrl+clic (ou Cmd+clic) pour ouvrir">${url}</a>`;
+  });
+}
+
+function scrollAdminChat() {
+  const el=document.getElementById('adminChatMessages');
+  if(el) el.scrollTop=el.scrollHeight;
+}
+
+// ── Drag & Drop image admin ──────────────────────────
+let adminImgBase64 = null;
+
+function toggleAdminImgDrop() {
+  const area = document.getElementById('adminImgDropArea');
+  area.style.display = area.style.display === 'none' ? 'block' : 'none';
+}
+
+function handleAdminImgDrop(event) {
+  event.preventDefault();
+  const zone = document.getElementById('adminImgDropZone');
+  zone.style.borderColor = 'var(--border)';
+  zone.style.background = 'var(--bg4)';
+  const file = event.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) loadAdminImgFile(file);
+  else showToast('Fichier non supporté — image uniquement', 'error');
+}
+
+function handleAdminImgFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    adminImgBase64 = e.target.result;
+    const strip = document.getElementById('adminImgPreviewStrip');
+    const prev = document.getElementById('adminImgPreview');
+    const nameEl = document.getElementById('adminImgPreviewName');
+    const btn = document.getElementById('adminImgBtn');
+    if (strip) strip.classList.add('show');
+    if (prev) prev.src = e.target.result;
+    if (nameEl) nameEl.textContent = file.name;
+    if (btn) btn.classList.add('selected');
+  };
+  reader.readAsDataURL(file);
+}
+
+function loadAdminImgFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    adminImgBase64 = e.target.result;
+    const prev = document.getElementById('adminImgPreview');
+    const label = document.getElementById('adminImgDropLabel');
+    const clearBtn = document.getElementById('adminImgClearBtn');
+    prev.src = adminImgBase64;
+    prev.style.display = 'block';
+    label.style.display = 'none';
+    clearBtn.style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearAdminImg(e) {
+  if (e) e.stopPropagation();
+  adminImgBase64 = null;
+  const prev = document.getElementById('adminImgPreview');
+  const label = document.getElementById('adminImgDropLabel');
+  const clearBtn = document.getElementById('adminImgClearBtn');
+  const fileInput = document.getElementById('adminImgFileInput');
+  prev.src = ''; prev.style.display = 'none';
+  label.style.display = 'block';
+  clearBtn.style.display = 'none';
+  if (fileInput) fileInput.value = '';
+}
+
+async function sendAdminMsg() {
+  const input=document.getElementById('adminChatInput');
+  const content=input.value.trim();
+  if ((!content && !adminImgBase64) || !_adminChatCurrentId) return;
+  input.value=''; input.style.height='auto';
+  const imgData = adminImgBase64;
+  clearAdminImg();
+  const dropArea = document.getElementById('adminImgDropArea');
+  if (dropArea) dropArea.style.display = 'none';
+  try {
+    await apiFetch(`/shop/tickets/${_adminChatCurrentId}/message`,{method:'POST',body:JSON.stringify({content,imageUrl:imgData||null})});
+  } catch(e) {
+    showToast(e.message,'error');
+    input.value = content;
+  }
+}
+
+function previewAdminImg() {} // stub legacy
+
+// ═══════════════════════════════════════════════════
+// SHOP CATEGORIES ADMIN
+// ═══════════════════════════════════════════════════
+let shopCatAdminState = { assignCatName: null, allProducts: [] };
+
+async function loadShopCategories() {
+  const el = document.getElementById('shopCategoriesContent');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const [cats, productsData] = await Promise.all([
+      apiFetch('/shop/cats'),
+      apiFetch('/shop/products?limit=200')
+    ]);
+    const products = productsData.products || [];
+    shopCatAdminState.allProducts = products;
+
+    // Group products by category
+    const byCategory = {};
+    cats.forEach(c => { byCategory[c.name] = []; });
+    products.forEach(p => {
+      if (!byCategory[p.category]) byCategory[p.category] = [];
+      byCategory[p.category].push(p);
+    });
+
+    if (!cats.length) {
+      el.innerHTML = `<div class="empty"><p>Aucune catégorie boutique. Créez-en une pour commencer.</p></div>`;
+      return;
+    }
+
+    el.innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding:4px 0">
+        ${cats.map(c => {
+          const prods = byCategory[c.name] || [];
+          return `
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 18px 14px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:10px">
+                <span style="font-size:1.6rem;line-height:1">${c.icon||'📦'}</span>
+                <div>
+                  <div style="font-weight:700;font-size:.95rem;color:var(--text)">${c.name}</div>
+                  ${c.description ? `<div style="font-size:.73rem;color:var(--text-muted);margin-top:1px">${c.description}</div>` : ''}
+                </div>
+              </div>
+              <div style="display:flex;gap:6px">
+                <button class="btn btn-ghost btn-sm" title="Modifier" onclick="openShopCatModal('${c._id}','${c.name.replace(/'/g,"\\'")}','${c.icon||'📦'}','${(c.description||'').replace(/'/g,"\\'")}',${c.order||0})">
+                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </button>
+                <button class="btn btn-ghost btn-sm" title="Assigner des produits" onclick="openAssignProducts('${c._id}','${c.name.replace(/'/g,"\\'")}')">
+                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                </button>
+                <button class="btn btn-ghost btn-sm" style="color:var(--red)" title="Supprimer" onclick="deleteShopCat('${c._id}','${c.name.replace(/'/g,"\\'")}')">
+                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                </button>
+              </div>
+            </div>
+            <div style="height:1px;background:var(--border)"></div>
+            <div>
+              <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
+                <span>${prods.length} produit${prods.length!==1?'s':''}</span>
+                <span style="color:var(--text-dim)">ordre: ${c.order||0}</span>
+              </div>
+              ${prods.length ? `
+                <div style="display:flex;flex-direction:column;gap:4px;max-height:130px;overflow-y:auto">
+                  ${prods.slice(0,5).map(p=>`
+                    <div style="display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:6px;padding:5px 8px">
+                      ${p.thumbnail?`<img src="${p.thumbnail}" style="width:26px;height:26px;border-radius:4px;object-fit:cover" alt="">` : `<div style="width:26px;height:26px;background:var(--bg4);border-radius:4px"></div>`}
+                      <div style="flex:1;min-width:0">
+                        <div style="font-size:.78rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title}</div>
+                        <div style="font-size:.68rem;color:var(--text-muted)">${p.price.toFixed(2)} € · stock: ${p.quantity}</div>
+                      </div>
+                      ${p.featured?'<span style="font-size:.65rem;background:var(--red-dim);color:var(--red);border:1px solid var(--red-border);border-radius:3px;padding:1px 5px">⭐</span>':''}
+                    </div>
+                  `).join('')}
+                  ${prods.length>5?`<div style="font-size:.72rem;color:var(--text-muted);text-align:center;padding:3px">+${prods.length-5} de plus...</div>`:''}
+                </div>
+              ` : `<div style="font-size:.78rem;color:var(--text-dim);text-align:center;padding:8px">Aucun produit dans cette catégorie</div>`}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  } catch(err) { el.innerHTML = `<div class="empty"><p>${err.message}</p></div>`; }
+}
+
+// ── Emoji picker ─────────────────────────────────────────
+const EMOJI_LIST = [
+  '📦','🎮','🚗','🔫','👕','💰','⭐','🔥','💎','🎁','🛒','🏆',
+  '🎯','⚡','🌟','🎪','🎭','🎨','🎵','🎶','🏠','🏰','🌆','🌃',
+  '🚀','✈️','🚢','🏎️','🔧','⚙️','🛡️','⚔️','🗡️','🔱','💫','✨',
+  '🎲','🃏','🎰','🎳','🏹','🪃','🪖','👑','💍','💎','🔮','🪄',
+  '🐉','🦁','🐺','🦊','🐻','🦄','🐲','🦅','🦋','🌹','🌺','🍀',
+  '🌈','⛄','🌊','🔴','🟠','🟡','🟢','🔵','🟣','⚫','⚪','🟤',
+  '❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','❤️‍🔥','💥','🎆',
+  '🛍️','💳','🪙','💵','💴','💶','💷','🏦','📊','📈','📉','💹',
+  '🖥️','💻','📱','⌨️','🖱️','🖨️','📡','🔋','💡','🔦','🔑','🗝️',
+  '🎃','🎄','🎋','🎍','🎎','🎏','🎐','🎑','🎀','🎗️','🎟️','🎫',
+];
+
+let emojiPickerOpen = false;
+
+function toggleEmojiPicker() {
+  emojiPickerOpen = !emojiPickerOpen;
+  const panel = document.getElementById('emojiPickerPanel');
+  if (!panel) return;
+  panel.style.display = emojiPickerOpen ? 'block' : 'none';
+  if (emojiPickerOpen) {
+    renderEmojiGrid(EMOJI_LIST);
+    document.getElementById('emojiSearch').value = '';
+    setTimeout(() => document.getElementById('emojiSearch').focus(), 50);
+  }
+}
+
+function renderEmojiGrid(list) {
+  const grid = document.getElementById('emojiGrid');
+  if (!grid) return;
+  grid.innerHTML = list.map(e => `
+    <button type="button" onclick="selectEmoji('${e}')"
+      style="background:none;border:none;font-size:1.35rem;cursor:pointer;padding:4px;border-radius:6px;transition:background .1s;width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center"
+      onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='none'">${e}</button>
+  `).join('');
+}
+
+function filterEmojis(query) {
+  if (!query.trim()) { renderEmojiGrid(EMOJI_LIST); return; }
+  const filtered = EMOJI_LIST.filter(e => e.includes(query));
+  renderEmojiGrid(filtered.length ? filtered : EMOJI_LIST);
+}
+
+function selectEmoji(emoji) {
+  document.getElementById('shopCatIcon').value = emoji;
+  const btn = document.getElementById('shopCatIconBtn');
+  if (btn) btn.textContent = emoji;
+  emojiPickerOpen = false;
+  const panel = document.getElementById('emojiPickerPanel');
+  if (panel) panel.style.display = 'none';
+}
+
+// Close emoji picker on outside click
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#shopCatIconBtn') && !e.target.closest('#emojiPickerPanel')) {
+    emojiPickerOpen = false;
+    const panel = document.getElementById('emojiPickerPanel');
+    if (panel) panel.style.display = 'none';
+  }
+});
+
+function openShopCatModal(id='', name='', icon='📦', description='', order=0) {
+  document.getElementById('shopCatEditId').value = id;
+  document.getElementById('shopCatName').value = name;
+  document.getElementById('shopCatIcon').value = icon;
+  const btn = document.getElementById('shopCatIconBtn');
+  if (btn) btn.textContent = icon || '📦';
+  document.getElementById('shopCatDesc').value = description;
+  document.getElementById('shopCatOrder').value = order;
+  document.getElementById('shopCatModalTitle').textContent = id ? 'Modifier la catégorie' : 'Nouvelle catégorie boutique';
+  emojiPickerOpen = false;
+  const panel = document.getElementById('emojiPickerPanel');
+  if (panel) panel.style.display = 'none';
+  document.getElementById('shopCatOverlay').classList.add('open');
+}
+
+async function saveShopCategory() {
+  const id = document.getElementById('shopCatEditId').value;
+  const name = document.getElementById('shopCatName').value.trim();
+  const icon = document.getElementById('shopCatIcon').value.trim() || '📦';
+  const description = document.getElementById('shopCatDesc').value.trim();
+  const order = parseInt(document.getElementById('shopCatOrder').value) || 0;
+  if (!name) return showToast('Le nom est requis', 'error');
+  try {
+    if (id) {
+      await apiFetch(`/shop/cats/${id}`, { method: 'PATCH', body: JSON.stringify({ name, icon, description, order }) });
+      showToast('Catégorie modifiée', 'success');
+    } else {
+      await apiFetch('/shop/cats', { method: 'POST', body: JSON.stringify({ name, icon, description, order }) });
+      showToast('Catégorie créée', 'success');
+    }
+    document.getElementById('shopCatOverlay').classList.remove('open');
+    loadShopCategories();
+    // Refresh product cat select if open
+    loadShopCatSelect();
+  } catch(err) { showToast(err.message, 'error'); }
+}
+
+async function deleteShopCat(id, name) {
+  if (!await customConfirm(`Supprimer la catégorie "${name}" ?`, 'Les produits ne seront pas supprimés mais n\'auront plus de catégorie valide.', 'danger')) return;
+  try {
+    await apiFetch(`/shop/cats/${id}`, { method: 'DELETE' });
+    showToast('Catégorie supprimée', 'success');
+    loadShopCategories();
+    loadShopCatSelect();
+  } catch(err) { showToast(err.message, 'error'); }
+}
+
+async function loadShopCatSelect() {
+  try {
+    const cats = await apiFetch('/shop/cats');
+    const sel = document.getElementById('shopProdCat');
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">Choisir...</option>' + cats.map(c => `<option value="${c.name}">${c.icon||'📦'} ${c.name}</option>`).join('');
+    if (cur) sel.value = cur;
+  } catch {}
+}
+
+async function openAssignProducts(catId, catName) {
+  shopCatAdminState.assignCatName = catName;
+  document.getElementById('shopCatAssignTitle').textContent = `Produits — ${catName}`;
+  const list = document.getElementById('shopCatAssignList');
+  list.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  document.getElementById('shopCatAssignOverlay').classList.add('open');
+  try {
+    const data = await apiFetch('/shop/products?limit=200&activeAll=true');
+    const products = data.products || [];
+    shopCatAdminState.allProducts = products;
+    if (!products.length) { list.innerHTML = '<div class="empty"><p>Aucun produit trouvé.</p></div>'; return; }
+    list.innerHTML = products.map(p => `
+      <label style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='var(--red-border)'" onmouseout="this.style.borderColor='var(--border)'">
+        <input type="checkbox" data-pid="${p._id}" ${p.category===catName?'checked':''} style="accent-color:var(--red);width:15px;height:15px;flex-shrink:0">
+        ${p.thumbnail?`<img src="${p.thumbnail}" style="width:32px;height:32px;border-radius:6px;object-fit:cover" alt="">`:`<div style="width:32px;height:32px;background:var(--bg4);border-radius:6px"></div>`}
+        <div style="flex:1;min-width:0">
+          <div style="font-size:.83rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title}</div>
+          <div style="font-size:.72rem;color:var(--text-muted)">Actuel: ${p.category||'Sans catégorie'} · ${p.price.toFixed(2)} €</div>
+        </div>
+      </label>`).join('');
+  } catch(err) { list.innerHTML = `<div class="empty"><p>${err.message}</p></div>`; }
+}
+
+async function saveProductAssignments() {
+  const catName = shopCatAdminState.assignCatName;
+  if (!catName) return;
+  const checkboxes = document.querySelectorAll('#shopCatAssignList input[type=checkbox]');
+  const toAssign = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.dataset.pid);
+  const toUnassign = Array.from(checkboxes).filter(cb => !cb.checked).map(cb => cb.dataset.pid);
+  try {
+    // Assign checked products to this category
+    await Promise.all(toAssign.map(id => apiFetch(`/shop/products/${id}`, { method: 'PATCH', body: JSON.stringify({ category: catName }) })));
+    // Unassign unchecked if they were previously in this category
+    const prev = shopCatAdminState.allProducts.filter(p => toUnassign.includes(p._id) && p.category === catName);
+    await Promise.all(prev.map(p => apiFetch(`/shop/products/${p._id}`, { method: 'PATCH', body: JSON.stringify({ category: '' }) })));
+    showToast('Produits mis à jour', 'success');
+    document.getElementById('shopCatAssignOverlay').classList.remove('open');
+    loadShopCategories();
+  } catch(err) { showToast(err.message, 'error'); }
+}
+
+</script>
+
+<!-- Badge Add/Edit Modal -->
+<div class="overlay" id="badgeOverlay">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head">
+      <div class="modal-head-title" id="badgeModalTitle">Nouveau badge</div>
+      <button class="modal-close" onclick="document.getElementById('badgeOverlay').classList.remove('open')">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Clé unique <span class="req">*</span></label>
+          <input class="form-input" id="badgeKey" placeholder="ex: top10">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Emoji</label>
+          <input class="form-input" id="badgeEmoji" placeholder="🏅" style="font-size:1.2rem">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nom <span class="req">*</span></label>
+        <input class="form-input" id="badgeName" placeholder="Nom du badge">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <input class="form-input" id="badgeDesc" placeholder="À quoi correspond ce badge ?">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select class="form-input" id="badgeType" onchange="updateBadgeTypeFields()">
+            <option value="manual">Manuel</option>
+            <option value="auto_first_n">Premiers inscrits</option>
+            <option value="role">Par rôle</option>
+            <option value="auto_top5">Top 5 ressources</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Couleur</label>
+          <input type="color" class="form-input" id="badgeColor" value="#e74c3c" style="height:38px;padding:4px">
+        </div>
+      </div>
+      <div id="badgeThresholdGroup" style="display:none">
+        <div class="form-group">
+          <label class="form-label">Seuil (ex: 10, 50, 100...)</label>
+          <input class="form-input" id="badgeThreshold" type="number" min="1" placeholder="10">
+        </div>
+      </div>
+      <div id="badgeRoleGroup" style="display:none">
+        <div class="form-group">
+          <label class="form-label">Rôle</label>
+          <select class="form-input" id="badgeRole">
+            <option value="user">user</option>
+            <option value="vip">vip</option>
+            <option value="admin">admin</option>
+            <option value="owner">owner</option>
+            <option value="developer">developer</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ordre d'affichage</label>
+        <input class="form-input" id="badgeOrder" type="number" value="0">
+      </div>
+      <input type="hidden" id="badgeEditId">
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="document.getElementById('badgeOverlay').classList.remove('open')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveBadge()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+// SUPPORT TICKETS ADMIN
+// ════════════════════════════════════════════════
+let supportAdminState = { activeChatId: null, panelOpen: false, evtSource: null, filter: 'open' };
+let supportAdminImgBase64 = null;
+
+async function loadSupportTickets() {
+  const el = document.getElementById('supportTicketsContent');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const q = supportAdminState.filter ? `?status=${supportAdminState.filter}` : '';
+    const tickets = await apiFetch('/support' + q);
+    if (!tickets.length) {
+      el.innerHTML = '<div class="empty"><p>Aucun ticket support</p></div>';
+      return;
+    }
+    el.innerHTML = `<div class="table-wrap"><table>
+      <thead><tr><th>Membre</th><th>Titre</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+      <tbody>${tickets.map(t => {
+        const titleSafe = (t.title||'').replace(/"/g,'&quot;').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        const userSafe = (t.user?.username||'?').replace(/'/g,"\\'");
+        const isClos = t.status !== 'open';
+        return `<tr>
+          <td><div style="display:flex;align-items:center;gap:8px">
+            <img src="${t.user?.avatar||'https://cdn.discordapp.com/embed/avatars/0.png'}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0">
+            <div><div style="font-weight:600;font-size:.83rem">${t.user?.username||'?'}</div>${roleBadge(t.user?.role||'user')}</div>
+          </div></td>
+          <td>
+            <div style="font-size:.82rem;font-weight:600;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.title||'—'}</div>
+            ${isClos && t.closeReason ? `<div style="font-size:.72rem;color:var(--text-dim);margin-top:2px">Raison : ${t.closeReason}</div>` : ''}
+          </td>
+          <td><span class="status ${isClos?'status-rejected':'status-approved'}">${isClos?'Fermé':'Ouvert'}</span></td>
+          <td style="font-size:.75rem;color:var(--text-dim)">${timeAgo(t.createdAt)}</td>
+          <td><div style="display:flex;gap:4px;flex-wrap:wrap">
+            <button class="btn btn-outline btn-sm" onclick="openSupportAdminChat('${t._id}','${titleSafe}','${userSafe}')">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Chat
+            </button>
+            ${!isClos ? `<button class="btn btn-danger btn-sm" onclick="closeSupportTicket('${t._id}')">Fermer</button>` : ''}
+            ${isClos ? `<button class="btn btn-danger btn-sm" onclick="deleteSupportTicket('${t._id}','${titleSafe}')" title="Supprimer définitivement">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg> Supprimer
+            </button>` : ''}
+          </div></td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>`;
+  } catch(e) { el.innerHTML = `<div class="empty"><p>${e.message}</p></div>`; }
+}
+
+function setSupportFilter(filter, el) {
+  supportAdminState.filter = filter;
+  document.querySelectorAll('.admin-support-filter').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  loadSupportTickets();
+}
+
+async function closeSupportTicket(id) {
+  if (!await vunyConfirm({ title: 'Fermer le ticket', msg: 'Clore ce ticket support ?', type: 'danger', okLabel: 'Fermer' })) return;
+  try {
+    await apiFetch(`/support/${id}/close`, { method: 'PATCH', body: JSON.stringify({ reason: '' }) });
+    showToast('Ticket fermé', 'success');
+    loadSupportTickets();
+    updateSupportBadge();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+async function deleteSupportTicket(id, title) {
+  if (!await vunyConfirm({ title: 'Supprimer définitivement', msg: `Supprimer définitivement le ticket "${title}" ? Cette action est irréversible.`, type: 'danger', okLabel: 'Supprimer' })) return;
+  try {
+    await apiFetch(`/support/${id}`, { method: 'DELETE' });
+    showToast('Ticket supprimé', 'success');
+    loadSupportTickets();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+async function openSupportAdminChat(ticketId, title, username) {
+  supportAdminState.activeChatId = ticketId;
+  document.getElementById('supportAdminChatTitle').textContent = title;
+  document.getElementById('supportAdminChatSub').textContent = `@${username}`;
+  document.getElementById('supportAdminMessages').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;padding:3rem"><div class="spinner" style="width:24px;height:24px;border-width:2px"></div></div>';
+  // Open as centered modal
+  const overlay = document.getElementById('supportAdminChatPanel');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  supportAdminState.panelOpen = true;
+
+  await refreshSupportAdminChat(ticketId);
+
+  if (supportAdminState.evtSource) supportAdminState.evtSource.close();
+  if (App.token) {
+    const src = new EventSource(`${API_BASE}/support/${ticketId}/events?token=${App.token}`);
+    supportAdminState.evtSource = src;
+    src.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      if (data.type === 'message') {
+        appendSupportAdminMsg(data.message);
+        scrollSupportAdminChat();
+      } else if (data.type === 'status') {
+        refreshSupportAdminChat(ticketId);
+        loadSupportTickets();
+        updateSupportBadge();
+      }
+    };
+    src.onerror = () => {};
+  }
+}
+
+async function refreshSupportAdminChat(ticketId) {
+  try {
+    const ticket = await apiFetch(`/support/${ticketId}`);
+    const msgEl = document.getElementById('supportAdminMessages');
+    const statusEl = document.getElementById('supportAdminStatus');
+    const inputArea = document.getElementById('supportAdminInputArea');
+    if (ticket.status !== 'open') {
+      inputArea.style.display = 'none';
+      statusEl.style.display = 'block';
+      statusEl.innerHTML = `<span style="color:var(--text-muted)">🔒 Ticket fermé${ticket.closeReason ? ' — ' + ticket.closeReason : ''}</span>`;
+    } else {
+      inputArea.style.display = 'flex';
+      statusEl.style.display = 'none';
+    }
+    msgEl.innerHTML = '';
+    ticket.messages.forEach(m => appendSupportAdminMsg(m));
+    scrollSupportAdminChat();
+  } catch(e) {}
+}
+
+function appendSupportAdminMsg(m) {
+  const msgEl = document.getElementById('supportAdminMessages');
+  if (!msgEl) return;
+  if (m._id && msgEl.querySelector(`[data-mid="${m._id}"]`)) return;
+  const isMe = m.sender?._id === App.user?._id || m.sender === App.user?._id;
+  const wrap = document.createElement('div');
+  if (m._id) wrap.dataset.mid = m._id;
+  wrap.style.cssText = `display:flex;gap:7px;align-items:flex-start;max-width:85%;${isMe ? 'align-self:flex-end;margin-left:auto;flex-direction:row-reverse' : ''}`;
+  const ava = m.sender?.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png';
+  const name = m.sender?.username || '?';
+  const imgHtml = m.imageUrl ? `<img src="${m.imageUrl}" style="max-width:200px;border-radius:8px;display:block;margin-top:4px;cursor:pointer" onclick="window.open('${m.imageUrl}','_blank')" alt="">` : '';
+  const ec = linkifyText((m.content || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'));
+  wrap.innerHTML = `
+    <img src="${ava}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0" title="${name}" alt="">
+    <div>
+      ${!isMe ? `<div style="font-size:.68rem;color:var(--text-dim);margin-bottom:2px">${name}</div>` : ''}
+      <div style="background:${isMe ? 'var(--red-dim)' : 'var(--bg3)'};border:1px solid ${isMe ? 'var(--red-border)' : 'var(--border)'};border-radius:${isMe ? '12px 12px 3px 12px' : '12px 12px 12px 3px'};padding:8px 11px;font-size:.82rem;color:var(--text);line-height:1.55;word-break:break-word">${ec}${imgHtml}</div>
+      <div style="font-size:.65rem;color:var(--text-dim);margin-top:3px;text-align:${isMe ? 'left' : 'right'}">${timeAgo(m.createdAt)}</div>
+    </div>`;
+  msgEl.appendChild(wrap);
+}
+
+function scrollSupportAdminChat() {
+  const el = document.getElementById('supportAdminMessages');
+  if (el) el.scrollTop = el.scrollHeight;
+}
+
+function toggleSupportAdminPanel() {
+  const overlay = document.getElementById('supportAdminChatPanel');
+  if (overlay.classList.contains('open')) {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    supportAdminState.panelOpen = false;
+  } else {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    supportAdminState.panelOpen = true;
+    scrollSupportAdminChat();
+  }
+}
+
+function handleSupportAdminImg(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    supportAdminImgBase64 = e.target.result;
+    showToast('Image sélectionnée — appuie sur Envoyer', 'success');
+    // Highlight the image button
+    const btn = event.target.previousElementSibling;
+    if (btn) { btn.style.borderColor = 'var(--red)'; btn.style.color = 'var(--red)'; }
+  };
+  reader.readAsDataURL(file);
+}
+
+
+function clearSupportAdminImgPreview() {
+  supportAdminState.imgData = null;
+  const preview = document.getElementById('supportAdminImgPreviewRow');
+  const btn = document.getElementById('supportAdminImgBtn');
+  const fi = document.getElementById('supportAdminImgInput');
+  if (preview) preview.classList.remove('show');
+  if (btn) btn.classList.remove('selected');
+  if (fi) fi.value = '';
+}
+async function sendSupportAdminMsg() {
+  const input = document.getElementById('supportAdminInput');
+  const content = input.value.trim();
+  const imgData = supportAdminState.imgData || supportAdminImgBase64;
+  if (!content && !imgData) return;
+  if (!supportAdminState.activeChatId) return;
+  input.value = ''; input.style.height = 'auto';
+  clearSupportAdminImgPreview();
+  supportAdminImgBase64 = null;
+  const fileInput = document.getElementById('supportAdminImgInput');
+  if (fileInput) fileInput.value = '';
+  try {
+    await apiFetch(`/support/${supportAdminState.activeChatId}/message`, { method: 'POST', body: JSON.stringify({ content, imageUrl: imgData || null }) });
+  } catch(e) { showToast(e.message, 'error'); input.value = content; }
+}
+
+async function updateSupportBadge() {
+  try {
+    const { count } = await apiFetch('/support/count-open');
+    const badge = document.getElementById('supportTicketsBadge');
+    if (badge) {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'inline-flex' : 'none';
+    }
+  } catch {}
+}
+
+// ════════════════════════════════════════════════
+// BADGES ADMIN
+// ════════════════════════════════════════════════
+async function loadBadges() {
+  const el = document.getElementById('badgesContent');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const badges = await apiFetch('/badges/all');
+    if (!badges.length) {
+      el.innerHTML = '<div class="empty"><p>Aucun badge. Créez-en un !</p></div>';
+      return;
+    }
+    el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+      ${badges.map(b => `
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color .2s;opacity:${b.active ? 1 : 0.5}">
+          <div style="font-size:1.8rem;flex-shrink:0">${b.emoji}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:.88rem;color:var(--white);margin-bottom:2px">${b.name} <span style="font-size:.7rem;color:var(--text-dim);font-weight:400">[${b.key}]</span></div>
+            <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:3px">${b.description || '—'}</div>
+            <div style="font-size:.7rem;color:var(--text-dim)">
+              ${b.type === 'role' ? `Rôle: ${b.role}` : b.type === 'auto_first_n' ? `Top ${b.threshold} premiers` : 'Manuel'}
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+            <button class="btn btn-outline btn-sm" onclick="editBadge(${JSON.stringify(b).replace(/"/g,'&quot;')})">✏️</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteBadge('${b._id}')">🗑️</button>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  } catch(e) { el.innerHTML = `<div class="empty"><p>${e.message}</p></div>`; }
+}
+
+function openAddBadgeModal() {
+  document.getElementById('badgeKey').value = '';
+  document.getElementById('badgeName').value = '';
+  document.getElementById('badgeDesc').value = '';
+  document.getElementById('badgeEmoji').value = '🏅';
+  document.getElementById('badgeType').value = 'manual';
+  document.getElementById('badgeColor').value = '#e74c3c';
+  document.getElementById('badgeThreshold').value = '';
+  document.getElementById('badgeOrder').value = '0';
+  document.getElementById('badgeEditId').value = '';
+  document.getElementById('badgeModalTitle').textContent = 'Nouveau badge';
+  updateBadgeTypeFields();
+  document.getElementById('badgeOverlay').classList.add('open');
+}
+
+function editBadge(b) {
+  document.getElementById('badgeKey').value = b.key || '';
+  document.getElementById('badgeName').value = b.name || '';
+  document.getElementById('badgeDesc').value = b.description || '';
+  document.getElementById('badgeEmoji').value = b.emoji || '🏅';
+  document.getElementById('badgeType').value = b.type || 'manual';
+  document.getElementById('badgeColor').value = b.color || '#e74c3c';
+  document.getElementById('badgeThreshold').value = b.threshold || '';
+  document.getElementById('badgeRole').value = b.role || 'user';
+  document.getElementById('badgeOrder').value = b.order || 0;
+  document.getElementById('badgeEditId').value = b._id;
+  document.getElementById('badgeModalTitle').textContent = 'Modifier le badge';
+  updateBadgeTypeFields();
+  document.getElementById('badgeOverlay').classList.add('open');
+}
+
+function updateBadgeTypeFields() {
+  const type = document.getElementById('badgeType').value;
+  document.getElementById('badgeThresholdGroup').style.display = type === 'auto_first_n' ? 'block' : 'none';
+  document.getElementById('badgeRoleGroup').style.display = type === 'role' ? 'block' : 'none';
+}
+
+async function saveBadge() {
+  const editId = document.getElementById('badgeEditId').value;
+  const type = document.getElementById('badgeType').value;
+  const body = {
+    key: document.getElementById('badgeKey').value.trim(),
+    name: document.getElementById('badgeName').value.trim(),
+    description: document.getElementById('badgeDesc').value.trim(),
+    emoji: document.getElementById('badgeEmoji').value.trim() || '🏅',
+    type,
+    threshold: type === 'auto_first_n' ? parseInt(document.getElementById('badgeThreshold').value) || null : null,
+    role: type === 'role' ? document.getElementById('badgeRole').value : null,
+    color: document.getElementById('badgeColor').value,
+    order: parseInt(document.getElementById('badgeOrder').value) || 0,
+  };
+  if (!body.key || !body.name) return showToast('Clé et nom requis', 'error');
+  try {
+    if (editId) {
+      await apiFetch(`/badges/${editId}`, { method: 'PATCH', body: JSON.stringify(body) });
+      showToast('Badge modifié', 'success');
+    } else {
+      await apiFetch('/badges', { method: 'POST', body: JSON.stringify(body) });
+      showToast('Badge créé !', 'success');
+    }
+    document.getElementById('badgeOverlay').classList.remove('open');
+    loadBadges();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+async function deleteBadge(id) {
+  if (!await vunyConfirm({ title: 'Supprimer le badge', msg: 'Supprimer définitivement ce badge ?', type: 'danger', okLabel: 'Supprimer' })) return;
+  try {
+    await apiFetch(`/badges/${id}`, { method: 'DELETE' });
+    showToast('Badge supprimé', 'success');
+    loadBadges();
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+// ════════════════════════════════════════════════
+// ADMIN IMAGE BUTTON (inline) — fixed clearAdminImg
+// ════════════════════════════════════════════════
+function handleAdminImgFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    adminImgBase64 = e.target.result;
+    const strip = document.getElementById('adminImgPreviewStrip');
+    const prev = document.getElementById('adminImgPreview');
+    if (strip && prev) {
+      prev.src = adminImgBase64;
+      strip.style.display = 'block';
+    }
+    // Highlight the image button
+    const btn = document.getElementById('adminImgBtn');
+    if (btn) { btn.style.borderColor = 'var(--red)'; btn.style.color = 'var(--red)'; }
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearAdminImg(e) {
+  if (e) e.stopPropagation();
+  adminImgBase64 = null;
+  const strip = document.getElementById('adminImgPreviewStrip');
+  const prev = document.getElementById('adminImgPreview');
+  const fileInput = document.getElementById('adminImgFileInput');
+  const btn = document.getElementById('adminImgBtn');
+  if (strip) strip.style.display = 'none';
+  if (prev) { prev.src = ''; }
+  if (fileInput) fileInput.value = '';
+  if (btn) { btn.style.borderColor = 'var(--border)'; btn.style.color = 'var(--text-muted)'; }
+}
+
+// ════════════════════════════════════════════════
+// SOUND NOTIFICATIONS + POP-UP ALERT FOR ADMINS
+// ════════════════════════════════════════════════
+let _audioCtx = null;
+function getAudioCtx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return _audioCtx;
+}
+
+function playAdminSound(type) {
+  try {
+    const ctx = getAudioCtx();
+    // Resume context if suspended (browser requires user interaction first)
+    if (ctx.state === 'suspended') {
+      ctx.resume().then(() => _playAdminSoundNow(ctx, type));
+    } else {
+      _playAdminSoundNow(ctx, type);
+    }
+  } catch(e) { console.warn('Audio error:', e); }
+}
+
+function _playAdminSoundNow(ctx, type) {
+  try {
+    const playBeep = (freq, startTime, duration, vol=0.2) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.setValueAtTime(freq, startTime);
+      gain.gain.setValueAtTime(vol, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+      osc.type = 'sine';
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+    };
+
+    if (type === 'order') {
+      // Upbeat double beep for new order
+      playBeep(880, ctx.currentTime, 0.18, 0.2);
+      playBeep(1100, ctx.currentTime + 0.14, 0.22, 0.2);
+    } else if (type === 'support') {
+      // Different tone for support ticket
+      playBeep(660, ctx.currentTime, 0.15, 0.2);
+      playBeep(440, ctx.currentTime + 0.18, 0.25, 0.18);
+    } else if (type === 'message') {
+      // Soft ping for new message in chat
+      playBeep(1200, ctx.currentTime, 0.12, 0.12);
+    }
+  } catch(e) { console.warn('Sound error:', e); }
+}
+
+function showAdminAlert(message, type) {
+  const area = document.getElementById('adminAlertToast');
+  if (!area) return;
+  const toast = document.createElement('div');
+  toast.style.cssText = `pointer-events:all;background:rgba(18,18,24,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--red-border);border-radius:12px;padding:12px 15px;display:flex;align-items:center;gap:12px;box-shadow:0 12px 32px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04) inset;min-width:240px;max-width:320px;cursor:pointer;transition:opacity .3s,transform .3s;opacity:0;transform:translateX(20px)`;
+  const icon = type === 'order' ? '🛒' : '🎫';
+  const title = type === 'order' ? 'Nouvelle commande' : 'Nouveau ticket support';
+  const accentColor = type === 'order' ? 'var(--green)' : 'var(--red)';
+  toast.innerHTML = `
+    <div style="width:38px;height:38px;border-radius:10px;background:${type==='order'?'rgba(39,174,96,.15)':'var(--red-dim)'};border:1px solid ${type==='order'?'rgba(39,174,96,.3)':'var(--red-border)'};display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">${icon}</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:.82rem;font-weight:700;color:var(--white);margin-bottom:2px">${title}</div>
+      <div style="font-size:.72rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${message}</div>
+    </div>
+    <button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:1rem;flex-shrink:0;line-height:1;padding:2px;border-radius:4px;transition:color .15s" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--text-dim)'">✕</button>`;
+  toast.onclick = (e) => { if (e.target.tagName !== 'BUTTON') toast.remove(); };
+  area.appendChild(toast);
+  requestAnimationFrame(() => { toast.style.opacity = '1'; toast.style.transform = 'translateX(0)'; });
+  setTimeout(() => {
+    toast.style.opacity = '0'; toast.style.transform = 'translateX(20px)';
+    setTimeout(() => toast.remove(), 300);
+  }, 8000);
+}
+
+// ── Admin SSE for new shop orders ──────────────
+function startAdminShopSSE() {
+  if (!App.token || !App.user || roleLevel(App.user.role) < 1) return;
+  let _lastShopCount = null;
+  setInterval(async () => {
+    try {
+      const { count } = await apiFetch('/shop/tickets/count-open');
+      const badge = document.getElementById('shopTicketsBadge');
+      if (badge) { badge.textContent = count; badge.style.display = count > 0 ? 'inline-flex' : 'none'; }
+      // Sound + alert when count increases
+      if (_lastShopCount !== null && count > _lastShopCount) {
+        playAdminSound('order');
+        showAdminAlert('Nouvelle commande reçue', 'order');
+        if (document.getElementById('page-shop-tickets')?.classList.contains('active')) loadShopTickets();
+      }
+      _lastShopCount = count;
+    } catch {}
+  }, 15000);
+}
+
+// ── Admin SSE for new support tickets ──────────
+function startAdminSupportSSE() {
+  if (!App.token || !App.user || roleLevel(App.user.role) < 1) return;
+  try {
+    const src = new EventSource(`${API_BASE}/support/admin-events?token=${App.token}`);
+    src.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      if (data.type === 'new_ticket') {
+        playAdminSound('support');
+        showAdminAlert(`${data.ticket.user?.username || '?'} — "${data.ticket.title}"`, 'support');
+        updateSupportBadge();
+        // Refresh list if on support page
+        if (document.getElementById('page-support-tickets')?.classList.contains('active')) {
+          loadSupportTickets();
+        }
+      }
+    };
+    src.onerror = () => {};
+  } catch {}
+}
+
+// Initialize badges count and SSE on load
+
+// Unlock AudioContext on first user interaction (required by Chrome/Firefox)
+document.addEventListener('click', function _unlockAudio() {
+  try {
+    if (typeof getAudioCtx === 'function') {
+      const ctx = getAudioCtx();
+      if (ctx.state === 'suspended') ctx.resume();
+    }
+  } catch {}
+  document.removeEventListener('click', _unlockAudio);
+}, { once: true });
+
+(function initAdminExtras() {
+  const _origInit = window._adminInitDone;
+  if (_origInit) return;
+  window._adminInitDone = true;
+  // Wait for App.user to be ready
+  const checkReady = setInterval(() => {
+    if (typeof App !== 'undefined' && App.user && typeof roleLevel === 'function') {
+      clearInterval(checkReady);
+      if (roleLevel(App.user.role) >= 1) {
+        updateSupportBadge();
+        startAdminShopSSE();
+        startAdminSupportSSE();
+      }
+    }
+  }, 500);
+})();
+
+
+// ══════════════════════════════════════════════════════════════
+// STAFF CHAT
+// ══════════════════════════════════════════════════════════════
+let _staffChatSrc = null;
+let _staffChatLoaded = false;
+let _staffChatImgBase64 = null;
+
+async function initStaffChat() {
+  if (!_staffChatLoaded) {
+    await loadStaffChatHistory();
+    _staffChatLoaded = true;
+  }
+  startStaffChatSSE();
+  const badge = document.getElementById('staffChatBadge');
+  if (badge) { badge.style.display = 'none'; badge.textContent = '0'; }
+}
+
+async function loadStaffChatHistory() {
+  const el = document.getElementById('staffChatMessages');
+  if (!el) return;
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const msgs = await apiFetch('/staff-chat');
+    el.innerHTML = '';
+    if (!msgs.length) {
+      el.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--text-dim);font-size:.84rem">Aucun message — commencez la discussion !</div>';
+      return;
+    }
+    msgs.forEach(m => appendStaffMsg(m));
+    el.scrollTop = el.scrollHeight;
+  } catch(e) {
+    el.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--text-dim);font-size:.84rem">Erreur de chargement</div>';
+  }
+}
+
+function startStaffChatSSE() {
+  if (_staffChatSrc) return;
+  if (!App.token) return;
+  const src = new EventSource(API_BASE + '/staff-chat/events?token=' + App.token);
+  _staffChatSrc = src;
+  src.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    if (data.type === 'message') {
+      const page = document.getElementById('page-staff-chat');
+      if (page && page.classList.contains('active')) {
+        appendStaffMsg(data.message);
+        const el = document.getElementById('staffChatMessages');
+        if (el) el.scrollTop = el.scrollHeight;
+      } else {
+        const badge = document.getElementById('staffChatBadge');
+        if (badge) {
+          const cur = parseInt(badge.textContent) || 0;
+          badge.textContent = cur + 1;
+          badge.style.display = 'inline-block';
+        }
+      }
+    } else if (data.type === 'clear') {
+      const el = document.getElementById('staffChatMessages');
+      if (el) el.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--text-dim);font-size:.84rem">Chat vidé par un admin.</div>';
+    }
+  };
+  src.onerror = () => { _staffChatSrc = null; };
+}
+
+function appendStaffMsg(m) {
+  const el = document.getElementById('staffChatMessages');
+  if (!el) return;
+  if (m._id && el.querySelector('[data-smid="' + m._id + '"]')) return;
+  const placeholder = el.querySelector('[style*="padding:3rem"]');
+  if (placeholder) placeholder.remove();
+  const isMe = m.sender && (m.sender._id === App.user._id || m.sender === App.user._id);
+  const ava = (m.sender && m.sender.avatar) || 'https://cdn.discordapp.com/embed/avatars/0.png';
+  const name = (m.sender && m.sender.username) || '?';
+  const time = timeAgo(m.createdAt);
+  const wrap = document.createElement('div');
+  if (m._id) wrap.dataset.smid = m._id;
+  wrap.style.cssText = 'display:flex;gap:8px;align-items:flex-start;max-width:80%;' + (isMe ? 'align-self:flex-end;margin-left:auto;flex-direction:row-reverse' : '');
+  const rawText = (m.content || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  const imgHtml = m.imageUrl ? '<img src="' + m.imageUrl + '" style="max-width:220px;border-radius:8px;display:block;margin-top:4px;cursor:pointer" onclick="window.open(\'' + m.imageUrl + '\')" alt="">' : '';
+  wrap.innerHTML = '<img src="' + ava + '" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;margin-top:2px" title="' + name + '" alt=""><div>' + (!isMe ? '<div style="font-size:.68rem;color:var(--text-dim);margin-bottom:2px;font-weight:600">' + name + '</div>' : '') + '<div style="background:' + (isMe ? 'var(--red-dim)' : 'var(--bg3)') + ';border:1px solid ' + (isMe ? 'var(--red-border)' : 'var(--border)') + ';border-radius:' + (isMe ? '12px 12px 3px 12px' : '12px 12px 12px 3px') + ';padding:8px 12px;font-size:.83rem;color:var(--text);line-height:1.55;word-break:break-word">' + rawText + imgHtml + '</div><div style="font-size:.65rem;color:var(--text-dim);margin-top:3px">' + time + '</div></div>';
+  el.appendChild(wrap);
+}
+
+async function sendStaffMsg() {
+  const input = document.getElementById('staffChatInput');
+  const content = input ? input.value.trim() : '';
+  if (!content && !_staffChatImgBase64) return;
+  if (input) { input.value = ''; input.style.height = 'auto'; }
+  const imgData = _staffChatImgBase64;
+  clearStaffChatImg();
+  try {
+    const msg = await apiFetch('/staff-chat', { method: 'POST', body: JSON.stringify({ content: content, imageUrl: imgData || null }) });
+    appendStaffMsg(msg);
+    const el = document.getElementById('staffChatMessages');
+    if (el) el.scrollTop = el.scrollHeight;
+  } catch(e) {
+    showToast(e.message, 'error');
+    if (input) input.value = content;
+  }
+}
+
+async function clearStaffChat() {
+  if (!await vunyConfirm({ title: 'Vider le chat', msg: 'Supprimer tous les messages du chat staff ?', type: 'danger', okLabel: 'Vider' })) return;
+  try {
+    await apiFetch('/staff-chat/clear', { method: 'DELETE' });
+    showToast('Chat vidé', 'success');
+    _staffChatLoaded = false;
+    const el = document.getElementById('staffChatMessages');
+    if (el) el.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--text-dim);font-size:.84rem">Chat vidé.</div>';
+  } catch(e) { showToast(e.message, 'error'); }
+}
+
+function onStaffChatImgSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    _staffChatImgBase64 = e.target.result;
+    const preview = document.getElementById('staffChatImgPreview');
+    const thumb = document.getElementById('staffChatImgThumb');
+    const nameEl = document.getElementById('staffChatImgName');
+    const btn = document.getElementById('staffChatImgBtn');
+    if (preview) preview.style.display = 'flex';
+    if (thumb) thumb.src = e.target.result;
+    if (nameEl) nameEl.textContent = file.name;
+    if (btn) btn.style.color = 'var(--red)';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearStaffChatImg() {
+  _staffChatImgBase64 = null;
+  const preview = document.getElementById('staffChatImgPreview');
+  const btn = document.getElementById('staffChatImgBtn');
+  const fi = document.getElementById('staffChatImgInput');
+  if (preview) preview.style.display = 'none';
+  if (btn) btn.style.color = 'var(--text-muted)';
+  if (fi) fi.value = '';
+}
+
+</script>
